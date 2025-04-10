@@ -1,0 +1,4 @@
+export const STACKS = {
+    MAIN_STACK: 'MAIN_STACK',
+    DRAWER_STACK: 'DRAWER_STACK'
+  };

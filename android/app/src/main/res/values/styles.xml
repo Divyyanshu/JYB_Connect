@@ -1,0 +1,8 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextBackground">@drawable/screen</item>
+        <item name="android:forceDarkAllowed">false</item>
+            <item name="android:navigationBarColor">#000000</item>
+    </style>
+
+</resources>

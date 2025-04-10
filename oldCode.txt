@@ -1,0 +1,4990 @@
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   StyleSheet,
+//   SafeAreaView,
+//   StatusBar,
+//   ScrollView,
+//   Alert,
+// } from 'react-native';
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// const DealerVisitForm = ({navigation}) => {
+//   const [form, setForm] = useState({
+//     region: '',
+//     dealerCode: '',
+//     dealerName: '',
+//     dealerType: '',
+//     location: '',
+//     state: '',
+//     asmName: '',
+//     dateOfVisit: '',
+//   });
+
+//   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+//   useEffect(() => {
+//     retriveLocalData();
+//   }, []);
+
+//   const retriveLocalData = async () => {
+//     try {
+//       const temp = await AsyncStorage.getItem('dealerForm');
+//       if (temp) {
+//         const data = JSON.parse(temp);
+//         setForm(prevForm => ({ ...prevForm, ...data }));
+//       }
+//     } catch (error) {
+//       console.error('Error fetching local data:', error);
+//     }
+//   };
+
+//   const handleInputChange = (field, value) => {
+//     setForm({...form, [field]: value});
+//   };
+
+//   const showDatePicker = () => setDatePickerVisibility(true);
+//   const hideDatePicker = () => setDatePickerVisibility(false);
+
+//   const handleConfirm = date => {
+//     setForm({...form, dateOfVisit: date.toISOString().split('T')[0]});
+//     hideDatePicker();
+//   };
+
+//   const validateForm = () => {
+//     return Object.values(form).every(value => value.trim() !== '');
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!validateForm()) {
+//       Alert.alert('Validation Error', 'Please fill all fields.');
+//       return;
+//     }
+
+//     try {
+//       await AsyncStorage.setItem('dealerForm', JSON.stringify(form));
+//       navigation.navigate('tableFormOne');
+//     } catch (error) {
+//       console.error('Storage Error:', error);
+//       Alert.alert('Error', 'Something went wrong!');
+//     }
+//   };
+//   // local data cleaner
+//   // useEffect(()=>{
+//   //   AsyncStorage.clear()
+//   // },[])
+//   return (
+//     <SafeAreaView style={styles.safeContainer}>
+//       <StatusBar barStyle="dark-content" backgroundColor="#00BCD4" />
+//       <ScrollView contentContainerStyle={styles.mainContainer}>
+//         <View style={styles.header}>
+//           <Text style={styles.headingMain}>Dealer Form</Text>
+//           <Text style={styles.headingSec}>Fill the Details below:</Text>
+//         </View>
+
+//         <View style={styles.container}>
+//           {[{ label: 'Region', key: 'region' },
+//             { label: 'Dealer/Branch Code', key: 'dealerCode' },
+//             { label: 'Dealer Name', key: 'dealerName' },
+//             { label: 'Dealer Type', key: 'dealerType' },
+//             { label: 'Location', key: 'location' },
+//             { label: 'State', key: 'state' },
+//             { label: 'ASM Name', key: 'asmName' }].map(field => (
+//             <View key={field.key} style={styles.inputWrapper}>
+//               <Text style={styles.label}>{field.label}</Text>
+//               <TextInput
+//                 style={styles.input}
+//                 placeholder={`Enter ${field.label}`}
+//                 placeholderTextColor="grey"
+//                 value={form[field.key]}
+//                 onChangeText={text => handleInputChange(field.key, text)}
+//               />
+//             </View>
+//           ))}
+
+//           <Text style={styles.label}>Date of Visit</Text>
+//           <TouchableOpacity style={styles.inputContainer} onPress={showDatePicker}>
+//             <Text style={styles.inputText}>{form.dateOfVisit || 'Select Date'}</Text>
+//           </TouchableOpacity>
+
+//           <DateTimePickerModal
+//             isVisible={isDatePickerVisible}
+//             mode="date"
+//             onConfirm={handleConfirm}
+//             onCancel={hideDatePicker}
+//           />
+//         </View>
+
+//         <View style={styles.buttonContainer}>
+//           <TouchableOpacity
+//             style={[styles.submitButton, !validateForm() && styles.disabledButton]}
+//             onPress={handleSubmit}
+//             disabled={!validateForm()}>
+//             <Text style={styles.submitText}>Next</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// };
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   StyleSheet,
+//   SafeAreaView,
+//   StatusBar,
+//   ScrollView,
+//   Alert,
+// } from 'react-native';
+// import DateTimePickerModal from 'react-native-modal-datetime-picker';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {Picker} from '@react-native-picker/picker';
+
+// const DealerVisitForm = ({navigation}) => {
+//   const [form, setForm] = useState({
+//     region: '',
+//     dealerCode: '',
+//     dealerName: '',
+//     dealerType: '',
+//     location: '',
+//     state: '',
+//     asmName: '',
+//     dateOfVisit: '',
+//     visitType: '',
+//   });
+
+//   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+//   const [dateMode, setDateMode] = useState('');
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [selectedMonth, setSelectedMonth] = useState(selectedDate.getMonth());
+//   const [selectedYear, setSelectedYear] = useState(selectedDate.getFullYear());
+
+//   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+//   const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - 25 + i);
+
+//   const handleConfirmed = () => {
+//     onChange(new Date(selectedYear, selectedMonth, 1));
+//     setModalVisible(false);
+//   };
+//   useEffect(() => {
+//     retriveLocalData();
+//     console.log(retriveLocalData);
+//   }, []);
+
+//   const retriveLocalData = async () => {
+//     try {
+//       const temp = await AsyncStorage.getItem('dealerForm');
+//       if (temp) {
+//         const data = JSON.parse(temp);
+//         setForm(prevForm => ({...prevForm, ...data}));
+//       }
+//     } catch (error) {
+//       console.error('Error fetching local data:', error);
+//     }
+//   };
+
+//   const handleInputChange = (field, value) => {
+//     setForm({...form, [field]: value});
+//   };
+
+//   const showDatePicker = () => setDatePickerVisibility(true);
+//   const hideDatePicker = () => setDatePickerVisibility(false);
+
+//   const handleConfirm = (date) => {
+//     let formattedDate = '';
+//     if (dateMode === 'month') {
+//       formattedDate = date.toISOString().slice(0, 7); // YYYY-MM
+//     } else {
+//       formattedDate = date.getFullYear().toString(); // YYYY
+//     }
+//     setForm({...form, dateOfVisit: formattedDate});
+//     hideDatePicker();
+//   };
+
+//   const validateForm = () => {
+//     return Object.values(form).every(value => value.trim() !== '');
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!validateForm()) {
+//       Alert.alert('Validation Error', 'Please fill all fields.');
+//       return;
+//     }
+//     try {
+//       await AsyncStorage.setItem('dealerForm', JSON.stringify(form));
+//       navigation.navigate('tableFormOne');
+//     } catch (error) {
+//       console.error('Storage Error:', error);
+//       Alert.alert('Error', 'Something went wrong!');
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.safeContainer}>
+//       <StatusBar barStyle="dark-content" backgroundColor="#00BCD4" />
+//       <View style={styles.header}>
+//         <Text style={styles.headingMain}>Dealer Form</Text>
+//         <Text style={styles.headingSec}>Fill the Details below:</Text>
+//       </View>
+//       <ScrollView contentContainerStyle={styles.mainContainer}>
+//         <View style={styles.container}>
+//           {[
+//             {label: 'Region', key: 'region'},
+//             {label: 'Dealer/Branch Code', key: 'dealerCode'},
+//             {label: 'Dealer Name', key: 'dealerName'},
+//             {label: 'Dealer Type', key: 'dealerType'},
+//             {label: 'Location', key: 'location'},
+//             {label: 'State', key: 'state'},
+//             {label: 'ASM Name', key: 'asmName'},
+//           ].map(field => (
+//             <View key={field.key} style={styles.inputWrapper}>
+//               <Text style={styles.label}>{field.label}</Text>
+//               <TextInput
+//                 style={styles.input}
+//                 placeholder={`Enter ${field.label}`}
+//                 placeholderTextColor="grey"
+//                 value={form[field.key]}
+//                 onChangeText={text => handleInputChange(field.key, text)}
+//               />
+//             </View>
+//           ))}
+//           <Text style={styles.label}>Visit Type</Text>
+//           <Picker
+//             selectedValue={form.visitType}
+//             style={styles.input}
+//             onValueChange={itemValue => {
+//               setForm({...form, visitType: itemValue, dateOfVisit: ''});
+//               setDateMode(itemValue === 'monthly' ? 'month' : 'year');
+//             }}>
+//             <Picker.Item label="Select Visit Type" value="" style={{fontWeight :"bold"}}/>
+//             <Picker.Item label="Monthly" value="monthly" />
+//             <Picker.Item label="Quarter One" value="quarterOne" />
+//             <Picker.Item label="Quarter Two" value="quarterTwo" />
+//             <Picker.Item label="Quarter Three" value="quarterThree" />
+//             <Picker.Item label="Quarter Four" value="quarterFour" />
+//           </Picker>
+
+//           <Text style={styles.label}>Date of Visit</Text>
+//       <TouchableOpacity style={styles.inputContainer} onPress={() => setModalVisible(true)}>
+//         <Text style={styles.inputText}>{months[selectedMonth]} {selectedYear}</Text>
+//       </TouchableOpacity>
+
+//       <Modal visible={modalVisible} transparent animationType="slide">
+//         <View style={styles.modalContainer}>
+//           <View style={styles.pickerContainer}>
+//             <Picker selectedValue={selectedMonth} onValueChange={(itemValue) => setSelectedMonth(itemValue)}>
+//               {months.map((month, index) => (
+//                 <Picker.Item key={index} label={month} value={index} />
+//               ))}
+//             </Picker>
+
+//             <Picker selectedValue={selectedYear} onValueChange={(itemValue) => setSelectedYear(itemValue)}>
+//               {years.map((year, index) => (
+//                 <Picker.Item key={index} label={year.toString()} value={year} />
+//               ))}
+//             </Picker>
+
+//             <TouchableOpacity style={styles.doneButton} onPress={handleConfirmed}>
+//               <Text style={styles.doneText}>Done</Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//       </Modal>
+//         </View>
+
+//         <View style={styles.buttonContainer}>
+//           <TouchableOpacity
+//             style={[
+//               styles.submitButton,
+//               !validateForm() && styles.disabledButton,
+//             ]}
+//             onPress={handleSubmit}
+//             disabled={!validateForm()}>
+//             <Text style={styles.submitText}>Next</Text>
+//           </TouchableOpacity>
+//         </View>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   safeContainer: {
+//     flex: 1,
+//     backgroundColor: 'white',
+//   },
+//   mainContainer: {
+//     paddingBottom: 20,
+//     marginTop: 30,
+//   },
+//   header: {
+//     padding: 20,
+//     backgroundColor: 'white',
+//     marginTop :50
+//   },
+//   headingMain: {
+//     fontSize: 32,
+//     fontWeight: 'bold',
+//     color: 'black',
+//   },
+//   headingSec: {
+//     fontSize: 14,
+//     color: 'black',
+//     marginTop: 5,
+//   },
+//   container: {
+//     marginHorizontal: 20,
+//     marginTop: 10,
+//   },
+//   inputWrapper: {
+//     marginBottom: 12,
+//   },
+//   label: {
+//     fontSize: 14,
+//     fontWeight: 'bold',
+//     paddingBottom: 5,
+//   },
+//   input: {
+//     padding: 12,
+//     fontSize: 14,
+//     backgroundColor: '#f1f3f7',
+//     borderRadius: 5,
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//   },
+//   inputContainer: {
+//     width: '100%',
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     borderRadius: 5,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     padding: 10,
+//     backgroundColor: '#f1f3f7',
+//   },
+//   inputText: {
+//     fontSize: 16,
+//     color: '#333',
+//   },
+//   buttonContainer: {
+//     margin: 40,
+//   },
+//   submitButton: {
+//     backgroundColor: '#FFB22C',
+//     padding: 14,
+//     borderRadius: 30,
+//     alignItems: 'center',
+//     marginHorizontal: 20,
+//   },
+//   submitText: {
+//     fontSize: 16,
+//     color: 'white',
+//     fontWeight: 'bold',
+//   },
+//   disabledButton: {
+//     backgroundColor: '#ccc',
+//   },
+// });
+
+// export default DealerVisitForm;
+
+// import React, { useState } from 'react';
+// import { View, Text, Button, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+// import { Picker } from '@react-native-picker/picker';
+
+// const MonthYearPicker = () => {
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+//   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+//   const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - 25 + i);
+
+//   return (
+//     <View style={styles.container}>
+//       <TouchableOpacity onPress={() => setModalVisible(true)}>
+//         <Text style={styles.text}>{months[selectedMonth]} {selectedYear}</Text>
+//       </TouchableOpacity>
+
+//       <Modal visible={modalVisible} transparent animationType="slide">
+//         <View style={styles.modalContainer}>
+//           <View style={styles.pickerContainer}>
+//             <Picker selectedValue={selectedMonth} onValueChange={(itemValue) => setSelectedMonth(itemValue)}>
+//               {months.map((month, index) => (
+//                 <Picker.Item key={index} label={month} value={index} />
+//               ))}
+//             </Picker>
+
+//             <Picker selectedValue={selectedYear} onValueChange={(itemValue) => setSelectedYear(itemValue)}>
+//               {years.map((year, index) => (
+//                 <Picker.Item key={index} label={year.toString()} value={year} />
+//               ))}
+//             </Picker>
+
+//             <Button title="Done" onPress={() => setModalVisible(false)} />
+//           </View>
+//         </View>
+//       </Modal>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: { padding: 20, alignItems: 'center' ,flex :1 , justifyContent : "center"},
+//   text: { fontSize: 20, color: '#333' },
+//   modalContainer: { flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+//   pickerContainer: { backgroundColor: '#fff', padding: 20, borderRadius: 10, elevation: 5 },
+// });
+
+// export default MonthYearPicker;
+
+
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TextInput,
+//   StyleSheet,
+//   ScrollView,
+//   TouchableOpacity,
+//   SafeAreaView,
+//   Dimensions,
+//   Alert,
+// } from 'react-native';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
+
+// const {width} = Dimensions.get('window');
+// const columnWidth = scale(150);
+// const fixedColumnWidth = scale(150);
+
+// const KeyPerformance = ({navigation}) => {
+//   const [data, setData] = useState([
+//     {
+//       parameter: 'Service Visit',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'FS Redemption',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'Paid Service',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'EW',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'RSA',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'Parts Sale',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//     {
+//       parameter: 'Lube Sale',
+//       monthPlan: '',
+//       mtdPlan: '',
+//       mtdActual: '',
+//       percentage: '',
+//       actionPlan: '',
+//     },
+//   ]);
+//   const [complaintData, setcomplaintData] = useState([
+//     {
+//       ComplaintParameter: 'Customer Complaint',
+//       recvd: '',
+//       closed: '',
+//       pending24: '',
+//       pending48: '',
+//       pendingMore48: '',
+//       occurrence: '',
+//     },
+//   ]);
+//   useEffect(() => {
+//     checkLocalData();
+//   }, []);
+
+//   const handleInputChange = (index, field, value) => {
+//     const newData = [...data];
+//     newData[index][field] = value;
+//     setData(newData);
+//   };
+//   const handleComplaintInputChange = (index, field, value) => {
+//     const newData = [...complaintData];
+//     newData[index][field] = value;
+//     setcomplaintData(newData);
+//   };
+
+//   const saveFormData = async () => {
+//     try {
+//       await AsyncStorage.setItem('keyPerformanceForm', JSON.stringify(data));
+//       console.log('Key Performance form data saved in AsyncStorage');
+//     } catch (error) {
+//       console.error('Error saving Key Performance data:', error);
+//     }
+//   };
+//   const goto_manpower = () => {
+//     navigation.navigate('manPowerTable');
+//   };
+//   const checkLocalData = async () => {
+//     try {
+//       const data = await AsyncStorage.getItem('keyPerformanceForm');
+//       console.log('Stored Data:', JSON.parse(data));
+//       Alert.alert('Local Data', JSON.stringify(JSON.parse(data), null, 2));
+//     } catch (error) {
+//       console.error('Error fetching local data:', error);
+//     }
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.safeContainer}>
+//       <ScrollView>
+//         <View style={styles.headingContainer}>
+//           <Text style={styles.heading}>Key-Performance</Text>
+//         </View>
+//         <View style={styles.tableContainer}>
+//           <View style={styles.fixedColumn}>
+//             <Text style={[styles.headerCell, {width: fixedColumnWidth}]}>
+//               Parameters
+//             </Text>
+//             {data.map((item, index) => (
+//               <Text
+//                 key={index}
+//                 style={[styles.staticColumn, {width: fixedColumnWidth}]}>
+//                 {item.parameter}
+//               </Text>
+//             ))}
+//           </View>
+//           <ScrollView horizontal>
+//             <View>
+//               <View style={styles.headerRow}>
+//                 {[
+//                   'Month Plan',
+//                   'MTD Plan',
+//                   'MTD Actual',
+//                   '% Ach',
+//                   'Action Plan',
+//                 ].map((title, index) => (
+//                   <Text
+//                     key={index}
+//                     style={[styles.headerCell, {width: columnWidth}]}>
+//                     {title}
+//                   </Text>
+//                 ))}
+//               </View>
+//               <FlatList
+//                 data={data}
+//                 keyExtractor={(item, index) => index.toString()}
+//                 renderItem={({item, index}) => (
+//                   <View style={styles.row}>
+//                     {Object.keys(item)
+//                       .slice(1)
+//                       .map((field, idx) => (
+//                         <TextInput
+//                           key={idx}
+//                           style={[styles.inputCell, {width: columnWidth}]}
+//                           value={item[field]}
+//                           onChangeText={value =>
+//                             handleInputChange(index, field, value)
+//                           }
+//                         />
+//                       ))}
+//                   </View>
+//                 )}
+//               />
+//             </View>
+//           </ScrollView>
+//         </View>
+//         <View style={styles.tableComplaintWrapper}>
+//           {/* Fixed "Parameters" Column */}
+//           <View style={styles.ComplaintFixedColumn}>
+//             <Text style={styles.ComplaintStaticHeader}>
+//               Complaint Parameter
+//             </Text>
+//             {complaintData.map((item, index) => (
+//               <Text key={index} style={styles.ComplaintStaticCell}>
+//                 {item.ComplaintParameter}
+//               </Text>
+//             ))}
+//           </View>
+
+//           {/* Scrollable Table */}
+//           <ScrollView
+//             horizontal
+//             showsHorizontalScrollIndicator={true}
+//             style={styles.ComplaintScrollView}>
+//             <View>
+//               {/* Fixed Header */}
+//               <View style={styles.ComplaintHeaderRow}>
+//                 {[
+//                   'Recvd',
+//                   'Closed',
+//                   'Pending 24hrs',
+//                   'Pending 48hrs',
+//                   'Pending >48hrs',
+//                   'Occurrence',
+//                 ].map((title, index) => (
+//                   <Text key={index} style={styles.ComplaintHeaderCell}>
+//                     {title}
+//                   </Text>
+//                 ))}
+//               </View>
+
+//               {/* Data Rows */}
+//               <FlatList
+//                 data={complaintData} // FIX: yaha `complaintData` use kiya hai
+//                 nestedScrollEnabled={true}
+//                 renderItem={({item, index}) => (
+//                   <View style={styles.complaintRow}>
+//                     {[
+//                       'recvd',
+//                       'closed',
+//                       'pending24',
+//                       'pending48',
+//                       'pendingMore48',
+//                       'occurrence',
+//                     ].map((field, idx) => (
+//                       <TextInput
+//                         key={idx}
+//                         style={styles.ComplaintInputCell}
+//                         value={item[field]}
+//                         onChangeText={value =>
+//                           handleComplaintInputChange(index, field, value)
+//                         }
+//                       />
+//                     ))}
+//                   </View>
+//                 )}
+//                 keyExtractor={(item, index) => index.toString()}
+//               />
+//             </View>
+//           </ScrollView>
+//         </View>
+//         <TouchableOpacity style={styles.submitButton} onPress={saveFormData}>
+//           <Text style={styles.submitSaveText}>Save LocalDB</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity style={styles.submitButton} onPress={checkLocalData}>
+//           <Text style={styles.submitText}>View Local Data</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity style={styles.submitButton} onPress={goto_manpower}>
+//           <Text style={styles.submitText}>Next</Text>
+//         </TouchableOpacity>
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// };
+
+ {/* <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+            <Icon
+              name={secureText ? 'visibility-off' : 'visibility'}
+              size={24}
+              color="gray"
+            />
+          </TouchableOpacity> */}
+
+
+          let screen1;
+  // let screen2;
+
+  // async  function  getLocalData() {
+  //   (screen1 = await AsyncStorage.getItem('dealerForm')),
+  //     (screen2 = await AsyncStorage.getItem('tableFormOne'));
+
+  //   console.log('Screen 1: ', screen1);
+  //   console.log('Screen 2: ', screen2);
+  // }
+
+
+  API CALLING LAST PAGE 
+
+  // import AsyncStorage from '@react-native-async-storage/async-storage';
+// import React, {useEffect, useState} from 'react';
+// import {
+//   Alert,
+//   Image,
+//   PermissionsAndroid,
+//   SafeAreaView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
+// } from 'react-native';
+// import {launchCamera} from 'react-native-image-picker';
+// import axios from '../api/axios';
+// import {API_ENDPOINTS, BASE_URL} from '../api/endPoints';
+// import {
+//   getFormData,
+//   retrieveLocalData,
+//   saveDataToStorage,
+// } from '../utils/commonFunctions';
+// import {SCREENS} from '../utils/screens';
+// import {CustomButton} from '../uiKit/customButton';
+// import {COMMON_STYLES} from '../utils/commonStyles';
+
+// const InsertWorkshopPicture = ({navigation}) => {
+//   const [images, setImages] = useState([null, null, null, null]);
+//   const labels = [
+//     'Workshop Entry',
+//     'Customer Lounge Area',
+//     'Billing & Reception',
+//     'Complete Workshop Area',
+//   ];
+
+//   // get local data : ---->
+//   useEffect(() => {
+//     retrieveLocalData('workshopImages', setImages);
+//   }, []);
+
+//   const openCamera = async index => {
+//     try {
+//       const granted = await PermissionsAndroid.request(
+//         PermissionsAndroid.PERMISSIONS.CAMERA,
+//         {
+//           title: 'Camera Permission',
+//           message: 'App needs access to your camera',
+//           buttonNeutral: 'Ask Me Later',
+//           buttonNegative: 'Cancel',
+//           buttonPositive: 'OK',
+//         },
+//       );
+
+//       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//         const result = await launchCamera({
+//           mediaType: 'photo',
+//           saveToPhotos: true,
+//         });
+//         if (result.assets && result.assets.length > 0) {
+//           const imagePath = result.assets[0].uri;
+//           const updatedImages = [...images];
+//           updatedImages[index] = imagePath;
+//           setImages(updatedImages);
+//           await AsyncStorage.setItem(
+//             'workshopImages',
+//             JSON.stringify(updatedImages),
+//           );
+//         }
+//       } else {
+//         console.log('Camera permission denied');
+//       }
+//     } catch (err) {
+//       console.warn(err);
+//     }
+//   };
+//   const handleSubmit = async () => {
+//     try {
+//       await saveDataToStorage('workshopImages', images);
+//       const dealerFormPayload = JSON.parse(
+//         await AsyncStorage.getItem('dealerForm'),
+//       );
+//       const evolutionFormData = JSON.parse(
+//         await AsyncStorage.getItem('formData'),
+//       );
+//       const keyPerformanceFormData = JSON.parse(
+//         await AsyncStorage.getItem('keyPerformanceForm'),
+//       );
+//       const complaintFormData = JSON.parse(
+//         await AsyncStorage.getItem('complaintForm'),
+//       );
+//       const manPowerFormData = JSON.parse(
+//         await AsyncStorage.getItem('manpowerData'),
+//       );
+
+//       console.log('====================================');
+//       console.log(
+//         'dealerFormPayload = ',
+//         dealerFormPayload,
+//         '\n',
+//         'evolutionFormData = ',
+//         evolutionFormData,
+//         '\n',
+//         'keyPerformanceFormData = ',
+//         keyPerformanceFormData,
+//         '\n',
+//         'complaintFormData = ',
+//         complaintFormData,
+//         '\n',
+//         'manPowerFormData = ',
+//         manPowerFormData,
+//         '\n',
+//       );
+//       console.log('====================================');
+
+//       const workShopPayload = {
+//         WorkshopEntry: images[0],
+//         CustomerLoungeArea: images[1],
+//         BillingAndReceptionArea: images[2],
+//         CompleteWorkshopArea: images[3],
+//       };
+
+//       const createDealerRes = await axios.post(
+//         BASE_URL + API_ENDPOINTS.CREATE_DEALER,
+//         dealerFormPayload,
+//       );
+//       for (let i = 0; i < evolutionFormData.length; i++) {
+//         const payload = evolutionFormData[i];
+//         const evolutionRes = await axios.postForm(
+//           BASE_URL + API_ENDPOINTS.INSERT_DEALER_EVALUATION,
+//           getFormData({
+//             ...payload,
+//             DEFIED: 'A8F85AFE-614A-400D-8CC8-3CF7A8A65B75',
+//             DealerId: '11E11EA6-EF78-4CF2-8A38-EE393D81861B',
+//           }),
+//         );
+//         console.log(evolutionRes);
+//       }
+//       for (let i = 0; i < keyPerformanceFormData.length; i++) {
+//         const payload = keyPerformanceFormData[i];
+//         const keyPerformanceRes = await axios.post(
+//           BASE_URL + API_ENDPOINTS.INSERT_KEY_PERFORMANCE,
+//           payload,
+//         );
+//         console.log(keyPerformanceRes);
+//       }
+//       for (let i = 0; i < complaintFormData.length; i++) {
+//         const payload = complaintFormData[i];
+//         const complaintRes = await axios.post(
+//           BASE_URL + API_ENDPOINTS.INSERT_CUSTOMER_COMPLAINT,
+//           payload,
+//         );
+//         console.log(complaintRes);
+//       }
+
+//       for (let i = 0; i < manPowerFormData.length; i++) {
+//         const payload = manPowerFormData[i];
+//         const manPowerRes = await axios.post(
+//           BASE_URL + API_ENDPOINTS.INSERT_MANPOWER_DATA,
+//           payload,
+//         );
+//         console.log(manPowerRes);
+//       }
+
+//       const workShopRes = await axios.postForm(
+//         BASE_URL + API_ENDPOINTS.INSERT_WORKSHOP_PICTURE,
+//         getFormData(workShopPayload),
+//       );
+//       navigation.navigate(SCREENS.MAIN_STACK.COMPLETE_FORM);
+//     } catch (error) {
+//       console.log('Error in handleSubmit:', error);
+//     }
+//   };
+//   return (
+//     <SafeAreaView style={styles.safeview}>
+//       <View style={styles.container}>
+//         <View style={styles.grid}>
+//           {labels.map((label, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={styles.box}
+//               onPress={() => openCamera(index)}
+//               activeOpacity={0.7}>
+//               {images[index] ? (
+//                 <>
+//                   <Image source={{uri: images[index]}} style={styles.image} />
+//                   <Text style={styles.imageLabel}>{label}</Text>
+//                 </>
+//               ) : (
+//                 <Text style={styles.label}>{label}</Text>
+//               )}
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+//       {/* Buttons Container */}
+//       <View style={styles.btnContainer}>
+//         <CustomButton title="Submit" onPress={handleSubmit} loading={false} />
+//       </View>
+//     </SafeAreaView>
+//   );
+// };
+
+
+ const handleSubmit = async () => {
+    try {
+      await saveDataToStorage(LOCAL_STORAGE_KEYS.WORKSHOP_PICTURES, images);
+      const dealerFormPayload = JSON.parse(
+        await AsyncStorage.getItem('dealerForm'),
+      );
+      const evolutionFormData = JSON.parse(
+        await AsyncStorage.getItem('formData'),
+      );
+      const keyPerformanceFormData = JSON.parse(
+        await AsyncStorage.getItem('keyPerformanceForm'),
+      );
+      const complaintFormData = JSON.parse(
+        await AsyncStorage.getItem('complaintForm'),
+      );
+      const manPowerFormData = JSON.parse(
+        await AsyncStorage.getItem('manpowerData'),
+      );
+
+      console.log('====================================');
+      console.log(
+        'dealerFormPayload = ',
+        dealerFormPayload,
+        '\n',
+        'evolutionFormData = ',
+        evolutionFormData,
+        '\n',
+        'keyPerformanceFormData = ',
+        keyPerformanceFormData,
+        '\n',
+        'complaintFormData = ',
+        complaintFormData,
+        '\n',
+        'manPowerFormData = ',
+        manPowerFormData,
+        '\n',
+      );
+      console.log('====================================');
+
+      const workShopPayload = {
+        WorkshopEntry: images[0],
+        CustomerLoungeArea: images[1],
+        BillingAndReceptionArea: images[2],
+        CompleteWorkshopArea: images[3],
+      };
+
+      const createDealerRes = await axios.post(
+        BASE_URL + API_ENDPOINTS.CREATE_DEALER,
+        dealerFormPayload,
+      );
+      for (let i = 0; i < evolutionFormData.length; i++) {
+        const payload = evolutionFormData[i];
+        const evolutionRes = await axios.postForm(
+          BASE_URL + API_ENDPOINTS.INSERT_DEALER_EVALUATION,
+          getFormData({
+            ...payload,
+            DEFIED: 'A8F85AFE-614A-400D-8CC8-3CF7A8A65B75',
+            DealerId: '11E11EA6-EF78-4CF2-8A38-EE393D81861B',
+          }),
+        );
+        console.log(evolutionRes);
+      }
+      for (let i = 0; i < keyPerformanceFormData.length; i++) {
+        const payload = keyPerformanceFormData[i];
+        const keyPerformanceRes = await axios.post(
+          BASE_URL + API_ENDPOINTS.INSERT_KEY_PERFORMANCE,
+          payload,
+        );
+        console.log(keyPerformanceRes);
+      }
+      for (let i = 0; i < complaintFormData.length; i++) {
+        const payload = complaintFormData[i];
+        const complaintRes = await axios.post(
+          BASE_URL + API_ENDPOINTS.INSERT_CUSTOMER_COMPLAINT,
+          payload,
+        );
+        console.log(complaintRes);
+      }
+
+      for (let i = 0; i < manPowerFormData.length; i++) {
+        const payload = manPowerFormData[i];
+        const manPowerRes = await axios.post(
+          BASE_URL + API_ENDPOINTS.INSERT_MANPOWER_DATA,
+          payload,
+        );
+        console.log(manPowerRes);
+      }
+
+      const workShopRes = await axios.postForm(
+        BASE_URL + API_ENDPOINTS.INSERT_WORKSHOP_PICTURE,
+        getFormData(workShopPayload),
+      );
+      navigation.navigate(SCREENS.MAIN_STACK.COMPLETE_FORM);
+    } catch (error) {
+      console.log('Error in handleSubmit:', error);
+    }
+  };
+
+  // import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   StyleSheet,
+//   ScrollView,
+//   Alert,
+// } from 'react-native';
+// import {retrieveLocalData, saveDataToStorage} from '../utils/commonFunctions';
+// import {SCREENS} from '../utils/screens';
+// import {CustomButton} from '../uiKit/customButton';
+// import {COMMON_STYLES} from '../utils/commonStyles';
+// import {LOCAL_STORAGE_KEYS} from '../utils/constants';
+// import {moderateScale} from 'react-native-size-matters';
+
+// const ManPowerAvailabilityAndTrainingData = ({navigation}) => {
+//   const [data, setData] = useState([
+//     {
+//       Post: 'Service Manager',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//     {
+//       Post: 'CRM',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//     {
+//       Post: 'Service Advisor',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//     {
+//       Post: 'Parts Manager',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//     {
+//       Post: 'Technicians',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//     {
+//       Post: 'CRE',
+//       MinimumRequirement: '',
+//       Available: '',
+//       TrainedManpower: '',
+//       Percentage: '',
+//       Remark: '',
+//     },
+//   ]);
+//   const handleInputChange = (index, field, value) => {
+//     const numericValue = value.replace(/[^0-9]/g, '');
+//     const newData = [...data];
+//     newData[index][field] = numericValue;
+//     setData(newData);
+//   };
+//   const validateForm = () => {
+//     return data.every(item =>
+//       Object.values(item).every(val => val.trim() !== ''),
+//     );
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!validateForm()) {
+//       Alert.alert('Error', 'Please fill all fields before submitting.');
+//       return;
+//     }
+//     try {
+//       await saveDataToStorage(
+//         LOCAL_STORAGE_KEYS.MAN_POWER_AVAILABILITY_TRAINING,
+//         data,
+//       );
+//       navigation.navigate(SCREENS.MAIN_STACK.WORKSHOP_PICTURES);
+//       Alert.alert('Success', 'Data saved locally');
+//     } catch (error) {
+//       console.error('Error saving data:', error);
+//       Alert.alert('Error', 'Failed to save data.');
+//     }
+//   };
+//   return (
+//     <View style={styles.safeContainer}>
+//       <View style={styles.tableContainer}>
+//         <View style={styles.fixedColumn}>
+//           <Text style={styles.headerCellFixed}>Role</Text>
+//           {data.map((item, index) => (
+//             <View key={index} style={styles.cellFixed}>
+//               <Text style={styles.cellText}>{item.Post}</Text>
+//             </View>
+//           ))}
+//         </View>
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//           <View>
+//             <View style={styles.headerRow}>
+//               {['Min Req.', 'Available', 'Trained', 'Per %', 'Remark'].map(
+//                 (title, index) => (
+//                   <Text key={index} style={styles.headerCell}>
+//                     {title}
+//                   </Text>
+//                 ),
+//               )}
+//             </View>
+//             {data.map((item, index) => (
+//               <View key={index} style={styles.row}>
+//                 {[
+//                   'MinimumRequirement',
+//                   'Available',
+//                   'TrainedManpower',
+//                   'Percentage',
+//                   'Remark',
+//                 ].map((field, idx) => (
+//                   <TextInput
+//                     key={idx}
+//                     keyboardType="numeric"
+//                     style={[
+//                       styles.inputCell,
+//                       field === 'remarks' && styles.remarksInput,
+//                     ]}
+//                     value={item[field]}
+//                     onChangeText={value =>
+//                       handleInputChange(index, field, value)
+//                     }
+//                     multiline={field === 'remarks'}
+//                   />
+//                 ))}
+//               </View>
+//             ))}
+//           </View>
+//         </ScrollView>
+//       </View>
+//       <View style={styles.btnContainer}>
+//         <CustomButton title="Next" onPress={handleSubmit} loading={false} />
+//       </View>
+//     </View>
+//   );
+// };
+// const styles = StyleSheet.create({
+//   // Container Styles
+//   safeContainer: {
+//     flex: 1,
+//     backgroundColor: 'white',
+//     padding: 10,
+//   },
+//   tableContainer: {
+//     flexDirection: 'row',
+//     marginHorizontal: 10,
+//     marginVertical: 30,
+//   },
+//   // Fixed Column Styles
+//   fixedColumn: {
+//     width: 100,
+//   },
+//   headerCellFixed: {
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//     paddingVertical: 15,
+//     backgroundColor: '#FAF1E6',
+//     color: 'black',
+//     borderWidth: 1,
+//     borderColor: '#ddd',
+//     height: 60,
+//     fontSize: moderateScale(13),
+//   },
+//   cellFixed: {
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     width: 100,
+//     height: 60,
+//     borderWidth: 1,
+//     borderColor: '#ddd',
+//     backgroundColor: '#FAF1E6',
+//   },
+//   cellText: {
+//     textAlign: 'center',
+//     textTransform: 'uppercase',
+//     padding: 5,
+//     fontSize: moderateScale(10),
+//     fontWeight: 'bold',
+//   },
+//   // Table Header Styles
+//   headerRow: {
+//     height: 60,
+//     flexDirection: 'row',
+//     backgroundColor: '#08aa6d',
+//   },
+//   headerCell: {
+//     width: 70,
+//     textAlign: 'center',
+//     fontWeight: 'bold',
+//     color: 'white',
+//     fontSize: moderateScale(10),
+//     textTransform: 'uppercase',
+//     borderRightWidth: 1,
+//     padding: 5,
+//     paddingTop: 20,
+//     borderColor: '#ddd',
+//   },
+
+//   // Table Row Styles
+//   row: {
+//     flexDirection: 'row',
+//   },
+//   inputCell: {
+//     width: 70,
+//     height: 60,
+//     borderWidth: 1,
+//     borderColor: '#ddd',
+//     backgroundColor: 'white',
+//     fontSize: moderateScale(12),
+//     textAlign: 'left',
+//     paddingHorizontal: 10,
+//   },
+//   remarksInput: {
+//     width: 80,
+//     textAlign: 'left',
+//     paddingHorizontal: 10,
+//   },
+//   btnContainer: {
+//     paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+//     marginTop: 10,
+//   },
+// });
+
+// export default ManPowerAvailabilityAndTrainingData;
+
+
+
+
+keyPerformanceForm code :---- date 24 march 2025 
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
+import {scale, moderateScale} from 'react-native-size-matters';
+import {SCREENS} from '../utils/screens';
+import {retrieveLocalData, saveDataToStorage} from '../utils/commonFunctions';
+import {CustomButton} from '../uiKit/customButton';
+import {COMMON_STYLES} from '../utils/commonStyles';
+import {LOCAL_STORAGE_KEYS} from '../utils/constants';
+
+const columnWidth = scale(60);
+const fixedColumnWidth = scale(80);
+
+const KeyPerformanceDetails = ({navigation}) => {
+  const [dataKeyPerformance, setKeyPerformanceData] = useState([]);
+  const [complaintData, setComplaintData] = useState([]);
+  const [isNextEnabled, setIsNextEnabled] = useState(true);
+
+  useEffect(() => {
+    retrieveLocalData(LOCAL_STORAGE_KEYS.KEY_PERFORMANCE, data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setKeyPerformanceData([...data]);
+      } else if (dataKeyPerformance.length === 0) {
+        const defaultData = [
+          {
+            Parameters: 'Service Visit',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'FS Redemption',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'Paid Service',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'EW',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'RSA',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'Parts Sale',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'Lube Sale',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: '',
+            ACH: '',
+            ActionPlan: '',
+          },
+          {
+            Parameters: 'Repeat JC nos',
+            MonthPlan: '',
+            MTDPlan: '',
+            MTDActual: 'Repeat JC %',
+            ACH: 'Repeat JC %',
+            ActionPlan: '',
+          },
+        ];
+        setKeyPerformanceData(defaultData);
+        saveDataToStorage(LOCAL_STORAGE_KEYS.KEY_PERFORMANCE, defaultData);
+      }
+    });
+
+    retrieveLocalData(LOCAL_STORAGE_KEYS.CUSTOMER_COMPLAINT, data => {
+      if (Array.isArray(data) && data.length > 0) {
+        setComplaintData([...data]);
+      } else if (complaintData.length === 0) {
+        const defaultComplaintData = [
+          {
+            ComplaintParameter: 'Customer Complaint',
+            Recvd: '',
+            Closed: '',
+            hrs24Complaint: '',
+            hrs48Complaint: '',
+            LessThen48hrs: '',
+          },
+        ];
+        setComplaintData(defaultComplaintData);
+        saveDataToStorage(
+          LOCAL_STORAGE_KEYS.CUSTOMER_COMPLAINT,
+          defaultComplaintData,
+        );
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const isKeyPerformanceValid = dataKeyPerformance.every(item =>
+      Object.values(item)
+        .slice(1)
+        .every(value => value.trim() !== ''),
+    );
+
+    const isComplaintValid = complaintData.every(item =>
+      Object.values(item)
+        .slice(1)
+        .every(value => value.trim() !== ''),
+    );
+
+    setIsNextEnabled(isKeyPerformanceValid && isComplaintValid);
+  }, [dataKeyPerformance, complaintData]);
+
+  // Handle input changes
+  const handleInputChange = (index, field, value) => {
+    setKeyPerformanceData(prevData => {
+      if (!Array.isArray(prevData)) return [];
+      const newData = [...prevData];
+      newData[index][field] = value;
+      return newData;
+    });
+  };
+
+  const handleComplaintInputChange = (index, field, value) => {
+    const newData = [...complaintData];
+    newData[index][field] = value;
+    setComplaintData(newData);
+  };
+
+  // Save data and navigate
+  const handleNextBothForm = async () => {
+    try {
+      await saveDataToStorage(
+        LOCAL_STORAGE_KEYS.KEY_PERFORMANCE,
+        dataKeyPerformance,
+      );
+      await saveDataToStorage(
+        LOCAL_STORAGE_KEYS.CUSTOMER_COMPLAINT,
+        complaintData,
+      );
+      navigation.navigate(SCREENS.MAIN_STACK.MAN_POWER_AVAILABILITY_TRAINING);
+    } catch (error) {
+      console.error('Error in saveFormData:', error);
+    }
+  };
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={{marginHorizontal: 10}}>
+          <View style={styles.tableContainer}>
+            <View style={styles.fixedColumn}>
+              <Text
+                style={[
+                  styles.headerCell,
+                  {
+                    color: 'black',
+                    paddingTop: 25,
+                    fontSize: 11,
+                    backgroundColor: '#FAF1E6',
+                  },
+                  {width: fixedColumnWidth},
+                ]}>
+                Parameters
+              </Text>
+              {Array.isArray(dataKeyPerformance) &&
+                dataKeyPerformance.map((item, index) => (
+                  <Text
+                    key={index}
+                    style={[styles.staticColumn, {width: fixedColumnWidth}]}>
+                    {item.Parameters}
+                  </Text>
+                ))}
+            </View>
+            <ScrollView horizontal>
+              <View>
+                <View style={styles.headerRow}>
+                  {[
+                    'Month Plan',
+                    'MTD Plan',
+                    'MTD Actual',
+                    '% Ach',
+                    'Action Plan',
+                  ].map((title, index) => (
+                    <Text
+                      key={index}
+                      style={[styles.headerCell, {width: columnWidth}]}>
+                      {title}
+                    </Text>
+                  ))}
+                </View>
+                <FlatList
+                  data={dataKeyPerformance}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item, index}) => (
+                    <View style={styles.row}>
+                      {Object.keys(item)
+                        .slice(1)
+                        .map((field, idx) => (
+                          <TextInput
+                            keyboardType="numeric"
+                            key={idx}
+                            style={[styles.inputCell, {width: columnWidth}]}
+                            value={item[field]}
+                            onChangeText={value =>
+                              handleInputChange(index, field, value)
+                            }
+                          />
+                        ))}
+                    </View>
+                  )}
+                />
+              </View>
+            </ScrollView>
+          </View>
+          {/*  Complaint Table */}
+          <View style={styles.tableComplaintWrapper}>
+            <View style={styles.ComplaintFixedColumn}>
+              <Text style={styles.ComplaintStaticHeader}>
+                Complaint Parameter
+              </Text>
+              {complaintData.map((item, index) => (
+                <Text key={index} style={styles.ComplaintStaticCell}>
+                  {item.ComplaintParameter}
+                </Text>
+              ))}
+            </View>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.ComplaintScrollView}>
+              <View>
+                <View style={styles.ComplaintHeaderRow}>
+                  {[
+                    'Recvd',
+                    'Closed',
+                    'Pending 24hrs',
+                    'Pending 48hrs',
+                    'Pending >48hrs',
+                    'Complaint Occurrence',
+                  ].map((title, index) => (
+                    <Text key={index} style={styles.ComplaintHeaderCell}>
+                      {title}
+                    </Text>
+                  ))}
+                </View>
+                <FlatList
+                  data={complaintData}
+                  renderItem={({item, index}) => (
+                    <View style={styles.complaintRow}>
+                      {[
+                        'Recvd',
+                        'Closed',
+                        'hrs24Complaint',
+                        'hrs48Complaint',
+                        'LessThen48hrs',
+                        'Complaint Occurrence',
+                      ].map((field, idx) => (
+                        <TextInput
+                          key={idx}
+                          keyboardType="numeric"
+                          style={styles.ComplaintInputCell}
+                          value={item[field]}
+                          onChangeText={value =>
+                            handleComplaintInputChange(index, field, value)
+                          }
+                        />
+                      ))}
+                    </View>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* Next Button */}
+          <View style={styles.btnContainer}>
+            <CustomButton
+              title="Next"
+              onPress={handleNextBothForm}
+              disabled={!isNextEnabled}
+              loading={false}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    paddingBottom: COMMON_STYLES.SCREEN_VERTICAL_SPACING,
+    backgroundColor: COMMON_STYLES.SCREEN_BACKGROUND_COLOR,
+  },
+  tableContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginVertical: 40,
+  },
+  fixedColumn: {
+    backgroundColor: 'white',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    backgroundColor: '#08aa6d',
+  },
+  headerCell: {
+    fontSize: moderateScale(11),
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    height: 60,
+    paddingTop: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+  staticColumn: {
+    fontSize: moderateScale(10),
+    backgroundColor: '#FAF1E6',
+    textTransform: 'uppercase',
+    flexWrap: 'wrap',
+    height: 53.8,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    borderWidth: 1,
+    padding: 15,
+    paddingTop: 10,
+    borderColor: '#ddd',
+  },
+  inputCell: {
+    fontSize: moderateScale(12),
+    textAlign: 'auto',
+    borderWidth: 1,
+    height: 53,
+    borderColor: '#ddd',
+    padding: 8,
+    backgroundColor: 'white',
+  },
+  tableComplaintWrapper: {
+    flexDirection: 'row',
+    borderWidth: 0.5,
+    borderColor: '#ddd',
+    backgroundColor: '#F0F0F0',
+  },
+  ComplaintFixedColumn: {
+    width: 90,
+    backgroundColor: '#FAF1E6',
+  },
+  ComplaintStaticHeader: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: moderateScale(10),
+    height: 52,
+    color: 'black',
+    paddingTop: 5,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+  ComplaintStaticCell: {
+    textAlign: 'center',
+    height: 40,
+    paddingTop: 5,
+    fontSize: moderateScale(9),
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  ComplaintScrollView: {
+    flex: 1,
+  },
+  ComplaintHeaderRow: {
+    flexDirection: 'row',
+    backgroundColor: '#08aa6d',
+    borderColor: '#ddd',
+  },
+  ComplaintHeaderCell: {
+    width: 68,
+    paddingVertical: 8,
+    height: 52,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: moderateScale(9),
+    borderRightWidth: 1,
+    borderColor: 'white',
+    textTransform: 'uppercase',
+    color: 'white',
+  },
+  complaintRow: {
+    flexDirection: 'row',
+    borderColor: '#ddd',
+  },
+  ComplaintInputCell: {
+    width: 68,
+    height: 50,
+    paddingHorizontal: 10,
+    fontSize: moderateScale(12),
+    borderRightWidth: 2,
+    borderColor: '#ddd',
+    backgroundColor: 'white',
+  },
+  btnContainer: {
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    marginTop: 30,
+  },
+});
+
+export default KeyPerformanceDetails;
+
+
+
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import {retrieveLocalData, saveDataToStorage} from '../utils/commonFunctions';
+import {SCREENS} from '../utils/screens';
+import {CustomButton} from '../uiKit/customButton';
+import {COMMON_STYLES} from '../utils/commonStyles';
+import {LOCAL_STORAGE_KEYS} from '../utils/constants';
+import {moderateScale} from 'react-native-size-matters';
+
+const ManPowerAvailabilityAndTrainingData = ({navigation}) => {
+  const [data, setData] = useState([
+    {
+      Post: 'Service Manager',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+    {
+      Post: 'CRM',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+    {
+      Post: 'Service Advisor',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+    {
+      Post: 'Parts Manager',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+    {
+      Post: 'Technicians',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+    {
+      Post: 'CRE',
+      MinimumRequirement: '',
+      Available: '',
+      TrainedManpower: '',
+      Percentage: '',
+      Remark: '',
+    },
+  ]);
+
+  const [isValid, setIsValid] = useState(false);
+
+  const handleInputChange = (index, field, value) => {
+    const numericValue = value.replace(/[^0-9]/g, '');
+    const newData = [...data];
+    newData[index][field] = numericValue;
+    setData(newData);
+  };
+
+  const validateForm = () => {
+    return data.every(item =>
+      Object.values(item).every(val => val.trim() !== ''),
+    );
+  };
+
+  useEffect(() => {
+    setIsValid(validateForm());
+  }, [data]);
+
+  const handleSubmit = async () => {
+    if (!isValid) {
+      Alert.alert('Error', 'Please fill all fields before submitting.');
+      return;
+    }
+    try {
+      await saveDataToStorage(
+        LOCAL_STORAGE_KEYS.MAN_POWER_AVAILABILITY_TRAINING,
+        data,
+      );
+      navigation.navigate(SCREENS.MAIN_STACK.WORKSHOP_PICTURES);
+      Alert.alert('Success', 'Data saved locally');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      Alert.alert('Error', 'Failed to save data.');
+    }
+  };
+
+  return (
+    <View style={styles.safeContainer}>
+      <View style={styles.tableContainer}>
+        <View style={styles.fixedColumn}>
+          <Text style={styles.headerCellFixed}>Role</Text>
+          {data.map((item, index) => (
+            <View key={index} style={styles.cellFixed}>
+              <Text style={styles.cellText}>{item.Post}</Text>
+            </View>
+          ))}
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View>
+            <View style={styles.headerRow}>
+              {['Min Req.', 'Available', 'Trained', 'Per %', 'Remark'].map(
+                (title, index) => (
+                  <Text key={index} style={styles.headerCell}>
+                    {title}
+                  </Text>
+                ),
+              )}
+            </View>
+            {data.map((item, index) => (
+              <View key={index} style={styles.row}>
+                {[
+                  'MinimumRequirement',
+                  'Available',
+                  'TrainedManpower',
+                  'Percentage',
+                  'Remark',
+                ].map((field, idx) => (
+                  <TextInput
+                    key={idx}
+                    keyboardType="numeric"
+                    style={[
+                      styles.inputCell,
+                      field === 'remarks' && styles.remarksInput,
+                    ]}
+                    value={item[field]}
+                    onChangeText={value =>
+                      handleInputChange(index, field, value)
+                    }
+                    multiline={field === 'remarks'}
+                  />
+                ))}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
+      <View style={styles.btnContainer}>
+        <CustomButton title="Next" onPress={handleSubmit} disabled={!isValid} />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    paddingBottom: COMMON_STYLES.SCREEN_VERTICAL_SPACING,
+    backgroundColor: COMMON_STYLES.SCREEN_BACKGROUND_COLOR,
+  },
+  tableContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    marginVertical: 30,
+  },
+  fixedColumn: {
+    width: 100,
+  },
+  headerCellFixed: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 15,
+    backgroundColor: '#FAF1E6',
+    color: 'black',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    height: 60,
+    fontSize: moderateScale(13),
+  },
+  cellFixed: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 100,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: '#FAF1E6',
+  },
+  cellText: {
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    padding: 5,
+    fontSize: moderateScale(10),
+    fontWeight: 'bold',
+  },
+  headerRow: {
+    height: 60,
+    flexDirection: 'row',
+    backgroundColor: '#08aa6d',
+  },
+  headerCell: {
+    width: 70,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: moderateScale(10),
+    textTransform: 'uppercase',
+    borderRightWidth: 1,
+    padding: 5,
+    paddingTop: 20,
+    borderColor: '#ddd',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  inputCell: {
+    width: 70,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    backgroundColor: 'white',
+    fontSize: moderateScale(12),
+    textAlign: 'left',
+    paddingHorizontal: 10,
+  },
+  remarksInput: {
+    width: 80,
+    textAlign: 'left',
+    paddingHorizontal: 10,
+  },
+  btnContainer: {
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    marginTop: 10,
+  },
+});
+
+export default ManPowerAvailabilityAndTrainingData;
+
+
+
+
+create dealer form
+import {Picker} from '@react-native-picker/picker';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {CustomButton} from '../uiKit/customButton';
+import {COMMON_STYLES} from '../utils/commonStyles';
+import {LOCAL_STORAGE_KEYS, MONTHS} from '../utils/constants';
+import {SCREENS} from '../utils/screens';
+import {createDealerTable, insertDealerData} from '../database/schema';
+import db from '../database/db';
+// Function to fetch saved data from SQLite
+const getDealerData = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM DealerTable',
+        [],
+        (_, {rows}) => {
+          console.log('Fetched Data from SQLite:', rows._array);
+          resolve(rows._array);
+        },
+        (_, error) => reject(error),
+      );
+    });
+  });
+};
+
+const CustomInput = ({label, value, onChangeText, placeholder}) => {
+  return (
+    <View style={styles.inputWrapper}>
+      <Text style={styles.label}>{label}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder={placeholder}
+        placeholderTextColor="grey"
+        value={value}
+        onChangeText={onChangeText}
+      />
+    </View>
+  );
+};
+
+const CreateDealer = ({navigation}) => {
+  const [form, setForm] = useState({
+    region: '',
+    dealerCode: '',
+    dealerName: '',
+    dealerType: '',
+    location: '',
+    state: '',
+    asmName: '',
+    dateOfVisit: '',
+    visitType: '',
+  });
+
+  const currentDateAndTime = new Date();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(
+    currentDateAndTime.getMonth(),
+  );
+  const [selectedYear, setSelectedYear] = useState(
+    currentDateAndTime.getFullYear(),
+  );
+
+  useEffect(() => {
+    createDealerTable();
+  }, []);
+
+  const years = Array.from(
+    {length: 50},
+    (_, i) => new Date().getFullYear() - 25 + i,
+  );
+
+  const handleInputChange = (field, value) => {
+    setForm(prevState => ({...prevState, [field]: value}));
+  };
+
+  const handleConfirmed = () => {
+    const newDate =
+      form.visitType === 'monthly'
+        ? `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}`
+        : `${selectedYear}`;
+
+    setForm(prevState => ({...prevState, dateOfVisit: newDate}));
+    setModalVisible(false);
+  };
+
+  const validateForm = () => {
+    return Object.values(form).every(value => value.trim() !== '');
+  };
+  const handleSubmit = async () => {
+    if (!validateForm()) {
+      Alert.alert('Validation Error', 'Please fill all fields.');
+      return;
+    }
+    try {
+      //await insertDealerData(form); // Ensure it's awaited properly
+      await insertDealerData(
+        form.dealerCode,
+        form.region,
+        //form.deal,
+        form.dealerName,
+        form.dealerType,
+        location,
+        state,
+        asmName,
+        dofVisit,
+      ); // Ensure it's awaited properly
+      console.log('Data inserted successfully:', form);
+
+      // Fetch and log stored data
+      try {
+        const savedData = await getDealerData();
+        console.log('Stored Data in SQLite:', savedData);
+      } catch (fetchError) {
+        console.error('Error fetching data from SQLite:', fetchError);
+      }
+
+      Alert.alert('Data Saved Successfully!');
+      navigation.navigate(SCREENS.MAIN_STACK.DEALER_EVALUATION);
+    } catch (error) {
+      console.error('Storage Error:', error?.message || error);
+      Alert.alert('Error', 'Something went wrong!');
+    }
+  };
+
+  return (
+    <View style={styles.safeContainer}>
+      <StatusBar barStyle="dark-content" backgroundColor="#00BCD4" />
+      <View style={styles.mainContainer}>
+        <View style={styles.header}>
+          <Text style={styles.headingMain}>Dealer Form</Text>
+          <Text style={styles.headingSec}>Fill the Details below:</Text>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <View style={styles.container}>
+              {[
+                {label: 'Region', field: 'region'},
+                {label: 'Dealer Code', field: 'dealerCode'},
+                {label: 'Dealer Name', field: 'dealerName'},
+                {label: 'Dealer Type', field: 'dealerType'},
+                {label: 'Location', field: 'location'},
+                {label: 'State', field: 'state'},
+                {label: 'ASM Name', field: 'asmName'},
+              ].map(({label, field}) => (
+                <CustomInput
+                  key={field}
+                  label={label}
+                  value={form[field]}
+                  placeholder={`Enter ${label}`}
+                  onChangeText={text => handleInputChange(field, text)}
+                />
+              ))}
+              <Text style={styles.label}>Visit Type</Text>
+              <Picker
+                selectedValue={form.visitType}
+                style={styles.picker}
+                dropdownIconColor="black"
+                onValueChange={itemValue => {
+                  setForm(prevState => ({
+                    ...prevState,
+                    visitType: itemValue,
+                    dateOfVisit: '',
+                  }));
+                }}>
+                <Picker.Item label="Select Visit Type" value="" />
+                <Picker.Item label="Monthly" value="monthly" />
+                <Picker.Item label="Quarter One" value="quarterOne" />
+                <Picker.Item label="Quarter Two" value="quarterTwo" />
+                <Picker.Item label="Quarter Three" value="quarterThree" />
+                <Picker.Item label="Quarter Four" value="quarterFour" />
+              </Picker>
+              <Text style={styles.label}>Date of Visit</Text>
+              <TouchableOpacity
+                style={styles.inputContainer}
+                onPress={() => setModalVisible(true)}>
+                <Text style={styles.inputText}>
+                  {form.dateOfVisit || 'Select Date'}
+                </Text>
+              </TouchableOpacity>
+              <Modal visible={modalVisible} transparent animationType="slide">
+                <View style={styles.modalContainer}>
+                  <View style={styles.pickerContainer}>
+                    {form.visitType === 'monthly' && (
+                      <Picker
+                        selectedValue={selectedMonth}
+                        onValueChange={itemValue =>
+                          setSelectedMonth(itemValue)
+                        }>
+                        {MONTHS.map((month, index) => (
+                          <Picker.Item
+                            key={index}
+                            label={month}
+                            value={index}
+                          />
+                        ))}
+                      </Picker>
+                    )}
+                    <Picker
+                      selectedValue={selectedYear}
+                      onValueChange={itemValue => setSelectedYear(itemValue)}>
+                      {years.map((year, index) => (
+                        <Picker.Item
+                          key={index}
+                          label={year.toString()}
+                          value={year}
+                        />
+                      ))}
+                    </Picker>
+                    <TouchableOpacity
+                      style={styles.doneButton}
+                      onPress={handleConfirmed}>
+                      <Text style={styles.doneText}>Done</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+          </ScrollView>
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title="Next"
+              onPress={handleSubmit}
+              disabled={!validateForm()}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </View>
+  );
+};
+const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: COMMON_STYLES.SCREEN_BACKGROUND_COLOR,
+  },
+  mainContainer: {
+    flex: 1,
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    paddingVertical: COMMON_STYLES.SCREEN_VERTICAL_SPACING,
+  },
+  scrollContainer: {
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    paddingBottom: COMMON_STYLES.SCREEN_VERTICAL_SPACING,
+  },
+  header: {
+    padding: 20,
+  },
+  headingMain: {
+    fontSize: 40,
+    fontWeight: '800',
+    letterSpacing: 2,
+    color: 'black',
+  },
+  headingSec: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#097969',
+    marginTop: 5,
+  },
+  inputWrapper: {
+    marginBottom: 12,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingBottom: 10,
+  },
+  input: {
+    padding: 16,
+    fontSize: 16,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderColor: '#ccc',
+  },
+  inputContainer: {
+    width: '100%',
+    borderColor: '#ccc',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: 'white',
+  },
+  inputText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  buttonContainer: {
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    marginTop: 10,
+  },
+  submitButton: {
+    width: '90%',
+    backgroundColor: '#08aa6d',
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginHorizontal: 50,
+    marginBottom: 30,
+  },
+  submitText: {
+    fontSize: 16,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  picker: {
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    color: 'black',
+  },
+  text: {
+    fontSize: 20,
+    color: '#333',
+  },
+  modalContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: 200,
+  },
+  doneButton: {
+    backgroundColor: '#08aa6d',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  doneText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  pickerContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    width: '80%',
+    borderRadius: 10,
+    elevation: 5,
+  },
+});
+
+export default CreateDealer;
+
+
+
+-------date 25 march 2025 
+API CODE
+
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
+import {
+  Image,
+  PermissionsAndroid,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {launchCamera} from 'react-native-image-picker';
+import axios from '../api/axios';
+import {API_ENDPOINTS, BASE_URL} from '../api/endPoints';
+import {retrieveLocalData} from '../utils/commonFunctions';
+import {SCREENS} from '../utils/screens';
+import {CustomButton} from '../uiKit/customButton';
+import {COMMON_STYLES} from '../utils/commonStyles';
+import {LOCAL_STORAGE_KEYS} from '../utils/constants';
+import {COLORS} from '../utils/colors';
+
+const InsertWorkshopPicture = ({navigation}) => {
+  // Local States
+  const [images, setImages] = useState([null, null, null, null]);
+  const [createDealerStep1form, setCreateDealerStep1Form] = useState({});
+  const [dealerEvolutionStep2form, setDealerEvolutionStep2Form] = useState({});
+  const [manPowerStep3form, setManPowerStep3form] = useState({});
+  const [keyPerformanceStep4form, setKeyPerformanceStep4form] = useState({});
+  const [customerComplaintStep5form, setCustomerComplaintStep5form] = useState(
+    {},
+  );
+  const [repeatJCStep6form, setRepeatJCStep6form] = useState({});
+  const [workshopPhotosStep7form, setWorkshopPhotosStep7form] = useState({});
+
+  const [loading, setLoading] = useState(false);
+
+  //  Variables
+  const labels = [
+    'Workshop Entry',
+    'Customer Lounge Area',
+    'Billing & Reception',
+    'Complete Workshop Area',
+  ];
+
+  // Functions
+  const openCamera = async index => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'App needs access to your camera',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const result = await launchCamera({
+          mediaType: 'photo',
+          saveToPhotos: true,
+        });
+        if (result.assets && result.assets.length > 0) {
+          const imagePath = result.assets[0].uri;
+          const updatedImages = [...images];
+          updatedImages[index] = imagePath;
+          setImages(updatedImages);
+          await AsyncStorage.setItem(
+            LOCAL_STORAGE_KEYS.WORKSHOP_PICTURES,
+            JSON.stringify(updatedImages),
+          );
+        }
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  // Calling All API in Sequence Wise Order --->
+  const handleCreate_DealerSubmission = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        Dealercode: createDealerStep1form?.dealerCode,
+        Region: createDealerStep1form?.region,
+        DealerBranchCode: '4',
+        DealerName: createDealerStep1form?.dealerName,
+        DealerType: createDealerStep1form?.dealerType,
+        Location: createDealerStep1form?.location,
+        State: createDealerStep1form?.state,
+        ASMName: createDealerStep1form?.asmName,
+        // DateOfVisit: createDealerStep1form?.dateOfVisit,
+        DateOfVisit: '2024-09-09',
+      };
+
+      console.log('handleCreate_DealerSubmission() Payload = ', payload);
+
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.CREATE_DEALER,
+        payload,
+      );
+
+      console.log(
+        'handleCreate_DealerSubmission() Response = ',
+        response?.data,
+      );
+
+      if (
+        response?.data?.Message == 'Success' &&
+        response?.data?.Data[0]?.DealerId
+      ) {
+        const DealerId = response?.data?.Data[0]?.DealerId;
+        handleDealer_EvolutionSubmission(DealerId);
+      }
+    } catch (error) {
+      console.error('handleCreate_DealerSubmission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Dealer Evolution --->
+  const handleDealer_EvolutionSubmission = async dealerId => {
+    setLoading(true);
+    try {
+      const payload = new FormData();
+
+      const stepData = dealerEvolutionStep2form?.[0]?.[0] || {};
+
+      payload.append('DEFID', 'A8F85AFE-614A-400D-8CC8-3CF7A8A65B75');
+      payload.append('DealerId', dealerId);
+      payload.append('MaxObt', stepData.MaxObt || '');
+      payload.append('ActionPlan', stepData.ActionPlan || '');
+      payload.append('PlanDate', stepData.PlanDate || '');
+      payload.append('Responsibility', stepData.Responsibility || '');
+      payload.append('GapArea', stepData.GapArea || '');
+
+      if (stepData.Image) {
+        payload.append('Image', {
+          uri: stepData.Image,
+          name: `photo_${Date.now()}.jpg`,
+          type: 'image/jpeg',
+        });
+      }
+
+      console.log('handleDealer_EvolutionSubmission() Payload = ', payload);
+
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.INSERT_DEALER_EVALUATION,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      console.log(
+        'handleDealer_EvolutionSubmission() Response = ',
+        response.data,
+      );
+      if (response?.data?.Data[0]?.Output === 'Insert Successfully') {
+        handleKeyPerformanceSubmission(dealerId);
+      }
+    } catch (error) {
+      console.error('handleDealer_EvolutionSubmission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const handleDealer_EvolutionSubmission = async dealerId => {
+  //   setLoading(true);
+  //   try {
+  //     for (let i = 0; i < dealerEvolutionStep2form.length; i++) {
+  //       const stepData = dealerEvolutionStep2form[i][0] || {};
+  //       const payload = new FormData();
+
+  //       payload.append('DEFID', stepData.DEFID || '');
+  //       payload.append('DealerId', dealerId);
+  //       payload.append('MaxObt', stepData.MaxObt || '');
+  //       payload.append('ActionPlan', stepData.ActionPlan || '');
+  //       payload.append('PlanDate', stepData.PlanDate || '');
+  //       payload.append('Responsibility', stepData.Responsibility || '');
+  //       payload.append('GapArea', stepData.GapArea || '');
+
+  //       if (stepData.Image) {
+  //         payload.append('Image', {
+  //           uri: stepData.Image,
+  //           name: `photo_${Date.now()}_${i}.jpg`,
+  //           type: 'image/jpeg',
+  //         });
+  //       }
+
+  //       console.log('Payload for request ', i, payload);
+
+  //       const response = await axios.post(
+  //         BASE_URL + API_ENDPOINTS.INSERT_DEALER_EVALUATION,
+  //         payload,
+  //         {
+  //           headers: {
+  //             'Content-Type': 'multipart/form-data',
+  //           },
+  //         },
+  //       );
+
+  //       console.log('Response for request ', i, response.data);
+  //     }
+  //     if (response?.data?.Data[0]?.Output === 'Insert Successfully') {
+  //       handleKeyPerformanceSubmission(dealerId);
+  //     }
+  //   } catch (error) {
+  //     console.error('handleDealer_EvolutionSubmission() Error = ', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleKeyPerformanceSubmission = async dealerId => {
+    try {
+      setLoading(true);
+
+      if (!dealerId) {
+        return;
+      }
+      const keyPerformanceData = Object.values(keyPerformanceStep4form) || [];
+
+      if (!keyPerformanceData.length) {
+        return;
+      }
+
+      const payload = {
+        Parameters: keyPerformanceData[0]?.Parameters?.trim() || '',
+        MonthPlan: keyPerformanceData[0]?.MonthPlan?.trim() || '',
+        MTDPlan: keyPerformanceData[0]?.MTDPlan?.trim() || '',
+        MTDActual: keyPerformanceData[0]?.MTDActual?.trim() || '',
+        ACH: keyPerformanceData[0]?.ACH?.trim() || '',
+        ActionPlan: keyPerformanceData[0]?.ActionPlan?.trim() || '',
+        Responsibility: keyPerformanceData[0]?.Responsibility?.trim() || '',
+        ReasonForLowMarks:
+          keyPerformanceData[0]?.ReasonForLowMarks?.trim() || '',
+        DealerId: dealerId.toString(),
+      };
+
+      console.log('handleKeyPerformanceSubmission() Payload = ', payload);
+
+      const response = await axios.post(
+        `${BASE_URL}${API_ENDPOINTS.INSERT_KEY_PERFORMANCE}`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        },
+      );
+      console.log(
+        'handleKeyPerformanceSubmission() Response = ',
+        response?.data,
+      );
+      if (response.data?.Message === 'Success') {
+        handleRepeat_JC_Submission(dealerId);
+      }
+    } catch (error) {
+      console.error('handleKeyPerformanceSubmission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Repeat_JC -
+  const handleRepeat_JC_Submission = async dealerId => {
+    try {
+      setLoading(true);
+      if (!dealerId) {
+        return;
+      }
+      const keyPerformanceData = Object.values(repeatJCStep6form) || [];
+
+      if (!keyPerformanceData.length) {
+        return;
+      }
+
+      const payload = {
+        MonthPlan: keyPerformanceData[7]?.MonthPlan?.trim() || '',
+        MTDPlan: keyPerformanceData[7]?.MTDPlan?.trim() || '',
+        ActionPlan: keyPerformanceData[7]?.ActionPlan?.trim() || '',
+        DealerId: dealerId.toString(),
+      };
+
+      console.log('handleRepeat_JC_Submission() Payload = ', payload);
+
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.REPEAT_NOS_JS,
+        payload,
+      );
+
+      console.log('handleRepeat_JC_Submission() Response = ', response);
+
+      handleCustomer_ComplaintSubmission(dealerId);
+    } catch (error) {
+      console.error('handleRepeat_JC_Submission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Customer - Complaint;
+  const handleCustomer_ComplaintSubmission = async dealerId => {
+    try {
+      setLoading(true);
+
+      if (!dealerId) {
+        return;
+      }
+
+      const customerComplaint = Object.values(customerComplaintStep5form) || [];
+
+      if (!customerComplaint.length) {
+        return;
+      }
+
+      const payload = {
+        Recvd: customerComplaint[0]?.Recvd?.trim() || '',
+        Closed: customerComplaint[0]?.Closed?.trim() || '',
+        hrs48Complaint: customerComplaint[0]?.hrs48Complaint?.trim() || '',
+        hrs24Complaint: customerComplaint[0]?.hrs24Complaint?.trim() || '',
+        LessThen48hrs: customerComplaint[0]?.LessThen48hrs?.trim() || '',
+        Complaint: customerComplaint[0]?.Complaint?.trim() || '',
+        DealerId: dealerId.toString(),
+      };
+      console.log('handleCustomer_ComplaintSubmission() Payload = ', payload);
+
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.INSERT_CUSTOMER_COMPLAINT,
+        payload,
+      );
+      console.log(
+        'handleCustomer_ComplaintSubmission() Response = ',
+        response?.data,
+      );
+      handleManPower_Submission(dealerId);
+    } catch (error) {
+      console.error('handleCustomer_ComplaintSubmission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // ManPower ---->
+  const handleManPower_Submission = async dealerId => {
+    setLoading(true);
+    try {
+      const manpowerData = Object.values(manPowerStep3form)[0] || {};
+
+      const payload = {
+        Post: manpowerData.Post || '',
+        MinimumRequirement: manpowerData.MinimumRequirement || '',
+        Available: manpowerData.Available || '',
+        TrainedManpower: manpowerData.TrainedManpower || '',
+        Percentage: manpowerData.Percentage || '',
+        Remark: manpowerData.Remark || '',
+        Reason: 'NO Way',
+        DealerId: dealerId || '',
+      };
+
+      console.log('handleManPower_Submission() Payload = ', payload);
+
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.INSERT_MANPOWER_DATA,
+        payload,
+      );
+
+      console.log('handleManPower_Submission() Response = ', response?.data);
+
+      if (
+        response?.data?.Message === 'Success' &&
+        response?.data?.Data?.[0]?.Output === 'Insert Successfully'
+      ) {
+        console.log('Data inserted successfully');
+        handleWorkShopPictures_Submission(dealerId);
+      }
+    } catch (error) {
+      console.error('handleManPower_Submission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // WorkShopPhotos -->
+  const handleWorkShopPictures_Submission = async dealerId => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('DealerId', dealerId);
+    formData.append('WorkshopEntry', {
+      uri: workshopPhotosStep7form[0],
+      type: 'image/jpeg',
+      name: 'workshop1.jpg',
+    });
+    formData.append('CustomerLoungeArea', {
+      uri: workshopPhotosStep7form[1],
+      type: 'image/jpeg',
+      name: 'customerLounge.jpg',
+    });
+    formData.append('BillingAndReceptionArea', {
+      uri: workshopPhotosStep7form[2],
+      type: 'image/jpeg',
+      name: 'billingReception.jpg',
+    });
+    formData.append('CompleteWorkshopArea', {
+      uri: workshopPhotosStep7form[3],
+      type: 'image/jpeg',
+      name: 'completeWorkshop.jpg',
+    });
+
+    console.log('handleWorkShopPictures_Submission() Payload = ', formData);
+
+    try {
+      const response = await axios.post(
+        BASE_URL + API_ENDPOINTS.INSERT_WORKSHOP_PICTURE,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      console.log(
+        'handleWorkShopPictures_Submission() Response = ',
+        response?.data,
+      );
+      navigation.reset({
+        index: 0,
+        routes: [{name: SCREENS.MAIN_STACK.COMPLETE_FORM}],
+      });
+    } catch (error) {
+      console.error('handleWorkShopPictures_Submission() Error = ', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //Main create Dealer API FUNCTION CALL --->
+  const handleSubmit = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: SCREENS.MAIN_STACK.COMPLETE_FORM}],
+    });
+    // handleWorkShopPictures_Submission();
+    // handleManPower_Submission();
+    // handleCustomer_ComplaintSubmission();
+  };
+  // Effects All Local db Data
+  useEffect(() => {
+    retrieveLocalData(
+      LOCAL_STORAGE_KEYS?.CREATE_DEALER,
+      setCreateDealerStep1Form,
+    );
+    retrieveLocalData('formData', setDealerEvolutionStep2Form);
+    retrieveLocalData(
+      LOCAL_STORAGE_KEYS?.MAN_POWER_AVAILABILITY_TRAINING,
+      setManPowerStep3form,
+    );
+    retrieveLocalData(
+      LOCAL_STORAGE_KEYS?.KEY_PERFORMANCE,
+      setKeyPerformanceStep4form,
+    );
+    retrieveLocalData(
+      LOCAL_STORAGE_KEYS?.WORKSHOP_PICTURES,
+      setWorkshopPhotosStep7form,
+    );
+    retrieveLocalData(
+      LOCAL_STORAGE_KEYS?.CUSTOMER_COMPLAINT,
+      setCustomerComplaintStep5form,
+    );
+    retrieveLocalData(LOCAL_STORAGE_KEYS?.REPEAT_JC_NOS, setRepeatJCStep6form);
+  }, []);
+
+  console.log('createDealerStep1form = ', createDealerStep1form);
+  console.log('dealerEvolutionStep2form = ', dealerEvolutionStep2form);
+  console.log('manPowerStep3form =', manPowerStep3form);
+  console.log('keyPerformanceStep4form =', keyPerformanceStep4form);
+  console.log('customerComplaintStep5form =', customerComplaintStep5form);
+  console.log('repeatJCStep6form = ', repeatJCStep6form);
+  console.log('workshopPhotosStep7form = ', workshopPhotosStep7form);
+
+  return (
+    <>
+      <View style={styles.container}>
+        <View style={styles.grid}>
+          {labels.map((label, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.box}
+              onPress={() => openCamera(index)}
+              activeOpacity={0.7}>
+              {images[index] ? (
+                <>
+                  <Image source={{uri: images[index]}} style={styles.image} />
+                  <Text style={styles.imageLabel}>{label}</Text>
+                </>
+              ) : (
+                <Text style={styles.label}>{label}</Text>
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+        {/* Buttons Container */}
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title="Submit"
+            onPress={handleSubmit}
+            loading={loading}
+          />
+        </View>
+      </View>
+    </>
+  );
+};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    paddingBottom: COMMON_STYLES.SCREEN_VERTICAL_SPACING,
+    backgroundColor: COLORS.WHITE,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 80,
+  },
+  box: {
+    width: '48%',
+    height: 240,
+    backgroundColor: '#FAF1E6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginVertical: 10,
+    position: 'relative',
+  },
+  label: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    paddingHorizontal: 5,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  imageLabel: {
+    position: 'absolute',
+    bottom: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    color: '#fff',
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    borderRadius: 4,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  btnContainer: {
+    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    marginTop: 80,
+  },
+});
+
+export default InsertWorkshopPicture;
+
+
+
+----------------------------------------
+
+// import React, {useState, useEffect} from 'react';
+// import {View, FlatList} from 'react-native';
+// import {Dropdown} from 'react-native-element-dropdown';
+// import {
+//   TextInput,
+//   Button,
+//   Card,
+//   Text,
+//   Modal,
+//   Portal,
+//   Provider,
+//   FAB,
+// } from 'react-native-paper';
+// import {styles} from './style';
+// import {COLORS} from '../../utils/colors';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import {db} from '../../database/db';
+
+// const postOptions = [
+//   {label: 'Service Head', value: 'Service Head'},
+//   {label: 'Sales Head', value: 'Sales Head'},
+//   {label: 'Service Regional Manager', value: 'Service Regional Manager'},
+//   {label: 'Sales Regional Manager', value: 'Sales Regional Manager'},
+// ];
+
+// const AccompaniedByCompany = () => {
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [post, setPost] = useState('');
+//   const [name, setName] = useState('');
+//   const [mobile, setMobile] = useState('');
+//   const [list, setList] = useState([]);
+
+//   useEffect(() => {
+//     createCompanyTable();
+//     fetchCompanyData();
+//   }, []);
+
+//   const createCompanyTable = () => {
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'CREATE TABLE IF NOT EXISTS AccompaniedByCompany (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+//       );
+//     });
+//   };
+
+//   const insertCompanyData = () => {
+//     if (!post || !name || !mobile) return;
+
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'INSERT INTO AccompaniedByCompany (post, name, mobile) VALUES (?, ?, ?);',
+//         [post, name, mobile],
+//         () => {
+//           fetchCompanyData();
+//           resetCompanyForm();
+//         },
+//       );
+//     });
+//   };
+
+//   const fetchCompanyData = () => {
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'SELECT * FROM AccompaniedByCompany;',
+//         [],
+//         (tx, results) => {
+//           const rows = results.rows;
+//           let temp = [];
+//           for (let i = 0; i < rows.length; i++) {
+//             temp.push(rows.item(i));
+//           }
+//           setList(temp);
+//         },
+//       );
+//     });
+//   };
+
+//   const resetCompanyForm = () => {
+//     setPost('');
+//     setName('');
+//     setMobile('');
+//     setModalVisible(false);
+//   };
+
+//   return (
+//     <Provider>
+//       <View style={styles.container}>
+//         <FlatList
+//           data={list}
+//           keyExtractor={item => item.id.toString()}
+//           renderItem={({item}) => (
+//             <Card style={styles.card} elevation={0}>
+//               <Card.Content>
+//                 <Text variant="titleMedium">Post: {item.post}</Text>
+//                 <Text>Name: {item.name}</Text>
+//                 <Text>Mobile: {item.mobile}</Text>
+//               </Card.Content>
+//             </Card>
+//           )}
+//         />
+
+//         <FAB
+//           icon="plus"
+//           color="white"
+//           style={styles.fab}
+//           onPress={() => setModalVisible(true)}
+//         />
+
+//         <Portal>
+//           <Modal
+//             visible={modalVisible}
+//             onDismiss={resetCompanyForm}
+//             contentContainerStyle={styles.modal}>
+//             <Text
+//               variant="titleLarge"
+//               style={{
+//                 marginBottom: 20,
+//                 textAlign: 'center',
+//                 fontWeight: 'bold',
+//               }}>
+//               Company
+//             </Text>
+
+//             <Dropdown
+//               style={styles.dropdown}
+//               data={postOptions}
+//               labelField="label"
+//               valueField="value"
+//               placeholder="Select Post"
+//               value={post}
+//               onChange={item => setPost(item.value)}
+//             />
+
+//             <TextInput
+//               label="Name"
+//               value={name}
+//               onChangeText={setName}
+//               mode="outlined"
+//               style={styles.input}
+//               outlineColor="#999"
+//               activeOutlineColor={COLORS.PRIMARY}
+//             />
+
+//             <TextInput
+//               label="Mobile"
+//               value={mobile}
+//               onChangeText={text => {
+//                 const cleaned = text.replace(/[^0-9]/g, '').slice(0, 10);
+//                 setMobile(cleaned);
+//               }}
+//               mode="outlined"
+//               keyboardType="number-pad"
+//               maxLength={10}
+//               style={styles.input}
+//               outlineColor="#999"
+//               activeOutlineColor={COLORS.PRIMARY}
+//             />
+
+//             <Button
+//               mode="contained"
+//               onPress={insertCompanyData}
+//               style={{marginTop: 10}}
+//               buttonColor={COLORS.PRIMARY}
+//               icon="check">
+//               Submit
+//             </Button>
+
+//             <Button
+//               onPress={resetCompanyForm}
+//               textColor="red"
+//               style={{marginTop: 5}}
+//               icon={({size, color}) => (
+//                 <Icon name="close" size={24} color={color} />
+//               )}>
+//               Cancel
+//             </Button>
+//           </Modal>
+//         </Portal>
+//       </View>
+//     </Provider>
+//   );
+// };
+
+// export default AccompaniedByCompany;
+
+
+
+
+// // import React, {useState, useEffect} from 'react';
+// // import {
+// //   View,
+// //   Text,
+// //   FlatList,
+// //   TouchableOpacity,
+// //   ActivityIndicator,
+// //   ScrollView,
+// //   Dimensions,
+// //   Image,
+// //   SafeAreaView,
+// //   Platform,
+// // } from 'react-native';
+// // import NetInfo from '@react-native-community/netinfo';
+// // import {Snackbar} from 'react-native-paper';
+// // import {styles} from './style';
+// // import {MONTHS, YEARS} from '../../utils/constants';
+// // import {useNavigation} from '@react-navigation/native';
+// // import {SCREENS} from '../../utils/screens';
+// // import {STACKS} from '../../utils/stacks';
+// // import axios from 'axios';
+// // import LinearGradient from 'react-native-linear-gradient';
+// // import {
+// //   clearKPIPerformanceData,
+// //   clearTableManPowerAvailability,
+// //   create_KPI_Performance_Table,
+// //   createManPowerAvailability,
+// //   fetchDataManPowerAvailability,
+// //   insert_KPI_Performance_Record,
+// //   insertDataManPowerAvailability,
+// // } from '../../database/db';
+// // import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
+// // import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
+
+// // const {width} = Dimensions.get('window');
+
+// // const SelectDealerCode = () => {
+// //   const currentYear = new Date().getFullYear();
+// //   const currentMonth = (new Date().getMonth() + 1).toString();
+// //   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+// //   const [selectedYear, setSelectedYear] = useState(currentYear);
+// //   const [dealerData, setDealerData] = useState([]);
+// //   const [loading, setLoading] = useState(false);
+// //   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+// //   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+// //   const [selectedDealerCode, setSelectedDealerCode] = useState(null);
+// //   const [isPopupVisible, setPopupVisible] = useState(false);
+// //   const [snackbar, setSnackbar] = useState({
+// //     visible: false,
+// //     message: '',
+// //     type: 'info',
+// //   });
+
+// //   const navigation = useNavigation();
+
+// //   useEffect(() => {
+// //     create_KPI_Performance_Table();
+// //     createManPowerAvailability();
+// //   }, []);
+
+// //   const checkInternet = async () => {
+// //     const state = await NetInfo.fetch();
+// //     return state.isConnected;
+// //   };
+
+// //   const showSnackbar = (message, type = 'info') => {
+// //     setSnackbar({visible: true, message, type});
+// //   };
+
+// //   const handleMonthChange = async month => {
+// //     const isConnected = await checkInternet();
+// //     if (!isConnected) {
+// //       showSnackbar('No Internet Connection');
+// //       return;
+// //     }
+
+// //     setSelectedMonthIndex(month.value - 1);
+// //     setSelectedMonth(month.value);
+// //     fetchDealerList(month.value, selectedYear);
+// //   };
+
+// //   const handleYearChange = async (year, index) => {
+// //     const isConnected = await checkInternet();
+// //     if (!isConnected) {
+// //       showSnackbar('No Internet Connection');
+// //       return;
+// //     }
+
+// //     setSelectedYearIndex(index);
+// //     setSelectedYear(year);
+// //     fetchDealerList(selectedMonth, year);
+// //   };
+
+// //   useEffect(() => {
+// //     const init = async () => {
+// //       const isConnected = await checkInternet();
+// //       if (!isConnected) {
+// //         showSnackbar('No Internet Connection');
+// //         return;
+// //       }
+
+// //       const monthValue = new Date().getMonth();
+// //       const yearValue = new Date().getFullYear();
+
+// //       setSelectedMonthIndex(monthValue);
+// //       setSelectedMonth(monthValue + 1);
+// //       setSelectedYear(yearValue);
+
+// //       fetchDealerList(monthValue + 1, yearValue);
+// //       fetchManPowerData();
+// //     };
+
+// //     init();
+// //   }, []);
+
+// //   const fetchDealerList = async (month, year) => {
+// //     setLoading(true);
+// //     try {
+// //       const response = await axios.post(
+// //         `${BASE_URL}${API_ENDPOINTS.TRAVEL_DEALER_PLANNING}`,
+// //         {
+// //           Month: month,
+// //           Year: year.toString(),
+// //           DealerCode: 'p.vishnu3@classiclegends.com',
+// //         },
+// //         {headers: {'Content-Type': 'application/json'}},
+// //       );
+
+// //       if (response.data?.Data) {
+// //         setDealerData(response.data.Data);
+// //       } else {
+// //         setDealerData([]);
+// //         showSnackbar('No dealer data found');
+// //       }
+// //     } catch (error) {
+// //       console.error('Dealer List Error:', error);
+// //       showSnackbar('Failed to fetch dealer list');
+// //       setDealerData([]);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   const fetchManPowerData = async () => {
+// //     try {
+// //       const response = await axios.post(
+// //         'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
+// //         {ServiceVisit: 100},
+// //         {headers: {'Content-Type': 'application/json'}},
+// //       );
+
+// //       if (response.data?.Data?.length > 0) {
+// //         response.data.Data.forEach(item =>
+// //           insertDataManPowerAvailability(item.Type, item.Values),
+// //         );
+// //       }
+
+// //       fetchDataManPowerAvailability(dbData => {
+// //         setLoading(false);
+// //       });
+// //     } catch (error) {
+// //       console.error('ManPower API Error:', error);
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   const fetchKpiData = async (dealerCode, month, year) => {
+// //     const isConnected = await checkInternet();
+// //     if (!isConnected) {
+// //       showSnackbar('No Internet Connection');
+// //       return;
+// //     }
+
+// //     setLoading(true);
+// //     try {
+// //       clearKPIPerformanceData();
+// //       const response = await axios.post(
+// //         `${BASE_URL}${API_ENDPOINTS.KPI_PERFORMANCE}`,
+// //         {
+// //           DealerCode: dealerCode,
+// //           Month: month,
+// //           Year: year.toString(),
+// //         },
+// //         {headers: {'Content-Type': 'application/json'}},
+// //       );
+
+// //       const kpiData = response.data?.Data || [];
+// //       if (kpiData.length > 0) {
+// //         for (const item of kpiData) {
+// //           await insert_KPI_Performance_Record(
+// //             item?.Type || '',
+// //             item?.MonthPlan || 0,
+// //             item?.PerCriteria || 0,
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //             ' ',
+// //           );
+// //         }
+
+// //         navigation.navigate(STACKS.MAIN_STACK, {
+// //           screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+// //           params: {dealerCode, month, year, kpiData},
+// //         });
+
+// //         showSnackbar('KPI data synced successfully', 'success');
+// //       } else {
+// //         showSnackbar('No KPI data found');
+// //       }
+// //     } catch (error) {
+// //       console.error('KPI Fetch Error:', error);
+// //       showSnackbar('Unable to fetch KPI data');
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   const handleDealerSelect = dealerCode => {
+// //     setSelectedDealerCode(dealerCode);
+// //     setPopupVisible(true);
+// //   };
+
+// //   const handleProcess = async () => {
+// //     if (selectedDealerCode) {
+// //       setPopupVisible(false);
+// //       await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear);
+// //     }
+// //   };
+
+// //   const formatDate = dateStr => {
+// //     if (!dateStr) return 'N/A';
+// //     const date = new Date(dateStr);
+// //     return date.toLocaleDateString('en-GB');
+// //   };
+
+// //   return (
+// //     <View style={styles.container}>
+// //       {/* Month Selector */}
+// //       <View style={{paddingVertical: 20}}>
+// //         <Text style={styles.label}>Select Month:</Text>
+// //         <ScrollView
+// //           horizontal
+// //           showsHorizontalScrollIndicator={false}
+// //           contentContainerStyle={styles.scrollContainer}>
+// //           {MONTHS.map((month, index) => (
+// //             <TouchableOpacity
+// //               key={index}
+// //               style={[
+// //                 styles.segmentButton,
+// //                 selectedMonthIndex === index && styles.activeSegment,
+// //               ]}
+// //               onPress={() => handleMonthChange(month)}>
+// //               <Text
+// //                 style={[
+// //                   styles.segmentText,
+// //                   selectedMonthIndex === index && styles.activeText,
+// //                 ]}>
+// //                 {month.name}
+// //               </Text>
+// //             </TouchableOpacity>
+// //           ))}
+// //         </ScrollView>
+
+// //         <Text style={styles.label}>Select Year:</Text>
+// //         <ScrollView
+// //           horizontal
+// //           showsHorizontalScrollIndicator={false}
+// //           contentContainerStyle={styles.scrollContainer}>
+// //           {YEARS.map((year, index) => (
+// //             <TouchableOpacity
+// //               key={index}
+// //               style={[
+// //                 styles.segmentButton,
+// //                 selectedYearIndex === index && styles.activeSegment,
+// //               ]}
+// //               onPress={() => handleYearChange(year, index)}>
+// //               <Text
+// //                 style={[
+// //                   styles.segmentText,
+// //                   selectedYearIndex === index && styles.activeText,
+// //                 ]}>
+// //                 {year}
+// //               </Text>
+// //             </TouchableOpacity>
+// //           ))}
+// //         </ScrollView>
+// //       </View>
+
+// //       {loading ? (
+// //         <ActivityIndicator size="large" color="#007bff" />
+// //       ) : (
+// //         <SafeAreaView style={{flex: 1}}>
+// //           <FlatList
+// //             data={dealerData}
+// //             keyExtractor={item => item.Id.toString()}
+// //             contentContainerStyle={{
+// //               flexGrow: 1,
+// //               paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+// //             }}
+// //             renderItem={({item}) => (
+// //               <TouchableOpacity
+// //                 style={styles.card}
+// //                 onPress={() => handleDealerSelect(item.DealerCode)}>
+// //                 <LinearGradient
+// //                   colors={['#850f1f', '#990021']}
+// //                   start={{x: 0, y: 1}}
+// //                   end={{x: 0, y: 0}}
+// //                   style={styles.gradientBackground}
+// //                 />
+// //                 <View>
+// //                   <Text style={styles.title}>{item.DealerCode}</Text>
+// //                   <Text style={styles.status}>{item.Status}</Text>
+// //                 </View>
+// //                 <View>
+// //                   <Text style={styles.dealerDate}>
+// //                     {formatDate(item.PlanDate)}
+// //                   </Text>
+// //                 </View>
+// //                 <ConfirmationPopup
+// //                   visible={isPopupVisible}
+// //                   onConfirm={handleProcess}
+// //                   onCancel={() => setPopupVisible(false)}
+// //                   title="Confirmation"
+// //                   message="Are you sure you want to proceed?"
+// //                 />
+// //               </TouchableOpacity>
+// //             )}
+// //             ListEmptyComponent={() => (
+// //               <View
+// //                 style={{
+// //                   flex: 1,
+// //                   justifyContent: 'center',
+// //                   alignItems: 'center',
+// //                 }}>
+// //                 <Text
+// //                   style={{
+// //                     fontSize: 18,
+// //                     fontWeight: 'bold',
+// //                     color: '#555',
+// //                     padding: 20,
+// //                   }}>
+// //                   No Data Found
+// //                 </Text>
+// //                 <Image
+// //                   source={require('../../assets/images/no_data.png')}
+// //                   style={{height: 100, width: 100}}
+// //                   resizeMode="center"
+// //                 />
+// //               </View>
+// //             )}
+// //           />
+// //         </SafeAreaView>
+// //       )}
+// //       <Snackbar
+// //         visible={snackbar.visible}
+// //         onDismiss={() => setSnackbar({...snackbar, visible: false})}
+// //         duration={3000}
+// //         style={{
+// //           backgroundColor:
+// //             snackbar.type === 'success'
+// //               ? '#4caf50'
+// //               : snackbar.type === 'error'
+// //               ? '#f44336'
+// //               : '#323232',
+// //         }}>
+// //         {snackbar.message}
+// //       </Snackbar>
+// //     </View>
+// //   );
+// // };
+
+// // export default SelectDealerCode;
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   ActivityIndicator,
+//   ScrollView,
+//   Dimensions,
+//   Image,
+//   SafeAreaView,
+//   Platform,
+// } from 'react-native';
+// import NetInfo from '@react-native-community/netinfo';
+// import {Snackbar} from 'react-native-paper';
+// import {styles} from './style';
+// import {MONTHS, YEARS} from '../../utils/constants';
+// import {useNavigation} from '@react-navigation/native';
+// import {SCREENS} from '../../utils/screens';
+// import {STACKS} from '../../utils/stacks';
+// import axios from 'axios';
+// import LinearGradient from 'react-native-linear-gradient';
+// import {
+//   clearKPIPerformanceData,
+//   create_KPI_Performance_Table,
+//   insert_KPI_Performance_Record,
+//   createManPowerAvailability,
+//   insertDataManPowerAvailability,
+//   fetchDataManPowerAvailability,
+// } from '../../database/db';
+// import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
+// import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
+
+// const {width} = Dimensions.get('window');
+
+// const SelectDealerCode = () => {
+//   const currentYear = new Date().getFullYear();
+//   const currentMonth = (new Date().getMonth() + 1).toString();
+//   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+//   const [selectedYear, setSelectedYear] = useState(currentYear);
+//   const [dealerData, setDealerData] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+//   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+//   const [selectedDealerCode, setSelectedDealerCode] = useState(null);
+//   const [isPopupVisible, setPopupVisible] = useState(false);
+//   const [snackbar, setSnackbar] = useState({
+//     visible: false,
+//     message: '',
+//     type: 'info',
+//   });
+
+//   const navigation = useNavigation();
+
+//   useEffect(() => {
+//     create_KPI_Performance_Table();
+//     createManPowerAvailability();
+//   }, []);
+
+//   const checkInternet = async () => {
+//     const state = await NetInfo.fetch();
+//     return state.isConnected;
+//   };
+
+//   const showSnackbar = (message, type = 'info') => {
+//     setSnackbar({visible: true, message, type});
+//   };
+
+//   const handleMonthChange = async month => {
+//     if (!(await checkInternet())) return showSnackbar('No Internet Connection');
+//     setSelectedMonthIndex(month.value - 1);
+//     setSelectedMonth(month.value);
+//     fetchDealerList(month.value, selectedYear);
+//   };
+
+//   const handleYearChange = async (year, index) => {
+//     if (!(await checkInternet())) return showSnackbar('No Internet Connection');
+//     setSelectedYearIndex(index);
+//     setSelectedYear(year);
+//     fetchDealerList(selectedMonth, year);
+//   };
+
+//   useEffect(() => {
+//     const init = async () => {
+//       if (!(await checkInternet()))
+//         return showSnackbar('No Internet Connection');
+//       const monthValue = new Date().getMonth();
+//       const yearValue = new Date().getFullYear();
+//       setSelectedMonthIndex(monthValue);
+//       setSelectedMonth(monthValue + 1);
+//       setSelectedYear(yearValue);
+//       fetchDealerList(monthValue + 1, yearValue);
+//     };
+//     init();
+//   }, []);
+
+//   const fetchDealerList = async (month, year) => {
+//     setLoading(true);
+//     try {
+//       const response = await axios.post(
+//         `${BASE_URL}${API_ENDPOINTS.TRAVEL_DEALER_PLANNING}`,
+//         {
+//           Month: month,
+//           Year: year.toString(),
+//           DealerCode: 'p.vishnu3@classiclegends.com',
+//         },
+//       );
+//       if (response.data?.Data) setDealerData(response.data.Data);
+//       else {
+//         setDealerData([]);
+//         showSnackbar('No dealer data found');
+//       }
+//     } catch (error) {
+//       console.error('Dealer List Error:', error);
+//       showSnackbar('Failed to fetch dealer list');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const fetchKpiData = async (dealerCode, month, year) => {
+//     if (!(await checkInternet())) return showSnackbar('No Internet Connection');
+//     setLoading(true);
+//     try {
+//       await clearKPIPerformanceData();
+//       const response = await axios.post(
+//         `${BASE_URL}${API_ENDPOINTS.KPI_PERFORMANCE}`,
+//         {
+//           DealerCode: dealerCode,
+//           Month: month,
+//           Year: year.toString(),
+//         },
+//       );
+//       const kpiData = response.data?.Data || [];
+//       if (!kpiData.length) return showSnackbar('No KPI data found');
+
+//       for (const item of kpiData) {
+//         await insert_KPI_Performance_Record(
+//           item?.Type || '',
+//           item?.MonthPlan || 0,
+//           item?.PerCriteria || 0,
+//           ' ',
+//           ' ',
+//           ' ',
+//           ' ',
+//           ' ',
+//           ' ',
+//           ' ',
+//           ' ',
+//         );
+//       }
+//       showSnackbar('KPI data synced successfully', 'success');
+//       return true;
+//     } catch (error) {
+//       console.error('KPI Fetch Error:', error);
+//       showSnackbar('Unable to fetch KPI data');
+//       return false;
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const fetchManPowerData = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await axios.post(
+//         'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
+//         {ServiceVisit: 100},
+//         {headers: {'Content-Type': 'application/json'}},
+//       );
+
+//       if (response.data?.Data?.length > 0) {
+//         for (const item of response.data.Data) {
+//           await insertDataManPowerAvailability(item.Type, item.Values);
+//         }
+//       }
+//       fetchDataManPowerAvailability(() => console.log('Manpower data synced'));
+//     } catch (error) {
+//       console.error('ManPower API Error:', error);
+//       showSnackbar('Failed to fetch manpower data');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleProcess = async () => {
+//     if (!selectedDealerCode) return;
+//     setPopupVisible(false);
+//     const kpiFetched = await fetchKpiData(
+//       selectedDealerCode,
+//       selectedMonth,
+//       selectedYear,
+//     );
+//     if (kpiFetched) {
+//       await fetchManPowerData();
+//       navigation.navigate(STACKS.MAIN_STACK, {
+//         screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+//         params: {
+//           dealerCode: selectedDealerCode,
+//           month: selectedMonth,
+//           year: selectedYear,
+//         },
+//       });
+//     }
+//   };
+
+//   const formatDate = dateStr =>
+//     dateStr ? new Date(dateStr).toLocaleDateString('en-GB') : 'N/A';
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={{paddingVertical: 20}}>
+//         <Text style={styles.label}>Select Month:</Text>
+//         <ScrollView
+//           horizontal
+//           showsHorizontalScrollIndicator={false}
+//           contentContainerStyle={styles.scrollContainer}>
+//           {MONTHS.map((month, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={[
+//                 styles.segmentButton,
+//                 selectedMonthIndex === index && styles.activeSegment,
+//               ]}
+//               onPress={() => handleMonthChange(month)}>
+//               <Text
+//                 style={[
+//                   styles.segmentText,
+//                   selectedMonthIndex === index && styles.activeText,
+//                 ]}>
+//                 {month.name}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </ScrollView>
+//         <Text style={styles.label}>Select Year:</Text>
+//         <ScrollView
+//           horizontal
+//           showsHorizontalScrollIndicator={false}
+//           contentContainerStyle={styles.scrollContainer}>
+//           {YEARS.map((year, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={[
+//                 styles.segmentButton,
+//                 selectedYearIndex === index && styles.activeSegment,
+//               ]}
+//               onPress={() => handleYearChange(year, index)}>
+//               <Text
+//                 style={[
+//                   styles.segmentText,
+//                   selectedYearIndex === index && styles.activeText,
+//                 ]}>
+//                 {year}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </ScrollView>
+//       </View>
+
+//       {loading ? (
+//         <ActivityIndicator size="large" color="#007bff" />
+//       ) : (
+//         <SafeAreaView style={{flex: 1}}>
+//           <FlatList
+//             data={dealerData}
+//             keyExtractor={item => item.Id.toString()}
+//             contentContainerStyle={{
+//               flexGrow: 1,
+//               paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+//             }}
+//             renderItem={({item}) => (
+//               <TouchableOpacity
+//                 style={styles.card}
+//                 onPress={() => {
+//                   setSelectedDealerCode(item.DealerCode);
+//                   setPopupVisible(true);
+//                 }}>
+//                 <LinearGradient
+//                   colors={['#850f1f', '#990021']}
+//                   start={{x: 0, y: 1}}
+//                   end={{x: 0, y: 0}}
+//                   style={styles.gradientBackground}
+//                 />
+//                 <View>
+//                   <Text style={styles.title}>{item.DealerCode}</Text>
+//                   <Text style={styles.status}>{item.Status}</Text>
+//                 </View>
+//                 <View>
+//                   <Text style={styles.dealerDate}>
+//                     {formatDate(item.PlanDate)}
+//                   </Text>
+//                 </View>
+//                 <ConfirmationPopup
+//                   visible={isPopupVisible}
+//                   onConfirm={handleProcess}
+//                   onCancel={() => setPopupVisible(false)}
+//                   title="Confirmation"
+//                   message="Are you sure you want to proceed?"
+//                 />
+//               </TouchableOpacity>
+//             )}
+//             ListEmptyComponent={() => (
+//               <View
+//                 style={{
+//                   flex: 1,
+//                   justifyContent: 'center',
+//                   alignItems: 'center',
+//                 }}>
+//                 <Text
+//                   style={{
+//                     fontSize: 18,
+//                     fontWeight: 'bold',
+//                     color: '#555',
+//                     padding: 20,
+//                   }}>
+//                   No Data Found
+//                 </Text>
+//                 <Image
+//                   source={require('../../assets/images/no_data.png')}
+//                   style={{height: 100, width: 100}}
+//                   resizeMode="center"
+//                 />
+//               </View>
+//             )}
+//           />
+//         </SafeAreaView>
+//       )}
+
+//       <Snackbar
+//         visible={snackbar.visible}
+//         onDismiss={() => setSnackbar({...snackbar, visible: false})}
+//         duration={3000}
+//         style={{
+//           backgroundColor:
+//             snackbar.type === 'success'
+//               ? '#4caf50'
+//               : snackbar.type === 'error'
+//               ? '#f44336'
+//               : '#323232',
+//         }}>
+//         {snackbar.message}
+//       </Snackbar>
+//     </View>
+//   );
+// };
+
+// export default SelectDealerCode;
+
+
+// import React, {useEffect, useState} from 'react';
+// import {StyleSheet} from 'react-native';
+// import {Portal, Dialog, Button, TextInput} from 'react-native-paper';
+
+// const ManPowerModal = ({visible, onClose, onSubmit, item}) => {
+//   const [available, setAvailable] = useState('');
+//   const [trained, setTrained] = useState('');
+//   const [availablePercent, setAvailablePercent] = useState('');
+//   const [trainedPercent, setTrainedPercent] = useState('');
+
+//   const minRequired = parseInt(item?.value) || 0;
+
+//   useEffect(() => {
+//     if (available && minRequired) {
+//       const percent = (parseInt(available) / minRequired) * 100;
+//       setAvailablePercent(percent.toFixed(2));
+//     } else {
+//       setAvailablePercent('');
+//     }
+//   }, [available]);
+
+//   useEffect(() => {
+//     if (trained && minRequired) {
+//       const percent = (parseInt(trained) / minRequired) * 100;
+//       setTrainedPercent(percent.toFixed(2));
+//     } else {
+//       setTrainedPercent('');
+//     }
+//   }, [trained]);
+
+//   const handleSubmit = () => {
+//     const updatedData = {
+//       parameter: item?.type,
+//       mtd_plan: item?.mtd_plan,
+//       mtd_actual: available,
+//       percentage_achieve: availablePercent,
+//       gap_area: '',
+//       counter_measure_plan: '',
+//       responsibility: '',
+//       plan_closure_date: '',
+//       image_path: '',
+//       available,
+//       trained,
+//       available_percentage: availablePercent,
+//       trained_percentage: trainedPercent,
+//     };
+//     onSubmit(updatedData);
+//   };
+
+//   return (
+//     <Portal>
+//       <Dialog visible={visible} onDismiss={onClose} style={styles.dialog}>
+//         <Dialog.Title style={styles.title}>Manpower Action Plan</Dialog.Title>
+//         <Dialog.Content>
+//           <TextInput
+//             label="Available"
+//             mode="outlined"
+//             value={available}
+//             onChangeText={setAvailable}
+//             keyboardType="numeric"
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Trained"
+//             mode="outlined"
+//             value={trained}
+//             onChangeText={setTrained}
+//             keyboardType="numeric"
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Available %"
+//             mode="outlined"
+//             value={availablePercent}
+//             editable={false}
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Trained %"
+//             mode="outlined"
+//             value={trainedPercent}
+//             editable={false}
+//             style={styles.input}
+//           />
+//         </Dialog.Content>
+//         <Dialog.Actions style={styles.actions}>
+//           <Button
+//             mode="contained"
+//             onPress={handleSubmit}
+//             disabled={!available || !trained}
+//             style={styles.button}
+//             labelStyle={{color: 'white'}}>
+//             Submit
+//           </Button>
+//         </Dialog.Actions>
+//       </Dialog>
+//     </Portal>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   dialog: {
+//     backgroundColor: '#fff',
+//     borderRadius: 10,
+//     marginHorizontal: 10,
+//   },
+//   title: {
+//     fontWeight: 'bold',
+//     fontSize: 18,
+//   },
+//   input: {
+//     marginVertical: 8,
+//     backgroundColor: '#fff',
+//   },
+//   actions: {
+//     justifyContent: 'flex-end',
+//     padding: 10,
+//   },
+//   button: {
+//     backgroundColor: '#007bff',
+//     borderRadius: 5,
+//   },
+// });
+
+// export default ManPowerModal;
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   Modal,
+//   TouchableOpacity,
+//   StyleSheet,
+//   Platform,
+// } from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+// import {launchCamera} from 'react-native-image-picker';
+
+// const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
+//   const [form, setForm] = useState({
+//     available: '',
+//     trained: '',
+//     availablePerc: '',
+//     trainedPerc: '',
+//     gap_area: '',
+//     counter_measure_plan: '',
+//     responsibility: '',
+//     plan_closure_date: '',
+//     image_path: '',
+//   });
+
+//   const [showExtraInputs, setShowExtraInputs] = useState(false);
+//   const [showDatePicker, setShowDatePicker] = useState(false);
+
+//   const minReq = parseFloat(item?.value || 0);
+
+//   useEffect(() => {
+//     const available = parseFloat(form.available || 0);
+//     const trained = parseFloat(form.trained || 0);
+
+//     const availablePerc =
+//       minReq > 0 && available ? ((available / minReq) * 100).toFixed(2) : 0;
+//     const trainedPerc =
+//       minReq > 0 && trained ? ((trained / minReq) * 100).toFixed(2) : 0;
+
+//     const bothFilled = form.available !== '' && form.trained !== '';
+
+//     const showExtra =
+//       minReq > 0 &&
+//       bothFilled &&
+//       (parseFloat(availablePerc) < 100 || parseFloat(trainedPerc) < 100);
+
+//     setForm(prev => ({
+//       ...prev,
+//       availablePerc,
+//       trainedPerc,
+//     }));
+
+//     setShowExtraInputs(showExtra);
+//   }, [form.available, form.trained, item]);
+
+//   const handleInputChange = (key, value) => {
+//     if (key === 'trained') {
+//       const available = parseFloat(form.available || 0);
+//       const trained = parseFloat(value || 0);
+//       if (trained > available) return; // 🔒 Restriction
+//     }
+
+//     setForm(prev => ({
+//       ...prev,
+//       [key]: value,
+//     }));
+//   };
+
+//   const handleDateChange = (event, selectedDate) => {
+//     setShowDatePicker(false);
+//     if (selectedDate) {
+//       setForm({...form, plan_closure_date: selectedDate.toDateString()});
+//     }
+//   };
+
+//   const handleImagePick = async () => {
+//     const result = await launchCamera({mediaType: 'photo', quality: 0.5});
+//     if (result.assets && result.assets.length > 0) {
+//       setForm({...form, image_path: result.assets[0].uri});
+//     }
+//   };
+
+//   const handleSubmitForm = () => {
+//     onSubmit({
+//       ...form,
+//       parameter: item?.type,
+//       min_required: minReq,
+//     });
+//   };
+
+//   return (
+//     <Modal visible={visible} transparent animationType="slide">
+//       <View style={styles.modalOverlay}>
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.title}>Action Plan</Text>
+
+//           {minReq > 0 ? (
+//             <>
+//               <TextInput
+//                 placeholder="Available"
+//                 keyboardType="numeric"
+//                 style={styles.input}
+//                 value={form.available}
+//                 onChangeText={text => handleInputChange('available', text)}
+//               />
+//               <TextInput
+//                 placeholder="Trained"
+//                 keyboardType="numeric"
+//                 style={styles.input}
+//                 value={form.trained}
+//                 onChangeText={text => handleInputChange('trained', text)}
+//               />
+
+//               <Text style={styles.percentText}>
+//                 Available %: {form.availablePerc || '0'}%
+//               </Text>
+//               <Text style={styles.percentText}>
+//                 Trained %: {form.trainedPerc || '0'}%
+//               </Text>
+
+//               {showExtraInputs && (
+//                 <>
+//                   <TextInput
+//                     placeholder="Gap Area"
+//                     style={styles.input}
+//                     value={form.gap_area}
+//                     onChangeText={text => handleInputChange('gap_area', text)}
+//                   />
+//                   <TextInput
+//                     placeholder="Counter Measure Plan"
+//                     style={styles.input}
+//                     value={form.counter_measure_plan}
+//                     onChangeText={text =>
+//                       handleInputChange('counter_measure_plan', text)
+//                     }
+//                   />
+//                   <TextInput
+//                     placeholder="Responsibility"
+//                     style={styles.input}
+//                     value={form.responsibility}
+//                     onChangeText={text =>
+//                       handleInputChange('responsibility', text)
+//                     }
+//                   />
+
+//                   <TouchableOpacity
+//                     onPress={() => setShowDatePicker(true)}
+//                     style={styles.button}>
+//                     <Text style={styles.buttonText}>
+//                       {form.plan_closure_date
+//                         ? form.plan_closure_date
+//                         : 'Pick Closure Date'}
+//                     </Text>
+//                   </TouchableOpacity>
+
+//                   <TouchableOpacity
+//                     onPress={handleImagePick}
+//                     style={styles.button}>
+//                     <Text style={styles.buttonText}>
+//                       {form.image_path ? 'Image Selected' : 'Click Photo'}
+//                     </Text>
+//                   </TouchableOpacity>
+//                 </>
+//               )}
+//             </>
+//           ) : (
+//             <Text style={{color: 'gray', textAlign: 'center'}}>
+//               No action required (Min. Required is 0)
+//             </Text>
+//           )}
+
+//           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+//             <Text style={styles.closeButtonText}>X</Text>
+//           </TouchableOpacity>
+
+//           <View style={styles.buttonRow}>
+//             <TouchableOpacity onPress={handleSubmitForm} style={styles.button}>
+//               <Text style={styles.buttonText}>Submit</Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//         {showDatePicker && (
+//           <DateTimePicker
+//             value={new Date()}
+//             mode="date"
+//             display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+//             onChange={handleDateChange}
+//           />
+//         )}
+//       </View>
+//     </Modal>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     backgroundColor: '#00000099',
+//     padding: 20,
+//   },
+//   modalContainer: {
+//     backgroundColor: '#fff',
+//     borderRadius: 12,
+//     padding: 20,
+//     elevation: 5,
+//   },
+//   title: {
+//     fontSize: 20,
+//     marginBottom: 15,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     marginTop: 10,
+//     borderRadius: 8,
+//     padding: 10,
+//   },
+//   percentText: {
+//     marginTop: 8,
+//     fontSize: 16,
+//     color: '#333',
+//   },
+//   button: {
+//     backgroundColor: '#007bff',
+//     padding: 10,
+//     marginTop: 10,
+//     borderRadius: 8,
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     textAlign: 'center',
+//   },
+//   buttonRow: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   closeButton: {
+//     position: 'absolute',
+//     top: 10,
+//     right: 10,
+//     backgroundColor: '#ccc',
+//     width: 30,
+//     height: 30,
+//     borderRadius: 15,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     zIndex: 10,
+//   },
+//   closeButtonText: {
+//     fontWeight: 'bold',
+//     fontSize: 16,
+//   },
+// });
+
+// export default ManPowerModal;
+
+
+// import React, {useEffect, useState} from 'react';
+// import {StyleSheet} from 'react-native';
+// import {Portal, Dialog, Button, TextInput} from 'react-native-paper';
+
+// const ManPowerModal = ({visible, onClose, onSubmit, item}) => {
+//   const [available, setAvailable] = useState('');
+//   const [trained, setTrained] = useState('');
+//   const [availablePercent, setAvailablePercent] = useState('');
+//   const [trainedPercent, setTrainedPercent] = useState('');
+
+//   const minRequired = parseInt(item?.value) || 0;
+
+//   useEffect(() => {
+//     if (available && minRequired) {
+//       const percent = (parseInt(available) / minRequired) * 100;
+//       setAvailablePercent(percent.toFixed(2));
+//     } else {
+//       setAvailablePercent('');
+//     }
+//   }, [available]);
+
+//   useEffect(() => {
+//     if (trained && minRequired) {
+//       const percent = (parseInt(trained) / minRequired) * 100;
+//       setTrainedPercent(percent.toFixed(2));
+//     } else {
+//       setTrainedPercent('');
+//     }
+//   }, [trained]);
+
+//   const handleSubmit = () => {
+//     const updatedData = {
+//       parameter: item?.type,
+//       mtd_plan: item?.mtd_plan,
+//       mtd_actual: available,
+//       percentage_achieve: availablePercent,
+//       gap_area: '',
+//       counter_measure_plan: '',
+//       responsibility: '',
+//       plan_closure_date: '',
+//       image_path: '',
+//       available,
+//       trained,
+//       available_percentage: availablePercent,
+//       trained_percentage: trainedPercent,
+//     };
+//     onSubmit(updatedData);
+//   };
+
+//   return (
+//     <Portal>
+//       <Dialog visible={visible} onDismiss={onClose} style={styles.dialog}>
+//         <Dialog.Title style={styles.title}>Manpower Action Plan</Dialog.Title>
+//         <Dialog.Content>
+//           <TextInput
+//             label="Available"
+//             mode="outlined"
+//             value={available}
+//             onChangeText={setAvailable}
+//             keyboardType="numeric"
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Trained"
+//             mode="outlined"
+//             value={trained}
+//             onChangeText={setTrained}
+//             keyboardType="numeric"
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Available %"
+//             mode="outlined"
+//             value={availablePercent}
+//             editable={false}
+//             style={styles.input}
+//           />
+//           <TextInput
+//             label="Trained %"
+//             mode="outlined"
+//             value={trainedPercent}
+//             editable={false}
+//             style={styles.input}
+//           />
+//         </Dialog.Content>
+//         <Dialog.Actions style={styles.actions}>
+//           <Button
+//             mode="contained"
+//             onPress={handleSubmit}
+//             disabled={!available || !trained}
+//             style={styles.button}
+//             labelStyle={{color: 'white'}}>
+//             Submit
+//           </Button>
+//         </Dialog.Actions>
+//       </Dialog>
+//     </Portal>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   dialog: {
+//     backgroundColor: '#fff',
+//     borderRadius: 10,
+//     marginHorizontal: 10,
+//   },
+//   title: {
+//     fontWeight: 'bold',
+//     fontSize: 18,
+//   },
+//   input: {
+//     marginVertical: 8,
+//     backgroundColor: '#fff',
+//   },
+//   actions: {
+//     justifyContent: 'flex-end',
+//     padding: 10,
+//   },
+//   button: {
+//     backgroundColor: '#007bff',
+//     borderRadius: 5,
+//   },
+// });
+
+// export default ManPowerModal;
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   Modal,
+//   TouchableOpacity,
+//   StyleSheet,
+//   Platform,
+// } from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+// import {launchCamera} from 'react-native-image-picker';
+
+// const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
+//   const [form, setForm] = useState({
+//     available: '',
+//     trained: '',
+//     availablePerc: '',
+//     trainedPerc: '',
+//     gap_area: '',
+//     counter_measure_plan: '',
+//     responsibility: '',
+//     plan_closure_date: '',
+//     image_path: '',
+//   });
+
+//   const [showExtraInputs, setShowExtraInputs] = useState(false);
+//   const [showDatePicker, setShowDatePicker] = useState(false);
+
+//   const minReq = parseFloat(item?.value || 0);
+
+//   useEffect(() => {
+//     const available = parseFloat(form.available || 0);
+//     const trained = parseFloat(form.trained || 0);
+
+//     const availablePerc =
+//       minReq > 0 && available ? ((available / minReq) * 100).toFixed(2) : 0;
+//     const trainedPerc =
+//       minReq > 0 && trained ? ((trained / minReq) * 100).toFixed(2) : 0;
+
+//     const bothFilled = form.available !== '' && form.trained !== '';
+
+//     const showExtra =
+//       minReq > 0 &&
+//       bothFilled &&
+//       (parseFloat(availablePerc) < 100 || parseFloat(trainedPerc) < 100);
+
+//     setForm(prev => ({
+//       ...prev,
+//       availablePerc,
+//       trainedPerc,
+//     }));
+
+//     setShowExtraInputs(showExtra);
+//   }, [form.available, form.trained, item]);
+
+//   const handleInputChange = (key, value) => {
+//     if (key === 'trained') {
+//       const available = parseFloat(form.available || 0);
+//       const trained = parseFloat(value || 0);
+//       if (trained > available) return; // 🔒 Restriction
+//     }
+
+//     setForm(prev => ({
+//       ...prev,
+//       [key]: value,
+//     }));
+//   };
+
+//   const handleDateChange = (event, selectedDate) => {
+//     setShowDatePicker(false);
+//     if (selectedDate) {
+//       setForm({...form, plan_closure_date: selectedDate.toDateString()});
+//     }
+//   };
+
+//   const handleImagePick = async () => {
+//     const result = await launchCamera({mediaType: 'photo', quality: 0.5});
+//     if (result.assets && result.assets.length > 0) {
+//       setForm({...form, image_path: result.assets[0].uri});
+//     }
+//   };
+
+//   const handleSubmitForm = () => {
+//     onSubmit({
+//       ...form,
+//       parameter: item?.type,
+//       min_required: minReq,
+//     });
+//   };
+
+//   return (
+//     <Modal visible={visible} transparent animationType="slide">
+//       <View style={styles.modalOverlay}>
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.title}>Action Plan</Text>
+
+//           {minReq > 0 ? (
+//             <>
+//               <TextInput
+//                 placeholder="Available"
+//                 keyboardType="numeric"
+//                 style={styles.input}
+//                 value={form.available}
+//                 onChangeText={text => handleInputChange('available', text)}
+//               />
+//               <TextInput
+//                 placeholder="Trained"
+//                 keyboardType="numeric"
+//                 style={styles.input}
+//                 value={form.trained}
+//                 onChangeText={text => handleInputChange('trained', text)}
+//               />
+
+//               <Text style={styles.percentText}>
+//                 Available %: {form.availablePerc || '0'}%
+//               </Text>
+//               <Text style={styles.percentText}>
+//                 Trained %: {form.trainedPerc || '0'}%
+//               </Text>
+
+//               {showExtraInputs && (
+//                 <>
+//                   <TextInput
+//                     placeholder="Gap Area"
+//                     style={styles.input}
+//                     value={form.gap_area}
+//                     onChangeText={text => handleInputChange('gap_area', text)}
+//                   />
+//                   <TextInput
+//                     placeholder="Counter Measure Plan"
+//                     style={styles.input}
+//                     value={form.counter_measure_plan}
+//                     onChangeText={text =>
+//                       handleInputChange('counter_measure_plan', text)
+//                     }
+//                   />
+//                   <TextInput
+//                     placeholder="Responsibility"
+//                     style={styles.input}
+//                     value={form.responsibility}
+//                     onChangeText={text =>
+//                       handleInputChange('responsibility', text)
+//                     }
+//                   />
+
+//                   <TouchableOpacity
+//                     onPress={() => setShowDatePicker(true)}
+//                     style={styles.button}>
+//                     <Text style={styles.buttonText}>
+//                       {form.plan_closure_date
+//                         ? form.plan_closure_date
+//                         : 'Pick Closure Date'}
+//                     </Text>
+//                   </TouchableOpacity>
+
+//                   <TouchableOpacity
+//                     onPress={handleImagePick}
+//                     style={styles.button}>
+//                     <Text style={styles.buttonText}>
+//                       {form.image_path ? 'Image Selected' : 'Click Photo'}
+//                     </Text>
+//                   </TouchableOpacity>
+//                 </>
+//               )}
+//             </>
+//           ) : (
+//             <Text style={{color: 'gray', textAlign: 'center'}}>
+//               No action required (Min. Required is 0)
+//             </Text>
+//           )}
+
+//           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+//             <Text style={styles.closeButtonText}>X</Text>
+//           </TouchableOpacity>
+
+//           <View style={styles.buttonRow}>
+//             <TouchableOpacity onPress={handleSubmitForm} style={styles.button}>
+//               <Text style={styles.buttonText}>Submit</Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//         {showDatePicker && (
+//           <DateTimePicker
+//             value={new Date()}
+//             mode="date"
+//             display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+//             onChange={handleDateChange}
+//           />
+//         )}
+//       </View>
+//     </Modal>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     backgroundColor: '#00000099',
+//     padding: 20,
+//   },
+//   modalContainer: {
+//     backgroundColor: '#fff',
+//     borderRadius: 12,
+//     padding: 20,
+//     elevation: 5,
+//   },
+//   title: {
+//     fontSize: 20,
+//     marginBottom: 15,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     marginTop: 10,
+//     borderRadius: 8,
+//     padding: 10,
+//   },
+//   percentText: {
+//     marginTop: 8,
+//     fontSize: 16,
+//     color: '#333',
+//   },
+//   button: {
+//     backgroundColor: '#007bff',
+//     padding: 10,
+//     marginTop: 10,
+//     borderRadius: 8,
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     textAlign: 'center',
+//   },
+//   buttonRow: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   closeButton: {
+//     position: 'absolute',
+//     top: 10,
+//     right: 10,
+//     // backgroundColor: '#ccc',
+//     width: 30,
+//     height: 30,
+//     borderRadius: 15,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     zIndex: 10,
+//   },
+//   closeButtonText: {
+//     fontWeight: 'bold',
+//     fontSize: 16,
+//   },
+// });
+
+// export default ManPowerModal;
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   Modal,
+//   TouchableOpacity,
+//   StyleSheet,
+//   Platform,
+//   Alert,
+// } from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+// import {launchCamera} from 'react-native-image-picker';
+// import {COLORS} from '../../utils/colors';
+// import {CustomButton} from '../../uiKit/customButton';
+
+// const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
+//   const [form, setForm] = useState({
+//     available: '',
+//     trained: '',
+//     availablePerc: '',
+//     trainedPerc: '',
+//     gap_area: '',
+//     counter_measure_plan: '',
+//     responsibility: '',
+//     plan_closure_date: '',
+//     image_path: '',
+//   });
+
+//   const [showExtraInputs, setShowExtraInputs] = useState(false);
+//   const [showDatePicker, setShowDatePicker] = useState(false);
+
+//   const minReq = parseFloat(item?.value || 0);
+
+//   useEffect(() => {
+//     const available = parseFloat(form.available || 0);
+//     const trained = parseFloat(form.trained || 0);
+
+//     const availablePerc =
+//       minReq > 0 && available ? ((available / minReq) * 100).toFixed(2) : '0';
+//     const trainedPerc =
+//       minReq > 0 && trained ? ((trained / minReq) * 100).toFixed(2) : '0';
+
+//     const bothFilled = form.available !== '' && form.trained !== '';
+
+//     const showExtra =
+//       minReq > 0 &&
+//       bothFilled &&
+//       (parseFloat(availablePerc) < 100 || parseFloat(trainedPerc) < 100);
+
+//     setForm(prev => ({
+//       ...prev,
+//       availablePerc,
+//       trainedPerc,
+//     }));
+
+//     setShowExtraInputs(showExtra);
+//   }, [form.available, form.trained, item]);
+
+//   const handleInputChange = (key, value) => {
+//     if (key === 'trained') {
+//       const available = parseFloat(form.available || 0);
+//       const trained = parseFloat(value || 0);
+//       if (trained > available) {
+//         Alert.alert('Validation', 'Trained value cannot exceed Available.');
+//         return;
+//       }
+//     }
+
+//     if (key === 'available') {
+//       const val = parseFloat(value || 0);
+//       if (minReq > 0 && val > minReq) {
+//         Alert.alert('Validation', 'Available cannot exceed Min. Requirement.');
+//         return;
+//       }
+//     }
+
+//     setForm(prev => ({
+//       ...prev,
+//       [key]: value,
+//     }));
+//   };
+
+//   const handleDateChange = (event, selectedDate) => {
+//     setShowDatePicker(false);
+//     if (selectedDate) {
+//       setForm({...form, plan_closure_date: selectedDate.toDateString()});
+//     }
+//   };
+
+//   const handleImagePick = async () => {
+//     const result = await launchCamera({mediaType: 'photo', quality: 0.5});
+//     if (result.assets && result.assets.length > 0) {
+//       setForm({...form, image_path: result.assets[0].uri});
+//     }
+//   };
+
+//   const handleSubmitForm = () => {
+//     onSubmit({
+//       ...form,
+//       parameter: item?.type,
+//       min_required: minReq,
+//     });
+//   };
+
+//   return (
+//     <Modal visible={visible} transparent animationType="slide">
+//       <View style={styles.modalOverlay}>
+//         <View style={styles.modalContainer}>
+//           <Text style={styles.title}>Action Plan</Text>
+//           <Text style={styles.minReqText}>Parameter: {item?.type} </Text>{' '}
+//           <Text style={styles.minReqText}>Min. Requirement: {minReq}</Text>
+//           <TextInput
+//             placeholder="Available"
+//             keyboardType="numeric"
+//             style={styles.input}
+//             value={form.available}
+//             onChangeText={text => handleInputChange('available', text)}
+//           />
+//           <TextInput
+//             placeholder="Trained"
+//             keyboardType="numeric"
+//             style={styles.input}
+//             value={form.trained}
+//             onChangeText={text => handleInputChange('trained', text)}
+//           />
+//           <Text style={styles.percentText}>
+//             Available %: {form.availablePerc || '0'}%
+//           </Text>
+//           <Text style={styles.percentText}>
+//             Trained %: {form.trainedPerc || '0'}%
+//           </Text>
+//           {/* Conditional Extra Fields */}
+//           {showExtraInputs && (
+//             <>
+//               <TextInput
+//                 placeholder="Gap Area"
+//                 style={styles.input}
+//                 value={form.gap_area}
+//                 onChangeText={text => handleInputChange('gap_area', text)}
+//               />
+//               <TextInput
+//                 placeholder="Counter Measure Plan"
+//                 style={styles.input}
+//                 value={form.counter_measure_plan}
+//                 onChangeText={text =>
+//                   handleInputChange('counter_measure_plan', text)
+//                 }
+//               />
+//               <TextInput
+//                 placeholder="Responsibility"
+//                 style={styles.input}
+//                 value={form.responsibility}
+//                 onChangeText={text => handleInputChange('responsibility', text)}
+//               />
+
+//               <TouchableOpacity
+//                 onPress={() => setShowDatePicker(true)}
+//                 style={styles.button}>
+//                 <Text style={styles.buttonText}>
+//                   {form.plan_closure_date
+//                     ? form.plan_closure_date
+//                     : 'Pick Closure Date'}
+//                 </Text>
+//               </TouchableOpacity>
+
+//               <TouchableOpacity onPress={handleImagePick} style={styles.button}>
+//                 <Text style={styles.buttonText}>
+//                   {form.image_path ? 'Image Selected' : 'Click Photo'}
+//                 </Text>
+//               </TouchableOpacity>
+//             </>
+//           )}
+//           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+//             <Text style={styles.closeButtonText}>X</Text>
+//           </TouchableOpacity>
+//           <View style={styles.buttonRow}>
+//             <CustomButton title={'Submit'} />
+//           </View>
+//         </View>
+//         {showDatePicker && (
+//           <DateTimePicker
+//             value={new Date()}
+//             mode="date"
+//             display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+//             onChange={handleDateChange}
+//           />
+//         )}
+//       </View>
+//     </Modal>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     backgroundColor: '#00000099',
+//     padding: 20,
+//   },
+//   modalContainer: {
+//     backgroundColor: '#fff',
+//     borderRadius: 12,
+//     padding: 20,
+//     elevation: 5,
+//   },
+//   title: {
+//     fontSize: 20,
+//     marginBottom: 15,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+//   minReqText: {
+//     fontSize: 14,
+//     fontWeight: '600',
+//     color: '#000',
+//     textAlign: 'center',
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     marginTop: 10,
+//     borderRadius: 8,
+//     padding: 10,
+//   },
+//   percentText: {
+//     marginTop: 8,
+//     fontSize: 16,
+//     color: '#333',
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     textAlign: 'center',
+//   },
+//   buttonRow: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//   },
+//   closeButton: {
+//     position: 'absolute',
+//     top: 10,
+//     right: 10,
+//     width: 30,
+//     height: 30,
+//     borderRadius: 15,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     zIndex: 10,
+//   },
+//   closeButtonText: {
+//     fontWeight: 'bold',
+//     fontSize: 16,
+//   },
+// });
+
+// export default ManPowerModal;
+
+
+// import React, {useEffect} from 'react';
+// import {View, Image, StyleSheet, Dimensions, Text} from 'react-native';
+// import {useNavigation} from '@react-navigation/native';
+// import SplashScreen from 'react-native-splash-screen';
+// import {getToken} from '../utils/shared';
+// import {STACKS} from '../utils/stacks';
+// import {COLORS} from '../utils/colors';
+
+// const {width, height} = Dimensions.get('window');
+
+// const Splash = () => {
+//   const navigation = useNavigation();
+
+//   useEffect(() => {
+//     const checkTokenAndNavigate = async () => {
+//       try {
+//         const token = await getToken();
+
+//         setTimeout(() => {
+//           SplashScreen.hide();
+//           if (token) {
+//             //User is logged in
+//             navigation.replace(STACKS.DRAWER_STACK);
+//           } else {
+//             // No token, go to login
+//             navigation.replace(STACKS.MAIN_STACK);
+//           }
+//         }, 4000);
+//       } catch (err) {
+//         console.error('Splash token check error:', err);
+//         SplashScreen.hide();
+//         navigation.replace(STACKS.MAIN_STACK);
+//       }
+//     };
+
+//     checkTokenAndNavigate();
+//   }, []);
+
+//   return (
+//     <View style={styles.container}>
+//       <Image
+//         source={require('../assets/images/background.png')}
+//         style={styles.backgroundImage}
+//       />
+//       <View style={styles.contentContainer}>
+//         {/* <Image
+//           source={require('../assets/images/logo.png')}
+//           style={styles.logo}
+//         /> */}
+//         <View style={styles.TextContainer}>
+//           <Text style={styles.appText}>{'JYB Connect'}</Text>
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     width: '100%',
+//     height: '100%',
+//     position: 'relative',
+//   },
+//   backgroundImage: {
+//     position: 'absolute',
+//     width: '100%',
+//     height: '100%',
+//     resizeMode: 'cover',
+//   },
+//   contentContainer: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'flex-start',
+//   },
+//   logo: {
+//     width: width * 0.4,
+//     height: height * 0.1,
+//     marginTop: height * 0.1,
+//     position: 'absolute',
+//     left: width * 0.07,
+//   },
+//   TextContainer: {
+//     flex: 1,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+//   appText: {
+//     fontSize: 30,
+//     fontWeight: '700',
+//     // letterSpacing: ,
+//     color: COLORS.OFF_WHITE,
+//     marginTop: height * 0.05,
+//     textAlign: 'center',
+//     position: 'absolute',
+//   },
+// });
+
+// export default Splash;
+
+
+
+----------ATTTRIBUTE SUB PARAMTER VLA 
+ {/* <View */}
+                  {/* style={{flexDirection: 'row', justifyContent: 'center'}}> */}
+                  {/* <Text
+                      style={[
+                        styles.cell,
+                        {
+                          fontWeight: 'bold',
+                          color: COLORS.PRIMARY,
+                          height: 26,
+                          lineHeight: 26,
+                        },
+                      ]}>
+                      Sub Parameters :
+                    </Text> */}
+                  {/* {renderIf(
+                      isFilled,
+                      <View style={{height: 26, justifyContent: 'center'}}>
+                        <Image
+                          source={require('../../../assets/icons/check_tick.png')}
+                          style={{height: 22, width: 22, alignSelf: 'flex-end'}}
+                          resizeMode="contain"
+                        />
+                      </View>,
+                    )} */}
+                  {/* </View> */}

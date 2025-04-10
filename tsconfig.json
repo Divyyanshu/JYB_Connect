@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",        // ✅ Required
+    "resolveJsonModule": true,         // ✅ Now this works
+    "jsx": "react-native",
+    "strict": true,
+    "esModuleInterop": true,
+    "target": "esnext",
+    "module": "esnext",
+    "allowJs": true,
+    "noEmit": true,
+    "isolatedModules": true
+  },
+  "exclude": ["node_modules"]
+}

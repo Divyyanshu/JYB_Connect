@@ -1,0 +1,2970 @@
+// import React, {useState, useEffect} from 'react';
+// import {View, Text, FlatList, Modal, Button} from 'react-native';
+// import {useRoute} from '@react-navigation/native';
+// import {styles} from './style';
+// import {getDetailsByMainParameter} from '../../../database/db';
+
+// //  Main Screen Component
+// const Attributes = () => {
+//   const route = useRoute();
+//   const {mainParam} = route.params;
+
+//   const [data, setData] = useState([]);
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+
+//   // Function to fetch data from local DB
+//   const fetchDetails = () => {
+//     getDetailsByMainParameter(mainParam, detailsList => {
+//       setData(detailsList);
+//     });
+//   };
+
+//   useEffect(() => {
+//     fetchDetails();
+//   }, [mainParam]); //Update when main parameter changes
+
+//   const handleRowPress = item => {
+//     if (item.MaxMarks < 6) {
+//       setSelectedItem(item);
+//       setModalVisible(true);
+//     }
+//   };
+
+//   return (
+//     <View style={{flex: 1}}>
+//       <HeaderRow />
+//       <FlatList
+//         data={data}
+//         keyExtractor={item => item.DefId.toString()}
+//         renderItem={({item}) => (
+//           <DataRow item={item} onPress={() => handleRowPress(item)} />
+//         )}
+//         contentContainerStyle={{flexGrow: 1}}
+//       />
+
+//       {/* Modal for Low Marks */}
+//       <ScoreModal
+//         visible={modalVisible}
+//         item={selectedItem}
+//         onClose={() => setModalVisible(false)}
+//       />
+//     </View>
+//   );
+// };
+
+// //  Table Header Component
+// const HeaderRow = () => (
+//   <View style={styles.headerRow}>
+//     <Text style={styles.headerCell}>Sub Parameter</Text>
+//     <Text style={styles.headerCell}>Checkpoint</Text>
+//     <Text style={styles.headerCell}>Max Marks</Text>
+//     <Text style={styles.headerCell}>Marks Obt.</Text>
+//   </View>
+// );
+
+// //  Table Row Component
+// const DataRow = ({item, onPress}) => (
+//   <View style={styles.row} onTouchEnd={onPress}>
+//     <Text style={styles.cell}>{item.SubParameters}</Text>
+//     <Text style={styles.cell}>{item.Checkpoints}</Text>
+//     <Text style={styles.cell}>{item.MaxMarks}</Text>
+//     <Text style={[styles.cell, item.MaxMarks < 6 && styles.lowMarks]}>
+//       {item.MaxMarks}
+//     </Text>
+//   </View>
+// );
+
+// //  Modal Component
+// const ScoreModal = ({visible, item, onClose}) => {
+//   if (!item) return null;
+
+//   return (
+//     <Modal visible={visible} transparent animationType="slide">
+//       <View style={styles.modalContainer}>
+//         <View style={styles.modalContent}>
+//           <Text style={styles.modalText}>
+//             Marks obtained ({item.MaxMarks}) are less than 6.
+//           </Text>
+//           <Button title="Close" onPress={onClose} />
+//         </View>
+//       </View>
+//     </Modal>
+//   );
+// };
+
+// export default Attributes;
+// import {StyleSheet} from 'react-native';
+// import {COMMON_STYLES} from '../../../utils/commonStyles';
+
+// export const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+//     paddingVertical: 10,
+//     backgroundColor: COMMON_STYLES.SCREEN_BACKGROUND_COLOR,
+//     marginTop: 10,
+//   },
+//   headerRow: {
+//     flexDirection: 'row',
+//     backgroundColor: '#ddd',
+//     padding: 10,
+//     borderRadius: 5,
+//     marginBottom: 5,
+//   },
+//   headerCell: {
+//     flex: 1,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+//   row: {
+//     flexDirection: 'row',
+//     backgroundColor: '#fff',
+//     padding: 10,
+//     marginBottom: 5,
+//     borderRadius: 5,
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//   },
+//   cell: {
+//     flex: 1,
+//     textAlign: 'center',
+//   },
+//   lowMarks: {
+//     color: 'red',
+//     fontWeight: 'bold',
+//   },
+//   modalContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'rgba(0,0,0,0.5)',
+//   },
+//   modalContent: {
+//     width: 300,
+//     padding: 20,
+//     backgroundColor: '#fff',
+//     borderRadius: 10,
+//     alignItems: 'center',
+//   },
+//   modalText: {
+//     marginBottom: 10,
+//     textAlign: 'center',
+//   },
+// });
+
+// ------------------------------
+// import React, {useEffect, useState} from 'react';
+// import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+// import {styles} from './style';
+// import {getGroupedMainParameters} from '../../database/db';
+// import {useNavigation} from '@react-navigation/native';
+// import {SCREENS} from '../../utils/screens';
+
+// const ServiceAttributes = () => {
+//   const [data, setData] = useState([]);
+//   const navigation = useNavigation();
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await getGroupedMainParameters();
+//         if (response) {
+//           console.log('Fetched Data:', response);
+//           setData(response);
+//         } else {
+//           console.warn('Data is undefined or empty!');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const handleNavigator = mainParam => {
+//     navigation.navigate(SCREENS.MAIN_STACK.ATTRIBUTES, {mainParam});
+//   };
+
+//   const renderItem = ({item}) => (
+//     <TouchableOpacity
+//       style={styles.serviceAttributeCard}
+//       onPress={() => handleNavigator(item)}>
+//       <Text style={styles.cardText}>{item}</Text>
+//     </TouchableOpacity>
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       <FlatList
+//         data={data}
+//         keyExtractor={(item, index) => index.toString()}
+//         renderItem={renderItem}
+//         showsVerticalScrollIndicator={false}
+//       />
+//     </View>
+//   );
+// };
+
+// export default ServiceAttributes;
+// import {StyleSheet} from 'react-native';
+// import {COMMON_STYLES} from '../../utils/commonStyles';
+
+// export const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+//     paddingVertical: 10,
+//     backgroundColor: COMMON_STYLES.SCREEN_BACKGROUND_COLOR,
+//     marginTop: 10,
+//   },
+//   serviceAttributeCard: {
+//     padding: 16,
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     borderRadius: 5,
+//     backgroundColor: 'white',
+//     marginBottom: 10,
+//   },
+//   cardText: {
+//     fontSize: 16,
+//     textAlign: 'center',
+//   },
+// });
+
+// -----------------
+// import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   ScrollView,
+//   TextInput,
+//   Dimensions,
+//   Alert,
+//   ActivityIndicator,
+// } from 'react-native';
+// import Orientation from 'react-native-orientation-locker';
+// import axios from 'axios';
+// import {styles} from './style';
+// import {CustomButton} from '../../uiKit/customButton';
+
+// const screenWidth = Dimensions.get('window').width;
+
+// const KPI_Performance = () => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
+
+//   useEffect(() => {
+//     Orientation.lockToLandscape();
+//     fetchData();
+
+//     return () => {
+//       Orientation.unlockAllOrientations();
+//     };
+//   }, []);
+
+//   const fetchData = async () => {
+//     setLoading(true);
+//     setError(null);
+
+//     try {
+//       const response = await axios.get(
+//         'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//       );
+
+//       if (response.data?.Message === 'Success ' && response.data?.Data) {
+//         const formattedData = response.data.Data.map(item => ({
+//           parameter: item.Parameters,
+//           monthPlan: item.MonthPlan || '',
+//           mtdPlan: '',
+//           mtdActual: '',
+//           achievement: '',
+//           actionPlan: '',
+//         }));
+
+//         setData(formattedData);
+//       } else {
+//         setError('Invalid API Response');
+//       }
+//     } catch (err) {
+//       setError(err.message || 'Something went wrong');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleInputChange = (text, index, field) => {
+//     const newData = [...data];
+//     newData[index][field] = text;
+//     setData(newData);
+//   };
+
+//   const handleSubmit = () => {
+//     Alert.alert('Submitted Data:', JSON.stringify(data, null, 2));
+//   };
+
+//   const renderRow = ({item, index}) => (
+//     <View style={styles.row}>
+//       <Text style={styles.cell}>{item.parameter}</Text>
+//       <Text style={styles.cell}>{item.monthPlan}</Text>
+//       <TextInput
+//         style={styles.input}
+//         value={item.mtdPlan}
+//         onChangeText={text => handleInputChange(text, index, 'mtdPlan')}
+//         keyboardType="numeric"
+//       />
+//       <TextInput
+//         style={styles.input}
+//         value={item.mtdActual}
+//         onChangeText={text => handleInputChange(text, index, 'mtdActual')}
+//         keyboardType="numeric"
+//       />
+//       <TextInput
+//         style={styles.input}
+//         value={item.achievement}
+//         onChangeText={text => handleInputChange(text, index, 'achievement')}
+//       />
+//       <TextInput
+//         style={styles.input}
+//         value={item.actionPlan}
+//         onChangeText={text => handleInputChange(text, index, 'actionPlan')}
+//       />
+//     </View>
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? (
+//         <ActivityIndicator size="large" color="blue" />
+//       ) : error ? (
+//         <Text style={{color: 'red', textAlign: 'center'}}>{error}</Text>
+//       ) : (
+//         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//           <View style={{alignItems: 'center', width: screenWidth}}>
+//             <View style={styles.headerRow}>
+//               <Text style={styles.headerCell}>Parameters</Text>
+//               <Text style={styles.headerCell}>Month Plan</Text>
+//               <Text style={styles.headerCell}>MTD Plan</Text>
+//               <Text style={styles.headerCell}>MTD Actual</Text>
+//               <Text style={styles.headerCell}>% Ach</Text>
+//               <Text style={styles.headerCell}>Action Plan</Text>
+//             </View>
+//             <FlatList
+//               data={data}
+//               renderItem={renderRow}
+//               keyExtractor={item => item.parameter}
+//               showsVerticalScrollIndicator={false}
+//             />
+//           </View>
+//         </ScrollView>
+//       )}
+//       <View style={styles.submitButton}>
+//         <CustomButton title={'Next'} onPress={handleSubmit} />
+//       </View>
+//     </View>
+//   );
+// };
+
+// export default KPI_Performance;
+ <FlatList
+          style={{flex: 1}}
+          contentContainerStyle={{backgroundColor: 'green'}}
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => {
+            const percentage =
+              item.maxMarks > 0
+                ? ((item.obtainedMarks / item.maxMarks) * 100).toFixed(2) + '%'
+                : '0%';
+            return (
+              <View style={styles.row}>
+                <Text style={[styles.cell, styles.areaCell]}>{item.area}</Text>
+                <Text style={styles.cell}>{item.maxMarks}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+                <Text style={styles.cell}>{item.obtainedMarks}</Text>
+                <Text style={styles.cell}>{percentage}</Text>
+              </View>
+            );
+          }}
+          // ListFooterComponent={() => {
+          //   const totalMarks = data.reduce(
+          //     (sum, item) => sum + (item.maxMarks || 0),
+          //     0,
+          //   );
+          //   const totalObtained = data.reduce(
+          //     (sum, item) => sum + (item.obtainedMarks || 0),
+          //     0,
+          //   );
+          //   const totalPercentage =
+          //     totalMarks > 0
+          //       ? ((totalObtained / totalMarks) * 100).toFixed(2) + '%'
+          //       : '0%';
+
+          //   return (
+          //     <View style={[styles.row, styles.totalRow]}>
+          //       <Text style={[styles.cell, styles.areaCell, styles.totalText]}>
+          //         Total
+          //       </Text>
+          //       <Text style={[styles.cell, styles.totalText]}>
+          //         {totalMarks}
+          //       </Text>
+          //       <Text style={[styles.cell, styles.totalText]}>
+          //         {totalObtained}
+          //       </Text>
+          //       <Text style={[styles.cell, styles.totalText]}>
+          //         {totalPercentage}
+          //       </Text>
+          //     </View>
+          //   );
+          // }}
+        />
+        {/* </View> */}
+
+
+        -----backup kpi performance table 
+        // import React, {useEffect, useState} from 'react';
+// import {View, Text, FlatList} from 'react-native';
+// import {COLORS} from '../../utils/colors';
+// import {CustomButton} from '../../uiKit/customButton';
+// import axios from 'axios';
+// import {styles} from './style';
+// import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+// const KPIPerformance = () => {
+//   const [inputs, setInputs] = useState({});
+//   const [data, setData] = useState([]);
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.post(
+//           'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//           {DealerCode: 'Kanpur'},
+//           {headers: {'Content-Type': 'application/json'}},
+//         );
+
+//         console.log('API Response:', response.data);
+//         if (response.data?.Data) {
+//           setData(response.data.Data);
+//         } else {
+//           console.warn('API response does not contain Data field');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   const handleInputChange = (key, index, value) => {
+//     setInputs(prev => ({
+//       ...prev,
+//       [`${key}-${index}`]: value,
+//     }));
+//   };
+
+//   const handleSubmit = () => {
+//     console.log('Submitting Data:', inputs);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {/* <HeaderRow /> */}
+//       <FlatList
+//         data={data}
+//         // keyExtractor={item => item?.DefId.toString()}
+//         renderItem={({item, index}) => (
+//           <View
+//             style={{
+//               padding: 10,
+//               marginVertical: 20,
+//               borderRadius: 8,
+//               borderCurve: 'continuous',
+//               marginBottom: 20,
+//               backgroundColor: '#F1EFEC',
+//             }}>
+//             <View
+//               style={{
+//                 paddingVertical: 2,
+//                 borderRightWidth: 1,
+//                 borderColor: '#fff',
+//               }}>
+//               <View style={{flexDirection: 'row'}}>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                     borderRightWidth: 1,
+//                     borderColor: '#fff',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     Parameters
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.Parameters || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                     borderRightWidth: 1,
+//                     borderColor: '#fff',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     Month Plan
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                     borderRightWidth: 1,
+//                     borderColor: '#fff',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     % Criteria
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     MTD Plan
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       // borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//               </View>
+//             </View>
+//             <View
+//               style={{
+//                 paddingVertical: 2,
+//                 marginBottom: 10,
+//                 marginTop: 20,
+//               }}>
+//               <View style={{flexDirection: 'row'}}>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     MTD Actual
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     % Achieve
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}>
+//                     Action Plan
+//                   </Text>
+//                   <Text
+//                     style={{
+//                       width: '100%',
+//                       borderRightWidth: 1,
+//                       borderColor: 'grey',
+//                       textAlign: 'center',
+//                     }}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+
+//                 <View
+//                   style={{
+//                     width: '25%',
+//                     alignItems: 'center',
+//                   }}>
+//                   <Text
+//                     style={{
+//                       backgroundColor: COLORS.PRIMARY,
+//                       width: '100%',
+//                       textAlign: 'center',
+//                       color: '#fff',
+//                     }}></Text>
+//                 </View>
+//               </View>
+//             </View>
+//           </View>
+//         )}
+//         contentContainerStyle={{flexGrow: 1}}
+//       />
+//     </View>
+//   );
+// };
+// export default KPIPerformance;
+
+
+
+----PURSHOTAM SIR CODE import {StyleSheet} from 'react-native';
+import {COLORS} from '../../utils/colors';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+  },
+  card: {
+    padding: 10,
+    marginVertical: 20,
+    borderRadius: 8,
+    backgroundColor: '#F1EFEC',
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  cell: {
+    width: '25%',
+    alignItems: 'center',
+    borderRightWidth: 1,
+    borderColor: '#fff',
+  },
+  header: {
+    backgroundColor: COLORS.PRIMARY,
+    width: '100%',
+    textAlign: 'center',
+    color: '#fff',
+  },
+  text: {
+    width: '100%',
+    borderRightWidth: 1,
+    borderColor: 'grey',
+    textAlign: 'center',
+  },
+});
+
+
+
+---FOTTER BTN 
+ const renderFooter = () => {
+    return (
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+
+
+   {/* Gradient Background */}
+                <LinearGradient
+                  colors={['#850f0f', '#ffffff']} // Light Green to Dark Green Gradient
+                  start={{x: 0, y: 1}}
+                  end={{x: 1, y: 1}}
+                  style={styles.gradientBackground}
+                />
+
+
+
+                  gradientBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 10,
+  },
+
+
+  -----kpi old code 
+  // import React, {useEffect, useState} from 'react';
+// import {View, Text, FlatList, ActivityIndicator} from 'react-native';
+// import {COLORS} from '../../utils/colors';
+// import {CustomButton} from '../../uiKit/customButton';
+// import axios from 'axios';
+// import {styles} from './style';
+
+// const KPIPerformance = () => {
+//   const [inputs, setInputs] = useState({});
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.post(
+//           'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//           {DealerCode: 'Kanpur'},
+//           {headers: {'Content-Type': 'application/json'}},
+//         );
+
+//         console.log('API Response:', response.data);
+//         if (response.data?.Data) {
+//           setTimeout(() => {
+//             setData(response.data.Data);
+//             setLoading(false);
+//           }, 1200);
+//         } else {
+//           console.warn('API response does not contain Data field');
+//           setLoading(false);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+//   const renderFooter = () => (
+//     <View style={styles.buttonContainer}>
+//       <CustomButton title={'Next'} />
+//     </View>
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? ( // 🔹 Show Loader when loading is true
+//         <View style={styles.loaderContainer}>
+//           <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+//           <Text style={styles.loadingText}>Data Loading...</Text>
+//         </View>
+//       ) : (
+//         <FlatList
+//           data={data}
+//           renderItem={({item}) => (
+//             <View style={styles.card}>
+//               <View style={styles.row}>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Parameters</Text>
+//                   <Text style={styles.text}>{item.Parameters || 'N/A'}</Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Month Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>% Criteria</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>MTD Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//               </View>
+//               <View style={styles.row}>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>MTD Actual</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>% Achieve</Text>
+//                   <Text style={styles.text}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Action Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}></Text>
+//                   <Text style={styles.text}>
+//                     {/* {item.PercentageCriteria || 'N/A'} */}
+//                   </Text>
+//                 </View>
+//               </View>
+//             </View>
+//           )}
+//           contentContainerStyle={{flexGrow: 1}}
+//           ListFooterComponent={renderFooter}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// export default KPIPerformance;
+
+
+  <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+      {/* Month Picker */}
+      <View style={styles.pickerRow}>
+        {/* Month Picker */}
+        <View style={styles.pickerWrapper}>
+          <Text style={styles.label}>MONTH</Text>
+          <View style={styles.pickerContainer}>
+            <Text style={styles.selectedValue}>
+              {selectedMonth ? MONTHS[selectedMonth - 1] : 'Select Month'}
+            </Text>
+            <Picker
+              selectedValue={selectedMonth}
+              onValueChange={itemValue => setSelectedMonth(itemValue)}
+              style={styles.picker}>
+              {MONTHS.map((month, index) => (
+                <Picker.Item
+                  key={index}
+                  label={month}
+                  value={(index + 1).toString()}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+
+        {/* Year Picker */}
+        <View style={styles.pickerWrapper}>
+          <Text style={styles.label}>YEAR</Text>
+          <View style={styles.pickerContainer}>
+            <Text style={styles.selectedValue}>
+              {selectedYear ? selectedYear : 'Select Year'}
+            </Text>
+            <Picker
+              selectedValue={selectedYear}
+              onValueChange={itemValue => setSelectedYear(itemValue)}
+              style={styles.picker}>
+              {YEARS.map((year, index) => (
+                <Picker.Item
+                  key={index}
+                  label={year.toString()}
+                  value={year.toString()}
+                />
+              ))}
+            </Picker>
+          </View>
+        </View>
+      </View>// import React, {useEffect, useState} from 'react';
+// import {View, Text, FlatList, ActivityIndicator} from 'react-native';
+// import {COLORS} from '../../utils/colors';
+// import {CustomButton} from '../../uiKit/customButton';
+// import axios from 'axios';
+// import {styles} from './style';
+
+// const KPIPerformance = () => {
+//   const [inputs, setInputs] = useState({});
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.post(
+//           'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//           {DealerCode: 'Kanpur'},
+//           {headers: {'Content-Type': 'application/json'}},
+//         );
+
+//         console.log('API Response:', response.data);
+//         if (response.data?.Data) {
+//           setTimeout(() => {
+//             setData(response.data.Data);
+//             setLoading(false);
+//           }, 1200);
+//         } else {
+//           console.warn('API response does not contain Data field');
+//           setLoading(false);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+//   const renderFooter = () => (
+//     <View style={styles.buttonContainer}>
+//       <CustomButton title={'Next'} />
+//     </View>
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? ( // 🔹 Show Loader when loading is true
+//         <View style={styles.loaderContainer}>
+//           <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+//           <Text style={styles.loadingText}>Data Loading...</Text>
+//         </View>
+//       ) : (
+//         <FlatList
+//           data={data}
+//           renderItem={({item}) => (
+//             <View style={styles.card}>
+//               <View style={styles.row}>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Parameters</Text>
+//                   <Text style={styles.text}>{item.Parameters || 'N/A'}</Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Month Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>% Criteria</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>MTD Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//               </View>
+//               <View style={styles.row}>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>MTD Actual</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>% Achieve</Text>
+//                   <Text style={styles.text}>
+//                     {item.MonthPlan?.trim() ? item.MonthPlan : ''}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}>Action Plan</Text>
+//                   <Text style={styles.text}>
+//                     {item.PercentageCriteria || 'N/A'}
+//                   </Text>
+//                 </View>
+//                 <View style={styles.cell}>
+//                   <Text style={styles.header}></Text>
+//                   <Text style={styles.text}>
+//                     {/* {item.PercentageCriteria || 'N/A'} */}
+//                   </Text>
+//                 </View>
+//               </View>
+//             </View>
+//           )}
+//           contentContainerStyle={{flexGrow: 1}}
+//           ListFooterComponent={renderFooter}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// export default KPIPerformance;
+
+
+
+    <View style={styles.row}>
+          <View style={styles.cell}>
+            <Text style={styles.header}>MTD Actual</Text>
+            <TextInput
+              style={styles.input_MTD_Actual}
+              placeholder="Enter MTD Actual"
+              keyboardType="numeric"
+              value={inputs[index] || ''}
+              onChangeText={text => handleInputChange(text, index)}
+            />
+          </View>
+
+
+
+          ------KPI_Performance
+          // import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   ActivityIndicator,
+//   TextInput,
+//   Image,
+//   TouchableOpacity,
+// } from 'react-native';
+// import {CustomButton} from '../../uiKit/customButton';
+// import axios from 'axios';
+// import {styles} from './style';
+// import KPI_Action_Pop_up from '../../components/KPI_Action_Pop_up/KPI_Action_Pop_up';
+
+// const getDaysInMonth = (year, month) => {
+//   return new Date(year, month, 0).getDate();
+// };
+
+// const KPIPerformance = () => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [inputs, setInputs] = useState({});
+//   const currentDate = new Date();
+//   const currentDay = currentDate.getDate();
+//   const currentMonth = currentDate.getMonth() + 1;
+//   const currentYear = currentDate.getFullYear();
+//   const totalDaysInMonth = getDaysInMonth(currentYear, currentMonth);
+//   const [visible, setVisible] = useState(false);
+
+//   const handleActionPlanModel = () => setVisible(true);
+//   const onClose = () => setVisible(false);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.post(
+//           'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//           {DealerCode: 'Kanpur'},
+//           {headers: {'Content-Type': 'application/json'}},
+//         );
+
+//         if (response.data?.Data) {
+//           setData(response.data.Data);
+//         } else {
+//           console.warn('API response does not contain Data field');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchData();
+//   }, []);
+
+//   const handleInputChange = (text, index) => {
+//     setInputs(prev => ({...prev, [index]: text}));
+//   };
+
+//   const calculatePercentageAchieve = (mtdPlan, mtdActual) => {
+//     if (!mtdPlan || !mtdActual) return 'N/A';
+//     return ((mtdActual / mtdPlan) * 100).toFixed(2) + '%';
+//   };
+
+//   const renderItem = ({item, index}) => {
+//     const monthPlan = parseFloat(item.MonthPlan) || 0;
+//     const percentageCriteria = parseFloat(item.PercentageCriteria) || 0;
+//     const mtdPlan = ((monthPlan / totalDaysInMonth) * currentDay).toFixed(2);
+//     const mtdActual = parseFloat(inputs[index]) || 0;
+//     const percentageAchieve = calculatePercentageAchieve(mtdPlan, mtdActual);
+//     const showActionPlan =
+//       percentageAchieve !== 'N/A' &&
+//       parseFloat(percentageAchieve) < percentageCriteria;
+
+//     return (
+//       <View style={styles.card}>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Parameters</Text>
+//             <Text style={styles.text}>{item.Parameters || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Month Plan</Text>
+//             <Text style={styles.text}>{monthPlan || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>% Criteria</Text>
+//             <Text style={styles.text}>{percentageCriteria || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>MTD Plan</Text>
+//             <Text style={styles.text}>{mtdPlan || 'N/A'}</Text>
+//           </View>
+//         </View>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>MTD Actual</Text>
+//             <Text style={styles.text}>{mtdActual || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>% Achieve</Text>
+//             <Text style={styles.text}>{percentageAchieve}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Action Plan</Text>
+//             <Text style={styles.text}>
+//               {showActionPlan ? 'Required' : 'N/A'}
+//             </Text>
+//           </View>
+//           <TouchableOpacity
+//             style={styles.editCell}
+//             onPress={handleActionPlanModel}>
+//             <Image
+//               source={require('../../assets/icons/edit.png')}
+//               style={{height: 22, width: 22}}
+//             />
+//           </TouchableOpacity>
+//           <KPI_Action_Pop_up visible={visible} onClose={onClose} />
+//         </View>
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? (
+//         <View style={styles.loaderContainer}>
+//           <Text style={styles.loadingText}>Data Loading...</Text>
+//         </View>
+//       ) : (
+//         <FlatList
+//           data={data}
+//           renderItem={renderItem}
+//           keyExtractor={(item, index) => index.toString()}
+//           contentContainerStyle={{flexGrow: 1}}
+//           ListFooterComponent={
+//             <View style={styles.buttonContainer}>
+//               <CustomButton title={'Next'} />
+//             </View>
+//           }
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// export default KPIPerformance;
+
+
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  StatusBar,
+  ScrollView,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import {styles} from './style';
+import {MONTHS, YEARS} from '../../utils/constants';
+import {useNavigation} from '@react-navigation/native';
+import {SCREENS} from '../../utils/screens';
+import {STACKS} from '../../utils/stacks';
+import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import {
+  create_KPI_Performance_Table,
+  create_KPI_Performance_Table_InsertRecord,
+} from '../../database/db';
+const {width} = Dimensions.get('window');
+const SelectDealerCode = () => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = (new Date().getMonth() + 1).toString();
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [dealerData, setDealerData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState();
+  const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+  const [selectedDealerCode, setSelectedDealerCode] = useState(null);
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    create_KPI_Performance_Table();
+    fetchDealerList(selectedMonth, selectedYear);
+  }, [selectedMonth, selectedYear]);
+  const fetchDealerList = async (month, year) => {
+    setLoading(true);
+    console.log('Fetching Dealer List for:', {month, year});
+
+    try {
+      const response = await axios.post(
+        'http://198.38.81.7/jawadvrapi/api/Dealer/TravelDealerPlaning',
+        {
+          Month: month,
+          Year: year.toString(),
+          DealerCode: 'CLDA011',
+          // Month: selectedMonth,
+          // Year: selectedYear,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (response.data?.Data) {
+        setDealerData(response.data.Data);
+        console.log('Dealer List:', response.data.Data);
+      } else {
+        setDealerData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching dealer list:', error);
+      setDealerData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchKpiData = async (dealerCode, month, year) => {
+    setLoading(true);
+    console.log('Fetching KPI Data for:', {dealerCode, month, year});
+
+    try {
+      const response = await axios.post(
+        'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+        {
+          DealerCode: dealerCode,
+          Month: month,
+          Year: year.toString(),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const kpiData = response.data.Data;
+      console.log('KPI API Response:', kpiData);
+
+      if (kpiData.length > 0) {
+        for (const item of kpiData) {
+          try {
+            await create_KPI_Performance_Table_InsertRecord(
+              item?.parameter,
+              item?.month_plan,
+              item?.percentage_criteria,
+              item?.mtd_plan,
+              item.MTD_actual,
+              item.percent_achieved,
+              item.gap_Area,
+              item.counter_measure_plan,
+              item.responsibility,
+              item.plan_closure_date,
+              item.image,
+            );
+            console.log('KPI Data saved:', item);
+          } catch (error) {
+            console.error('Error saving KPI data:', error);
+          }
+        }
+        console.log('Success', 'KPI Data saved successfully!');
+        Alert.alert('Success', 'KPI Data saved successfully!');
+      } else {
+        console.log('No Data', 'No KPI Data found for this dealer.');
+      }
+
+      return kpiData;
+    } catch (error) {
+      console.error('Error fetching KPI data:', error);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleDealerSelect = async dealerCode => {
+    setSelectedDealerCode(dealerCode);
+    const kpiData = await fetchKpiData(dealerCode, selectedMonth, selectedYear);
+
+    navigation.navigate(STACKS.MAIN_STACK, {
+      screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+      params: {dealerCode, selectedMonth, selectedYear, kpiData},
+    });
+  };
+
+  const formatDate = dateStr => {
+    if (!dateStr) return 'N/A';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-GB');
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Month Selector */}
+      <Text style={styles.label}>Select Month</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}>
+        {MONTHS.map((month, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.segmentButton,
+              selectedMonthIndex === index && styles.activeSegment,
+            ]}
+            onPress={() => setSelectedMonthIndex(index)}>
+            <Text
+              style={[
+                styles.segmentText,
+                selectedMonthIndex === index && styles.activeText,
+              ]}>
+              {month}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <Text style={styles.label}>Select Year</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}>
+        {YEARS.map((year, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[
+              styles.segmentButton,
+              selectedYearIndex === index && styles.activeSegment,
+            ]}
+            onPress={() => setSelectedYearIndex(index)}>
+            <Text
+              style={[
+                styles.segmentText,
+                selectedYearIndex === index && styles.activeText,
+              ]}>
+              {year}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <Text style={styles.selectedText}>
+        Selected: {MONTHS[selectedMonthIndex]} {YEARS[selectedYearIndex]}
+      </Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#007bff" />
+      ) : (
+        <FlatList
+          data={dealerData}
+          keyExtractor={item => item.Id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => handleDealerSelect(item.DealerCode)}>
+              <LinearGradient
+                colors={['#850f0f', '#990021']}
+                start={{x: 0, y: 1}}
+                end={{x: 0, y: 0}}
+                style={styles.gradientBackground}
+              />
+              <View>
+                <Text style={styles.title}>{item.DealerCode}</Text>
+                <Text style={styles.status}>{item.Status}</Text>
+              </View>
+              <View>
+                <Text style={styles.dealerDate}>
+                  {formatDate(item.PlainDate)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
+    </View>
+  );
+};
+
+export default SelectDealerCode; 
+
+
+----------------kpi performance
+
+// const KPIPerformance = () => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [inputs, setInputs] = useState({});
+//   const [visible, setVisible] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+
+//   const currentDate = new Date();
+//   const currentDay = currentDate.getDate();
+//   const currentMonth = currentDate.getMonth() + 1;
+//   const currentYear = currentDate.getFullYear();
+//   const totalDaysInMonth = getDaysInMonth(currentYear, currentMonth);
+
+//   // const handleActionPlanModel = item => {
+//   //   setSelectedItem(data);
+//   //   setVisible(true);
+//   // };
+//   const handleActionPlanModel = item => {
+//     console.log('Item for modal:', item);
+//     setSelectedItem(item); // Ensure you're passing the correct data to modal
+//     setVisible(true);
+//   };
+//   const onClose = () => {
+//     setVisible(false);
+//     setSelectedItem(null);
+//   };
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.post(
+//           'https://loadcrm.com/jawadvrapi/api/Dealer/ApiforKpiPerformance',
+//           {DealerCode: 'Kanpur'},
+//           {headers: {'Content-Type': 'application/json'}},
+//         );
+
+//         if (response.data?.Data) {
+//           setData(response.data.Data);
+//         } else {
+//           console.warn('API response does not contain Data field');
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchData();
+//   }, []);
+
+//   const handleInputChange = (text, index) => {
+//     setInputs(prev => ({...prev, [index]: text}));
+//   };
+
+//   const calculatePercentageAchieve = (mtdPlan, mtdActual) => {
+//     if (!mtdPlan || !mtdActual) return 'N/A';
+//     return ((mtdActual / mtdPlan) * 100).toFixed(2) + '%';
+//   };
+
+//   const renderItem = ({item, index}) => {
+//     const monthPlan = parseFloat(item.MonthPlan) || 0;
+//     const percentageCriteria = parseFloat(item.PercentageCriteria) || 0;
+//     const mtdPlan = ((monthPlan / totalDaysInMonth) * currentDay).toFixed(2);
+//     const mtdActual = parseFloat(inputs[index]) || 0;
+//     const percentageAchieve = calculatePercentageAchieve(mtdPlan, mtdActual);
+//     const showActionPlan =
+//       percentageAchieve !== 'N/A' &&
+//       parseFloat(percentageAchieve) < percentageCriteria;
+
+//     return (
+//       <View style={styles.card}>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Parameters</Text>
+//             <Text style={styles.text}>{item.Parameters || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Month Plan</Text>
+//             <Text style={styles.text}>{monthPlan || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>% Criteria</Text>
+//             <Text style={styles.text}>{percentageCriteria || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>MTD Plan</Text>
+//             <Text style={styles.text}>{mtdPlan || 'N/A'}</Text>
+//           </View>
+//         </View>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>MTD Actual</Text>
+//             <Text style={styles.text}>{mtdActual || 'N/A'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>% Achieve</Text>
+//             <Text style={styles.text}>{percentageAchieve}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Action Plan</Text>
+//             <Text style={styles.text}>
+//               {showActionPlan ? 'Required' : 'N/A'}
+//             </Text>
+//           </View>
+//           <TouchableOpacity
+//             style={styles.editCell}
+//             onPress={() => handleActionPlanModel(item)}>
+//             <Image
+//               source={require('../../assets/icons/edit.png')}
+//               style={{height: 22, width: 22}}
+//             />
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? (
+//         <View style={styles.loaderContainer}>
+//           <Text style={styles.loadingText}>Data Loading...</Text>
+//         </View>
+//       ) : (
+//         <FlatList
+//           data={data}
+//           renderItem={renderItem}
+//           keyExtractor={(item, index) => index.toString()}
+//           contentContainerStyle={{flexGrow: 1}}
+//           ListFooterComponent={
+//             <View style={styles.buttonContainer}>
+//               <CustomButton title={'Next'} />
+//             </View>
+//           }
+//         />
+//       )}
+//       {visible && selectedItem && (
+//         <KPI_Action_Pop_up
+//           visible={visible}
+//           onClose={onClose}
+//           item={selectedItem}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+
+
+// import React, {useState, useEffect} from 'react';
+// import {
+//   Modal,
+//   StyleSheet,
+//   Text,
+//   View,
+//   TouchableOpacity,
+//   TextInput,
+//   Image,
+//   Platform,
+//   PermissionsAndroid,
+//   Alert,
+// } from 'react-native';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+// import {styles} from './style';
+// import {CustomButton} from '../../uiKit/customButton';
+// import {launchCamera} from 'react-native-image-picker';
+// import renderIf from '../../utils/renderIf';
+// import {updateServiceAttributes} from '../../database/db';
+
+// const KPIActionPopup = ({visible, onClose, item, onSubmit, rowIndex}) => {
+//   if (!item) return null;
+//   const [marksObtained, setMarksObtained] = useState('');
+//   const [formData, setFormData] = useState({
+//     gapArea: item.GapArea !== null ? item.GapArea : '',
+//     actionPlan: item.ActionPlan !== null ? item.ActionPlan : '',
+//     responsibility: item.Responsibility !== null ? item.Responsibility : '',
+//     planClosureDate: item.PlanDate !== null ? item.PlanDate : '',
+//     photo: item.Image !== null ? item.Image : null,
+//     marksObt: item.MaxObt !== null ? item.MaxObt : '',
+//   });
+//   const [showDatePicker, setShowDatePicker] = useState(false);
+//   const [MTD_Actual, setMTD_Actual] = useState('');
+//   const [selectedDate, setSelectedDate] = useState(new Date());
+//   const [isMTD_Actual, setIsMTD_Actual] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+
+//   useEffect(() => {
+//     if (item.GapArea !== null && item.GapArea !== '') {
+//       console.log('Gap area is present');
+//       setIsMTD_Actual(true); // Corrected this line
+//       setMTD_Actual(item.mtdActual);
+//     }
+//   }, []);
+//   console.log('item all data : >>>', item);
+
+//   const calculatePercentageAchieve = (mtdPlan, mtdActual) => {
+//     if (!mtdPlan || !mtdActual) return 'N/A';
+//     return ((mtdActual / mtdPlan) * 100).toFixed(2) + '%';
+//   };
+
+//   const renderItem = ({item, index}) => {
+//     const monthPlan = parseFloat(item.MonthPlan) || 0;
+//     const percentageCriteria = parseFloat(item.PercentageCriteria) || 0;
+//     const mtdPlan = ((monthPlan / totalDaysInMonth) * currentDay).toFixed(2);
+//     const mtdActual = parseFloat(inputs[index]) || 0;
+//     const percentageAchieve = calculatePercentageAchieve(mtdPlan, mtdActual);
+
+//     const showActionPlan =
+//       percentageAchieve !== 'N/A' &&
+//       parseFloat(percentageAchieve) < percentageCriteria;
+
+//     const handleMTDActualChange = text => {
+//       setIsMTD_Actual(text);
+
+//       const mtdActualValue = parseFloat(text) || 0;
+//       const requiredValue = parseFloat(item?.PercentageCriteria) || 0;
+
+//       if (PercentageCriteria >= requiredValue) {
+//         setIsMTD_Actual(true);
+//       } else {
+//         setIsMTD_Actual(false);
+//       }
+//     };
+//     const handleDateChange = (event, date) => {
+//       if (date) {
+//         setFormData(prev => ({...prev, planClosureDate: date.toDateString()}));
+//         setShowDatePicker(false);
+//       }
+//     };
+
+//     const validateForm = () => {
+//       if (!isMTD_Actual) return true;
+//       if (!formData.gapArea.trim()) return Alert.alert('Please enter gap area');
+//       if (!formData.actionPlan.trim())
+//         return Alert.alert('Please enter action plan');
+//       if (!formData.responsibility.trim())
+//         return Alert.alert('Please enter responsibility');
+//       if (!formData.planClosureDate.trim())
+//         return Alert.alert('Please enter plan closure date');
+//       if (!formData.photo) return Alert.alert('Please upload a photo');
+//       return true;
+//     };
+
+//     const handleSubmit = () => {
+//       if (!validateForm()) return;
+
+//       updateServiceAttributes(
+//         item.DefId,
+//         formData.marksObt,
+//         isMTD_Actual ? formData.gapArea : '',
+//         isMTD_Actual ? formData.actionPlan : '',
+//         isMTD_Actual ? formData.responsibility : '',
+//         isMTD_Actual ? formData.planClosureDate : '',
+//         isMTD_Actual ? formData.photo : '',
+//       );
+//       onSubmit(formData, rowIndex);
+//       console.log('value model >>>>>>', item.DefId);
+//     };
+
+//     const openCamera = async () => {
+//       try {
+//         const granted = await PermissionsAndroid.request(
+//           PermissionsAndroid.PERMISSIONS.CAMERA,
+//           {
+//             title: 'Camera Permission',
+//             message: 'App needs access to your camera',
+//             buttonPositive: 'OK',
+//           },
+//         );
+
+//         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+//           const result = await launchCamera({
+//             saveToPhotos: true,
+//             mediaType: 'photo',
+//           });
+//           if (result.assets?.length > 0) {
+//             setFormData(prev => ({...prev, photo: result.assets[0].uri}));
+//           }
+//         } else {
+//           Alert.alert('Permission Denied', 'Camera access is required.');
+//         }
+//       } catch (err) {
+//         console.warn(err);
+//       }
+//     };
+
+//     return (
+//       <Modal visible={visible} transparent animationType="slide">
+//         <View style={styles.modalContainer}>
+//           <View style={styles.modalContent}>
+//             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+//               <Icon name="close" size={24} color="black" />
+//             </TouchableOpacity>
+//             <Text style={styles.title}>Action Plan</Text>
+//             <View style={styles.inputContainer}>
+//               <Text style={styles.label}>MTD Actual:</Text>
+//               <TextInput
+//                 style={styles.input}
+//                 placeholder="MTD Actual"
+//                 onChangeText={handleMTDActualChange}
+//                 value={marksObtained}
+//                 keyboardType="number-pad"
+//                 maxLength={4}
+//               />
+//             </View>
+//             {renderIf(
+//               isMTD_Actual,
+//               <>
+//                 <View style={styles.inputContainer}>
+//                   <Text style={styles.label}>Gap Area :</Text>
+//                   <TextInput
+//                     style={styles.input}
+//                     value={formData.gapArea}
+//                     placeholder="Gap Area"
+//                     onChangeText={text =>
+//                       setFormData(prev => ({...prev, gapArea: text}))
+//                     }
+//                   />
+//                 </View>
+//                 <View style={styles.inputContainer}>
+//                   <Text style={styles.label}>Counter Measure Plan :</Text>
+//                   <TextInput
+//                     style={styles.input}
+//                     value={formData.actionPlan}
+//                     placeholder="Counter Measure Plan"
+//                     onChangeText={text =>
+//                       setFormData(prev => ({...prev, actionPlan: text}))
+//                     }
+//                   />
+//                 </View>
+//                 <View style={styles.inputContainer}>
+//                   <Text style={styles.label}>Responsibility :</Text>
+//                   <TextInput
+//                     style={styles.input}
+//                     value={formData.responsibility}
+//                     placeholder="Responsibility"
+//                     onChangeText={text =>
+//                       setFormData(prev => ({...prev, responsibility: text}))
+//                     }
+//                   />
+//                 </View>
+//                 <View style={styles.inputContainer}>
+//                   <Text style={styles.label}>Plan Closure Date :</Text>
+//                   <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+//                     <TextInput
+//                       style={styles.placeholderStyle}
+//                       value={formData.planClosureDate}
+//                       placeholder="Plan Closure Date"
+//                       placeholderTextColor={'black'}
+//                       editable={false}
+//                     />
+//                   </TouchableOpacity>
+//                 </View>
+//                 {showDatePicker && (
+//                   <DateTimePicker
+//                     value={selectedDate}
+//                     mode="date"
+//                     display="spinner"
+//                     onChange={handleDateChange}
+//                     minimumDate={new Date()}
+//                   />
+//                 )}
+//               </>,
+//             )}
+//             {formData.photo && (
+//               <Image source={{uri: formData.photo}} style={styles.image} />
+//             )}
+//             <View style={styles.buttonContainer}>
+//               {renderIf(
+//                 isMTD_Actual,
+//                 <CustomButton title="Click Photo" onPress={openCamera} />,
+//               )}
+//               <CustomButton title="Submit" onPress={handleSubmit} />
+//             </View>
+//           </View>
+//         </View>
+//       </Modal>
+//     );
+//   };
+// };
+
+// export default KPIActionPopup;
+
+
+
+// // import React, {useEffect, useState} from 'react';
+// // import {
+// //   View,
+// //   Text,
+// //   ScrollView,
+// //   FlatList,
+// //   useWindowDimensions,
+// // } from 'react-native';
+// // import Orientation from 'react-native-orientation-locker';
+// // import {styles} from './style';
+// // import {CustomButton} from '../../uiKit/customButton';
+// // import {getDvrScoreData} from '../../database/db';
+
+// // const DVRScoreScreen = ({navigation}) => {
+// //   const {width, height} = useWindowDimensions();
+// //   const [data, setData] = useState([]);
+
+// //   useEffect(() => {
+// //     Orientation.lockToLandscape();
+// //     fetchData();
+
+// //     return () => {
+// //       Orientation.lockToPortrait();
+// //     };
+// //   }, []);
+
+// //   const fetchData = async () => {
+// //     try {
+// //       const response = await getDvrScoreData();
+// //       if (response && response.length > 0) {
+// //         console.log('Fetched Data:', response);
+// //         const formattedData = response.map((item, index) => ({
+// //           id: index.toString(),
+// //           area: item.MainParameter,
+// //           maxMarks: item.TotalMaxMarks,
+// //           obtainedMarks: item.TotalMaxObt ?? 0,
+// //         }));
+// //         setData(formattedData);
+// //       } else {
+// //         console.warn('Data is undefined or empty!');
+// //       }
+// //     } catch (error) {
+// //       console.error('Error fetching data:', error);
+// //     }
+// //   };
+
+// //   return (
+// //     <View style={[styles.container, {width, height}]}>
+// //       <ScrollView horizontal>
+// //         <View style={[styles.table, {width: width * 0.8, height: height * 1}]}>
+// //           <View style={styles.headerRow}>
+// //             <Text style={[styles.headerCell, styles.areaCell]}>Area</Text>
+// //             <Text style={styles.headerCell}>Max Marks</Text>
+// //             <Text style={styles.headerCell}>Marks Obtained</Text>
+// //             <Text style={styles.headerCell}>% Achieved</Text>
+// //           </View>
+// //           <FlatList
+// //             data={data}
+// //             keyExtractor={item => item.id}
+// //             renderItem={({item}) => {
+// //               const percentage =
+// //                 item.maxMarks > 0
+// //                   ? ((item.obtainedMarks / item.maxMarks) * 100).toFixed(2) +
+// //                     '%'
+// //                   : '0%';
+// //               return (
+// //                 <View style={styles.row}>
+// //                   <Text style={[styles.cell, styles.areaCell]}>
+// //                     {item.area}
+// //                   </Text>
+// //                   <Text style={styles.cell}>{item.maxMarks}</Text>
+// //                   <Text style={styles.cell}>{item.obtainedMarks}</Text>
+// //                   <Text style={styles.cell}>{percentage}</Text>
+// //                 </View>
+// //               );
+// //             }}
+// //             ListFooterComponent={() => {
+// //               const totalMarks = data.reduce(
+// //                 (sum, item) => sum + (item.maxMarks || 0),
+// //                 0,
+// //               );
+// //               const totalObtained = data.reduce(
+// //                 (sum, item) => sum + (item.obtainedMarks || 0),
+// //                 0,
+// //               );
+// //               const totalPercentage =
+// //                 totalMarks > 0
+// //                   ? ((totalObtained / totalMarks) * 100).toFixed(2) + '%'
+// //                   : '0%';
+
+// //               return (
+// //                 <View style={[styles.row, styles.totalRow]}>
+// //                   <Text
+// //                     style={[styles.cell, styles.areaCell, styles.totalText]}>
+// //                     Total
+// //                   </Text>
+// //                   <Text style={[styles.cell, styles.totalText]}>
+// //                     {totalMarks}
+// //                   </Text>
+// //                   <Text style={[styles.cell, styles.totalText]}>
+// //                     {totalObtained}
+// //                   </Text>
+// //                   <Text style={[styles.cell, styles.totalText]}>
+// //                     {totalPercentage}
+// //                   </Text>
+// //                 </View>
+// //               );
+// //             }}
+// //           />
+// //         </View>
+// //       </ScrollView>
+// //       <View style={styles.ButtonContainer}>
+// //         <CustomButton title={'Next'} onPress={fetchData} />
+// //       </View>
+// //     </View>
+// //   );
+// // };
+
+// // export default DVRScoreScreen;
+
+
+// import React from 'react';
+// import {
+//   Modal,
+//   View,
+//   Text,
+//   TouchableOpacity,
+//   Image,
+//   ScrollView,
+// } from 'react-native';
+// import {styles} from './style';
+// import Feather from 'react-native-vector-icons/Feather';
+// import {useNavigation} from '@react-navigation/native';
+// import {SCREENS} from '../../utils/screens';
+// import {STACKS} from '../../utils/stacks';
+
+// const CustomModal = ({visible, onClose, modalType}) => {
+//   const navigation = useNavigation();
+//   const go_to_selectDealerCode = () => {
+//     navigation.navigate(STACKS.MAIN_STACK, {
+//       screen: SCREENS.MAIN_STACK.SELECT_DEALER_CODE,
+//     });
+//   };
+//   return (
+//     <Modal
+//       animationType="fade"
+//       transparent={true}
+//       visible={visible}
+//       onRequestClose={onClose}>
+//       <View style={styles.modalContainer}>
+//         {/* Close Button */}
+//         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+//           <Feather name="x" size={24} color="black" />
+//         </TouchableOpacity>
+//         <ScrollView
+//           showsVerticalScrollIndicator={false}
+//           style={{
+//             flex: 1,
+//           }}>
+//           {modalType === 'sales' ? (
+//             <View
+//               style={{
+//                 flex: 1,
+//                 justifyContent: 'center',
+//                 alignItems: 'center',
+//               }}>
+//               <Text style={styles.modalText}>Coming Soon : Sales!</Text>
+//             </View>
+//           ) : (
+//             <View
+//               style={{
+//                 flex: 1,
+//                 justifyContent: 'center',
+//                 alignItems: 'center',
+//               }}>
+//               <Text style={styles.modalTitle}>Select Option</Text>
+
+//               <TouchableOpacity
+//                 style={styles.optionCard}
+//                 onPress={go_to_selectDealerCode}>
+//                 <Image
+//                   source={require('../../assets/icons/dvr.png')}
+//                   style={styles.modelImages}
+//                 />
+//                 <Text style={styles.optionText}>Fill DVR</Text>
+//               </TouchableOpacity>
+//               <TouchableOpacity
+//                 style={styles.optionCard}
+//                 onPress={() => alert('Coming Soon: Dealer Evaluation')}>
+//                 <Image
+//                   source={require('../../assets/icons/service.png')}
+//                   style={styles.modelImages}
+//                 />
+//                 <Text style={styles.optionText}>{'Dealer \n Evaluation'}</Text>
+//               </TouchableOpacity>
+//             </View>
+//           )}
+//         </ScrollView>
+//       </View>
+//       <View style={styles.modalOverlay}></View>
+//     </Modal>
+//   );
+// };
+
+// export default CustomModal;
+
+
+------------model accomplaised
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   TextInput,
+//   FlatList,
+//   TouchableOpacity,
+//   Modal,
+//   Alert,
+// } from 'react-native';
+// import {styles} from './style';
+// import SQLite from 'react-native-sqlite-storage';
+// import {Dropdown} from 'react-native-element-dropdown';
+
+// const db = SQLite.openDatabase({name: 'AccompanyDB.db'});
+
+// const postOptions = [
+//   {label: 'Service Head', value: 'Service Head'},
+//   {label: 'Sales Head', value: 'Sales Head'},
+//   {label: 'Service Regional Manager', value: 'Service Regional Manager'},
+//   {label: 'Sales Regional Manager', value: 'Sales Regional Manager'},
+// ];
+
+// const AccompaniedByScreen = () => {
+//   const [modalVisible, setModalVisible] = useState(false);
+//   const [post, setPost] = useState('');
+//   const [name, setName] = useState('');
+//   const [mobile, setMobile] = useState('');
+//   const [list, setList] = useState([]);
+
+//   useEffect(() => {
+//     createTable();
+//     fetchData();
+//   }, []);
+
+//   const createTable = () => {
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+//       );
+//     });
+//   };
+
+//   const insertData = () => {
+//     if (!post || !name || !mobile) {
+//       Alert.alert('All fields are required!');
+//       return;
+//     }
+
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'INSERT INTO AccompaniedBy (post, name, mobile) VALUES (?, ?, ?);',
+//         [post, name, mobile],
+//         () => {
+//           fetchData();
+//           setPost('');
+//           setName('');
+//           setMobile('');
+//           setModalVisible(false);
+//         },
+//       );
+//     });
+//   };
+
+//   const fetchData = () => {
+//     db.transaction(tx => {
+//       tx.executeSql('SELECT * FROM AccompaniedBy;', [], (tx, results) => {
+//         const rows = results.rows;
+//         let temp = [];
+
+//         for (let i = 0; i < rows.length; i++) {
+//           temp.push(rows.item(i));
+//         }
+
+//         setList(temp);
+//       });
+//     });
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {/* Top Button to Open Modal */}
+//       <TouchableOpacity
+//         style={styles.addButton}
+//         onPress={() => setModalVisible(true)}>
+//         <Text style={styles.addButtonText}>+ Add</Text>
+//       </TouchableOpacity>
+
+//       {/* List View */}
+//       <FlatList
+//         data={list}
+//         keyExtractor={item => item.id.toString()}
+//         renderItem={({item}) => (
+//           <View style={styles.card}>
+//             <Text>Post: {item.post}</Text>
+//             <Text>Name: {item.name}</Text>
+//             <Text>Mobile: {item.mobile}</Text>
+//           </View>
+//         )}
+//       />
+//       <Modal visible={modalVisible} animationType="slide" transparent>
+//         <View style={styles.modalContainer}>
+//           <View style={styles.modalBox}>
+//             <Text style={styles.modalTitle}>Accompanied By Company</Text>
+
+//             <Dropdown
+//               style={styles.dropdown}
+//               data={postOptions}
+//               labelField="label"
+//               valueField="value"
+//               placeholder="Select Post"
+//               value={post}
+//               onChange={item => setPost(item.value)}
+//             />
+
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Enter Name"
+//               value={name}
+//               onChangeText={setName}
+//             />
+
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Enter Mobile"
+//               keyboardType="number-pad"
+//               value={mobile}
+//               onChangeText={setMobile}
+//             />
+
+//             <TouchableOpacity style={styles.submitBtn} onPress={insertData}>
+//               <Text style={{color: '#fff'}}>Submit</Text>
+//             </TouchableOpacity>
+
+//             <TouchableOpacity onPress={() => setModalVisible(false)}>
+//               <Text style={{color: 'red', marginTop: 10, textAlign: 'center'}}>
+//                 Cancel
+//               </Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//       </Modal>
+//     </View>
+//   );
+// };
+
+// export default AccompaniedByScreen;
+
+
+// import {StyleSheet} from 'react-native';
+
+
+// export const styles = StyleSheet.create({
+//   container: {flex: 1, backgroundColor: '#000', padding: 10},
+//   addButton: {
+//     backgroundColor: '#8B0000',
+//     padding: 10,
+//     borderRadius: 10,
+//     alignSelf: 'flex-end',
+//     marginBottom: 10,
+//   },
+//   addButtonText: {color: '#fff', fontWeight: 'bold'},
+//   card: {
+//     backgroundColor: '#fff',
+//     padding: 12,
+//     borderRadius: 10,
+//     marginVertical: 5,
+//   },
+//   modalContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     backgroundColor: '#000000aa',
+//     padding: 20,
+//   },
+//   modalBox: {
+//     backgroundColor: '#fff',
+//     borderRadius: 10,
+//     padding: 20,
+//   },
+//   modalTitle: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginBottom: 15,
+//   },
+//   dropdown: {
+//     borderWidth: 1,
+//     borderColor: 'gray',
+//     borderRadius: 8,
+//     paddingHorizontal: 10,
+//     marginBottom: 10,
+//   },
+//   input: {
+//     borderWidth: 1,
+//     borderColor: 'gray',
+//     borderRadius: 8,
+//     paddingHorizontal: 10,
+//     paddingVertical: 8,
+//     marginBottom: 10,
+//   },
+//   submitBtn: {
+//     backgroundColor: '#8B0000',
+//     padding: 10,
+//     alignItems: 'center',
+//     borderRadius: 8,
+//   },
+// });
+
+
+
+delet bhi addded hai 
+import React, {useState, useEffect} from 'react';
+import {View, FlatList, StyleSheet, Alert} from 'react-native';
+import SQLite from 'react-native-sqlite-storage';
+import {Dropdown} from 'react-native-element-dropdown';
+import {
+  TextInput,
+  Button,
+  Card,
+  Text,
+  Modal,
+  Portal,
+  Provider,
+  FAB,
+  useTheme,
+} from 'react-native-paper';
+
+const db = SQLite.openDatabase({name: 'AccompanyDB.db'});
+
+const postOptions = [
+  {label: 'Service Head', value: 'Service Head'},
+  {label: 'Sales Head', value: 'Sales Head'},
+  {label: 'Service Regional Manager', value: 'Service Regional Manager'},
+  {label: 'Sales Regional Manager', value: 'Sales Regional Manager'},
+];
+
+const AccompaniedByScreen = () => {
+  const {colors} = useTheme(); // React Native Paper Theme
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [post, setPost] = useState('');
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    createTable();
+    fetchData();
+  }, []);
+
+  const createTable = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'CREATE TABLE IF NOT EXISTS Accompanied (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+      );
+    });
+  };
+
+  const insertData = () => {
+    if (!post || !name || !mobile) {
+      return;
+    }
+
+    db.transaction(tx => {
+      tx.executeSql(
+        'INSERT INTO Accompanied (post, name, mobile) VALUES (?, ?, ?);',
+        [post, name, mobile],
+        () => {
+          fetchData();
+          resetForm();
+        },
+      );
+    });
+  };
+
+  const fetchData = () => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM Accompanied;', [], (tx, results) => {
+        let temp = [];
+        for (let i = 0; i < results.rows.length; i++) {
+          temp.push(results.rows.item(i));
+        }
+        setList(temp);
+      });
+    });
+  };
+
+  const deleteRecord = id => {
+    Alert.alert(
+      'Delete Entry',
+      'Are you sure you want to delete this record?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Delete',
+          onPress: () => {
+            db.transaction(tx => {
+              tx.executeSql(
+                'DELETE FROM Accompanied WHERE id = ?',
+                [id],
+                () => {
+                  fetchData();
+                },
+              );
+            });
+          },
+          style: 'destructive',
+        },
+      ],
+    );
+  };
+
+  const resetForm = () => {
+    setPost('');
+    setName('');
+    setMobile('');
+    setModalVisible(false);
+  };
+
+  return (
+    <Provider>
+      <View style={styles.container}>
+        <FlatList
+          data={list}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <Card style={styles.card}>
+              <Card.Content>
+                <Text variant="titleMedium">Post: {item.post}</Text>
+                <Text>Name: {item.name}</Text>
+                <Text>Mobile: {item.mobile}</Text>
+              </Card.Content>
+              <Card.Actions>
+                <Button textColor="red" onPress={() => deleteRecord(item.id)}>
+                  Delete
+                </Button>
+              </Card.Actions>
+            </Card>
+          )}
+        />
+
+        <FAB
+          icon="plus"
+          color="white"
+          style={[styles.fab, {backgroundColor: colors.primary}]}
+          onPress={() => setModalVisible(true)}
+        />
+
+        <Portal>
+          <Modal
+            visible={modalVisible}
+            onDismiss={resetForm}
+            contentContainerStyle={styles.modal}>
+            <Text variant="titleLarge" style={{marginBottom: 10}}>
+              Add Accompanied Person
+            </Text>
+
+            <Dropdown
+              style={styles.dropdown}
+              data={postOptions}
+              labelField="label"
+              valueField="value"
+              placeholder="Select Post"
+              value={post}
+              onChange={item => setPost(item.value)}
+            />
+
+            <TextInput
+              label="Name"
+              value={name}
+              onChangeText={setName}
+              mode="outlined"
+              style={styles.input}
+            />
+
+            <TextInput
+              label="Mobile"
+              value={mobile}
+              onChangeText={setMobile}
+              mode="outlined"
+              keyboardType="phone-pad"
+              style={styles.input}
+            />
+
+            <Button
+              mode="contained"
+              onPress={insertData}
+              style={{marginTop: 10}}>
+              Submit
+            </Button>
+
+            <Button onPress={resetForm} textColor="red" style={{marginTop: 5}}>
+              Cancel
+            </Button>
+          </Modal>
+        </Portal>
+      </View>
+    </Provider>
+  );
+};
+
+export default AccompaniedByScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#f2f2f2',
+  },
+  fab: {
+    position: 'absolute',
+    right: 16,
+    bottom: 16,
+  },
+  card: {
+    marginVertical: 6,
+    elevation: 2,
+  },
+  modal: {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 10,
+  },
+  input: {
+    marginBottom: 10,
+  },
+  dropdown: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    marginBottom: 10,
+  },
+});
+
+
+
+
+
+-------------
+// import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    margin: 20,
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    elevation: 4,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    zIndex: 1,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#333',
+  },
+  infoText: {
+    fontSize: 15,
+    color: '#555',
+    marginBottom: 4,
+  },
+  textInput: {
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  datePickerContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 14,
+    backgroundColor: '#f5f5f5',
+    marginBottom: 12,
+  },
+  dateText: {
+    fontSize: 14,
+    color: '#000',
+  },
+  placeholderText: {
+    fontSize: 14,
+    color: '#999',
+  },
+  image: {
+    width: 110,
+    height: 110,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignSelf: 'center',
+  },
+  button: {
+    marginTop: 10,
+    marginBottom: 10,
+  },
+});
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Alert,
+  Image,
+  PermissionsAndroid,
+} from 'react-native';
+import {
+  Modal,
+  Portal,
+  Text,
+  TextInput,
+  Button,
+  IconButton,
+} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {styles} from './style';
+import {CustomButton} from '../../uiKit/customButton';
+import {COLORS} from '../../utils/colors';
+import {launchCamera} from 'react-native-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {updateKPIPerformanceData} from '../../database/db';
+import renderIf from '../../utils/renderIf';
+import {TextInput as PaperInput} from 'react-native-paper';
+
+const calculatePercentageAchieve = (mtd_plan, mtd_actual) => {
+  if (!mtd_plan || !mtd_actual) return 0;
+  return Math.round((mtd_actual / mtd_plan) * 100);
+};
+
+const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
+  if (!item) return null;
+  const [formData, setFormData] = useState({
+    mtd_actual: '',
+    gapArea: '',
+    actionPlan: '',
+    responsibility: '',
+    planClosureDate: '',
+    photo: null,
+  });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isMTDActualFilled, setIsMTDActualFilled] = useState(false);
+
+  const handleDateChange = (event, date) => {
+    if (date) {
+      setSelectedDate(date);
+      handleInputChange('planClosureDate', date.toISOString().split('T')[0]);
+    }
+    setShowDatePicker(false);
+  };
+  useEffect(() => {
+    if (item) {
+      if (item.gap_area != '' && item.gapArea != undefined) {
+        setIsMTDActualFilled(true);
+      }
+      setFormData({
+        mtd_actual: item.mtd_actual,
+        gapArea: item.gap_area,
+        actionPlan: item.counter_measure_plan,
+        responsibility: item.responsibility,
+        planClosureDate: item.plan_closure_date,
+        photo: item.image_path || null,
+      });
+    }
+  }, [item]);
+
+  const handleInputChange = (key, value) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  const handleMTDActualChange = text => {
+    const numericValue = text.replace(/[^0-9]/g, '');
+    handleInputChange('mtd_actual', numericValue);
+    setIsMTDActualFilled(numericValue.length > 0);
+  };
+
+  const percentageAchieve = calculatePercentageAchieve(
+    item.mtd_plan,
+    formData.mtd_actual,
+  );
+
+  const isCriteriaMeet =
+    parseFloat(percentageAchieve) >= parseFloat(item.percentage_criteria);
+
+  async function handleValidate() {
+    if (!isCriteriaMeet) {
+      if (!formData.gapArea.trim())
+        return Alert.alert('Error', 'Enter Gap Area');
+      if (!formData.actionPlan.trim())
+        return Alert.alert('Error', 'Enter Action Plan');
+      if (!formData.responsibility.trim())
+        return Alert.alert('Error', 'Enter Responsibility');
+      if (!formData.planClosureDate.trim())
+        return Alert.alert('Error', 'Enter Plan Closure Date');
+      if (!formData.photo) return Alert.alert('Error', 'Capture a Photo');
+    }
+    try {
+      await updateKPIPerformanceData({
+        parameter: item.parameter,
+        mtd_plan: item.mtd_plan,
+        mtd_actual: formData.mtd_actual,
+        percentage_achieve: calculatePercentageAchieve(
+          item.mtd_plan,
+          formData.mtd_actual,
+        ),
+        gap_area: formData.gapArea,
+        counter_measure_plan: formData.actionPlan,
+        responsibility: formData.responsibility,
+        plan_closure_date: formData.planClosureDate,
+        image_path: formData.photo,
+      });
+      onSubmit(formData);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update KPI performance');
+    }
+  }
+  const handleSubmit = () => {
+    handleValidate();
+  };
+
+  const openCamera = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'App needs access to your camera',
+          buttonPositive: 'OK',
+        },
+      );
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        const result = await launchCamera({
+          saveToPhotos: true,
+          mediaType: 'photo',
+        });
+
+        if (result.assets?.length > 0) {
+          setFormData(prev => ({...prev, photo: result.assets[0].uri}));
+        }
+      } else {
+        Alert.alert('Permission Denied', 'Camera access is required.');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  return (
+    // <Modal visible={visible} transparent animationType="slide">
+    //   <View style={styles.modalContainer}>
+    //     <View style={styles.modalContent}>
+    //       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+    //         <Icon name="close" size={32} color={COLORS.PRIMARY} />
+    //       </TouchableOpacity>
+    //       <Text style={styles.title}>Action Plan</Text>
+    //       <View style={{alignItems: 'flex-start'}}>
+    //         <Text style={{marginBottom: 5}}>
+    //           {item.parameter}: {percentageAchieve}% of{' '}
+    //           {item.percentage_criteria}%
+    //         </Text>
+    //         <Text style={{marginBottom: 5}}>MTD Plan : {item.mtd_plan}</Text>
+    //       </View>
+    //       <View style={styles.inputContainer}>
+    //         <Text style={styles.label}>MTD Actual : </Text>
+    //         <TextInput
+    //           style={styles.input}
+    //           placeholder="Enter MTD Actual"
+    //           onChangeText={handleMTDActualChange}
+    //           value={formData.mtd_actual}
+    //           keyboardType="number-pad"
+    //           maxLength={4}
+    //         />
+    //       </View>
+    //       {isMTDActualFilled && !isCriteriaMeet && (
+    //         <>
+    //           <View style={styles.inputContainer}>
+    //             <Text style={styles.label}>Gap Area : </Text>
+    //             <TextInput
+    //               style={styles.input}
+    //               value={
+    //                 formData.gapArea != undefined && formData.gapArea != ''
+    //               }
+    //               placeholder="Enter Gap Area"
+    //               onChangeText={text => handleInputChange('gapArea', text)}
+    //             />
+    //           </View>
+    //           <View style={styles.inputContainer}>
+    //             <Text style={styles.label}>Counter Measure Plan : </Text>
+    //             <TextInput
+    //               style={styles.input}
+    //               value={
+    //                 formData.actionPlan != undefined &&
+    //                 formData.actionPlan != ''
+    //               }
+    //               placeholder="Enter Counter Measure"
+    //               onChangeText={text => handleInputChange('actionPlan', text)}
+    //             />
+    //           </View>
+    //           <View style={styles.inputContainer}>
+    //             <Text style={styles.label}>Responsibility : </Text>
+    //             <TextInput
+    //               style={styles.input}
+    //               value={
+    //                 formData.responsibility != undefined &&
+    //                 formData.responsibility != ''
+    //               }
+    //               placeholder="Enter Responsibility"
+    //               onChangeText={text =>
+    //                 handleInputChange('responsibility', text)
+    //               }
+    //             />
+    //           </View>
+    //           <View style={styles.inputContainer}>
+    //             <Text style={styles.label}>Plan Closure Date : </Text>
+    //             <TouchableOpacity
+    //               style={styles.input}
+    //               onPress={() => setShowDatePicker(true)}>
+    //               <Text
+    //                 style={{
+    //                   color: formData.planClosureDate ? '#000' : '#999',
+    //                   fontSize: 14,
+    //                 }}>
+    //                 {formData.planClosureDate
+    //                   ? `📅 ${formData.planClosureDate}`
+    //                   : '📅 Enter Date'}
+    //               </Text>
+    //             </TouchableOpacity>
+    //             {showDatePicker && (
+    //               <DateTimePicker
+    //                 value={selectedDate}
+    //                 mode="date"
+    //                 display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+    //                 onChange={handleDateChange}
+    //                 minimumDate={new Date()}
+    //               />
+    //             )}
+    //           </View>
+    //           {formData.photo && isMTDActualFilled && !isCriteriaMeet && (
+    //             <Image source={{uri: formData.photo}} style={styles.image} />
+    //           )}
+    //           <View style={styles.buttonContainer}>
+    //             <CustomButton title="Click Photo" onPress={openCamera} />
+    //           </View>
+    //         </>
+    //       )}
+    //       <View style={[styles.buttonContainer, {marginTop: 10}]}>
+    //         <CustomButton title={'Submit'} onPress={handleSubmit} />
+    //       </View>
+    //     </View>
+    //   </View>
+    // </Modal>
+    <Portal>
+      <Modal
+        visible={visible}
+        onDismiss={onClose}
+        contentContainerStyle={{
+          margin: 20,
+          backgroundColor: 'white',
+          padding: 20,
+          borderRadius: 12,
+        }}>
+        <View style={{position: 'absolute', right: 10, top: 10}}>
+          <IconButton
+            icon="close"
+            iconColor="#6200ee"
+            size={24}
+            onPress={onClose}
+          />
+        </View>
+
+        <Text
+          variant="titleMedium"
+          style={{marginBottom: 16, textAlign: 'center'}}>
+          Action Plan
+        </Text>
+
+        <View style={{marginBottom: 12}}>
+          <Text>
+            {item.parameter}: {percentageAchieve}% of {item.percentage_criteria}
+            %
+          </Text>
+          <Text>MTD Plan: {item.mtd_plan}</Text>
+        </View>
+
+        <TextInput
+          label="MTD Actual"
+          mode="outlined"
+          keyboardType="number-pad"
+          maxLength={4}
+          value={formData.mtd_actual}
+          onChangeText={handleMTDActualChange}
+          style={{marginBottom: 16}}
+        />
+
+        {isMTDActualFilled && !isCriteriaMeet && (
+          <>
+            <TextInput
+              label="Gap Area"
+              mode="outlined"
+              value={formData.gapArea}
+              placeholder="Enter Gap Area"
+              onChangeText={text => handleInputChange('gapArea', text)}
+              style={{marginBottom: 12}}
+            />
+
+            <TextInput
+              label="Counter Measure Plan"
+              mode="outlined"
+              value={formData.actionPlan}
+              placeholder="Enter Counter Measure"
+              onChangeText={text => handleInputChange('actionPlan', text)}
+              style={{marginBottom: 12}}
+            />
+
+            <TextInput
+              label="Responsibility"
+              mode="outlined"
+              value={formData.responsibility}
+              placeholder="Enter Responsibility"
+              onChangeText={text => handleInputChange('responsibility', text)}
+              style={{marginBottom: 12}}
+            />
+
+            {/* Date Picker */}
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(true)}
+              style={{
+                borderWidth: 1,
+                borderColor: '#bbb',
+                borderRadius: 8,
+                padding: 14,
+                backgroundColor: '#f5f5f5',
+                marginBottom: 12,
+              }}>
+              <Text style={{color: formData.planClosureDate ? '#000' : '#999'}}>
+                {formData.planClosureDate
+                  ? `📅 ${formData.planClosureDate}`
+                  : '📅 Enter Date'}
+              </Text>
+            </TouchableOpacity>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={selectedDate}
+                mode="date"
+                display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+                minimumDate={new Date()}
+                onChange={handleDateChange}
+              />
+            )}
+
+            {/* Image Preview */}
+            {formData.photo && (
+              <Image
+                source={{uri: formData.photo}}
+                style={{
+                  width: 110,
+                  height: 110,
+                  borderRadius: 10,
+                  marginBottom: 16,
+                  alignSelf: 'center',
+                }}
+              />
+            )}
+
+            {/* Photo Button */}
+            <Button
+              mode="outlined"
+              icon="camera"
+              onPress={openCamera}
+              style={{marginBottom: 16}}>
+              Click Photo
+            </Button>
+          </>
+        )}
+
+        {/* Submit Button */}
+        <Button mode="contained" onPress={handleSubmit}>
+          Submit
+        </Button>
+      </Modal>
+    </Portal>
+  );
+};
+
+export default KPIActionPopup;
