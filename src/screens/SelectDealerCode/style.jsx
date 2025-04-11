@@ -6,7 +6,7 @@ const {width} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    // paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
     paddingVertical: 5,
     backgroundColor: '#fff',
   },
@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderWidth: 0.1,
+    marginHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
     // shadowColor: '#000',
     // shadowOffset: {width: -1, height: 2},
     // shadowOpacity: 0.08,

@@ -27,11 +27,11 @@ export const Navigation = () => {
           component={MainNavigator}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name={STACKS.DRAWER_STACK}
           component={DrawerNavigator}
           options={{headerShown: false}}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

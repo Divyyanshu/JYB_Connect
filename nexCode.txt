@@ -2968,3 +2968,601 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
 };
 
 export default KPIActionPopup;
+
+
+
+-----------------------------------------------------------------------------------
+
+// import {createStackNavigator} from '@react-navigation/stack';
+// import LoginPage from '../screens/auth/Login/Login';
+// import {SCREENS} from '../utils/screens';
+// import SelectDealerCode from '../screens/SelectDealerCode/SelectDealerCode';
+// import KeyActivities from '../screens/KeyActivities/KeyActivities';
+// import ServiceAttributes from '../screens/ServiceAttribute/ServiceAttribute';
+// import DVR_Score from '../screens/DVR_Score/DVR_Score';
+// import KPI_Performance from '../screens/KPI_Performance/KPI_Performance';
+// import ManPower_Status from '../screens/ManPowerStatus/ManPower_Status';
+// import ComplaintsAnalysis from '../screens/ComplaintsAnalysis/ComplaintsAnalysis';
+// import MinutesOfMeeting from '../screens/MinutesOfMeeting/MinutesOfMeeting';
+// import Attributes from '../screens/ServiceAttribute/Attributes/Attributes';
+// import {COLORS} from '../utils/colors';
+// import {TouchableOpacity} from 'react-native';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+// import RepeatJob_Analysis from '../screens/RepeatJob_Analysis/RepeatJob_Analysis';
+
+// import Accompanied_Dealer from '../screens/Accompanied_Dealer/Accompanied_Dealer';
+// import Accompanied_Company from '../screens/Accompanied_Company/Accompanied_Company';
+
+// const Stack = createStackNavigator();
+
+// export const MainNavigator = ({navigation}) => {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName={SCREENS.MAIN_STACK.LOGIN}
+//       screenOptions={{ headerShown: true }}
+
+//     >
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.LOGIN}
+//         component={LoginPage}
+//         options={{headerShown: false}}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
+//         component={SelectDealerCode}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Select Dealer Code',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.KEY_ACTIVITIES}
+//         component={KeyActivities}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Key Activities',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.SERVICE_ATTRIBUTES}
+//         component={ServiceAttributes}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Service Attributes',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       {/* ✅ Attributes Screen ka header title dynamically set*/}
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.ATTRIBUTES}
+//         component={Attributes}
+//         options={({route, navigation}) => ({
+//           title: route.params?.mainParam || 'Attributes',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => {
+//                 if (navigation.canGoBack()) {
+//                   navigation.goBack();
+//                 } else {
+//                   navigation.navigate(SCREENS.MAIN_STACK.DASHBOARD);
+//                 }
+//               }}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.DVR_SCORE}
+//         component={DVR_Score}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'DVR Score',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.KPI_PERFORMANCE}
+//         component={KPI_Performance}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'KPI Performance',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.MAN_POWER_STATUS}
+//         component={ManPower_Status}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Man Power Status',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.COMPLAINTS_ANALYSIS}
+//         component={ComplaintsAnalysis}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Complaints Analysis',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.REPEAT_JOB}
+//         component={RepeatJob_Analysis}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Repeat Job Card Analysis',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.MINUTES_OF_MEETING}
+//         component={MinutesOfMeeting}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Minutes Of Meeting',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 80},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.ACCOMPANIED_COMPANY}
+//         component={Accompanied_Company}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Accompanied By Company',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//       <Stack.Screen
+//         name={SCREENS.MAIN_STACK.ACCOMPANIED_DEALER}
+//         component={Accompanied_Dealer}
+//         options={({navigation}) => ({
+//           headerShown: true,
+//           title: 'Accompanied By Dealer',
+//           headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
+//           headerTitleStyle: {color: COLORS.WHITE},
+
+//           headerLeft: () => (
+//             <TouchableOpacity
+//               onPress={() => navigation.goBack()}
+//               style={{padding: 10}}>
+//               <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
+//             </TouchableOpacity>
+//           ),
+//         })}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
+
+
+-------------------------------
+// import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   SafeAreaView,
+// } from 'react-native';
+// import {styles} from './style';
+// import KPI_Action_Pop_up from '../../components/KPI_Action_Pop_up/KPI_Action_Pop_up';
+// import {
+//   fetchDataManPowerAvailability,
+//   updateKPIPerformanceData,
+// } from '../../database/db';
+// import ManPowerModal from '../../components/Manpower_Popup/Manpower_Popup';
+
+// const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
+
+// const ManpowerAvailabilityScreen = ({navigation}) => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [visible, setVisible] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+//   const [refresh, setRefresh] = useState(false);
+
+//   const currentDate = new Date();
+//   const totalDaysInMonth = getDaysInMonth(
+//     currentDate.getFullYear(),
+//     currentDate.getMonth() + 1,
+//   );
+//   const currentDay = currentDate.getDate();
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         fetchDataManPowerAvailability(dbData => {
+//           setData(dbData);
+//           console.log('data for man power table >>>', data);
+//           setLoading(false);
+//         });
+//       } catch (error) {
+//         console.error('Error fetching Manpower Data:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+//     fetchData();
+//     const unsubscribe = navigation.addListener('focus', fetchData);
+//     return unsubscribe;
+//   }, [navigation, refresh]);
+
+//   const handleActionPlanModel = item => {
+//     setSelectedItem(item);
+//     setVisible(true);
+//   };
+
+//   const onClose = () => {
+//     setVisible(false);
+//     setSelectedItem(null);
+//   };
+
+//   const handleSubmit = async dataForm => {
+//     try {
+//       updateKPIPerformanceData(
+//         dataForm.parameter,
+//         dataForm.mtd_plan,
+//         dataForm.mtd_actual,
+//         dataForm.percentage_achieve,
+//         dataForm.gap_area,
+//         dataForm.counter_measure_plan,
+//         dataForm.responsibility,
+//         dataForm.plan_closure_date,
+//         dataForm.image_path,
+//       );
+//       setRefresh(!refresh);
+//       onClose();
+//     } catch (error) {
+//       console.error('Error updating data:', error);
+//     } finally {
+//       onClose();
+//     }
+//   };
+
+//   const renderItem = ({item}) => {
+//     const mtdPlan = (
+//       (parseFloat(item.month_plan) / totalDaysInMonth) *
+//       currentDay
+//     ).toFixed(2);
+//     return (
+//       <TouchableOpacity
+//         onPress={() => handleActionPlanModel({...item, mtd_plan: mtdPlan})}>
+//         <View style={styles.card}>
+//           <View style={styles.row}>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Roles</Text>
+//               <Text style={styles.text}>{item.type}</Text>
+//             </View>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Min. Required</Text>
+//               <Text style={styles.text}>{item.value}</Text>
+//             </View>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Available</Text>
+//               <Text style={styles.text}>{item.available || 'NA'}</Text>
+//             </View>
+//           </View>
+//           <View style={styles.row}>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Trained</Text>
+//               <Text style={styles.text}>{item.trained || 'NA'}</Text>
+//             </View>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Available %</Text>
+//               <Text style={styles.text}>
+//                 {item.available_percentage || 'NA'}
+//               </Text>
+//             </View>
+//             <View style={styles.cell}>
+//               <Text style={styles.header}>Trained %</Text>
+//               <Text style={styles.text}>{item.trained_percentage || 'NA'}</Text>
+//             </View>
+//           </View>
+//         </View>
+//       </TouchableOpacity>
+//     );
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? (
+//         <View style={styles.loaderContainer}>
+//           <Text>Loading...</Text>
+//         </View>
+//       ) : (
+//         <SafeAreaView style={{flex: 1}}>
+//           <FlatList
+//             data={data}
+//             renderItem={renderItem}
+//             keyExtractor={(item, index) =>
+//               item.id?.toString() || index.toString()
+//             }
+//             contentContainerStyle={{
+//               flexGrow: 1,
+//               paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+//             }}
+//             keyboardShouldPersistTaps="handled"
+//             showsVerticalScrollIndicator={false}
+//           />
+//         </SafeAreaView>
+//       )}
+//       {visible && selectedItem && (
+//         <ManPowerModal
+//           visible={visible}
+//           onClose={onClose}
+//           item={selectedItem}
+//           onSubmit={handleSubmit}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// export default ManpowerAvailabilityScreen;
+// import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   SafeAreaView,
+//   Platform,
+// } from 'react-native';
+// import {styles} from './style';
+// import {
+//   fetchDataManPowerAvailability,
+//   updateKPIPerformanceData,
+//   updateManPowerAvailabilityData,
+// } from '../../database/db';
+// import ManPowerModal from '../../components/Manpower_Popup/Manpower_Popup';
+
+// const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
+
+// const ManpowerAvailabilityScreen = ({navigation}) => {
+//   const [data, setData] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [visible, setVisible] = useState(false);
+//   const [selectedItem, setSelectedItem] = useState(null);
+//   const [refresh, setRefresh] = useState(false);
+
+//   const currentDate = new Date();
+//   const totalDaysInMonth = getDaysInMonth(
+//     currentDate.getFullYear(),
+//     currentDate.getMonth() + 1,
+//   );
+//   const currentDay = currentDate.getDate();
+
+//   const fetchData = async () => {
+//     try {
+//       setLoading(true);
+//       fetchDataManPowerAvailability(dbData => {
+//         console.log('Fetched data from DB:', dbData);
+//         setData(dbData);
+//       });
+//     } catch (error) {
+//       console.error('Error fetching Manpower Data:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchData();
+//     const unsubscribe = navigation.addListener('focus', fetchData);
+//     return unsubscribe;
+//   }, [navigation, refresh]);
+
+//   useEffect(() => {
+//     if (data.length > 0) {
+//       console.log('Updated data state:', data);
+//     }
+//   }, [data]);
+
+//   const handleActionPlanModel = item => {
+//     const mtdPlan = (
+//       (parseFloat(item.month_plan) / totalDaysInMonth) *
+//       currentDay
+//     ).toFixed(2);
+//     setSelectedItem({...item, mtd_plan: mtdPlan});
+//     setVisible(true);
+//   };
+
+//   const onClose = () => {
+//     setVisible(false);
+//     setSelectedItem(null);
+//   };
+
+//   const handleSubmit = async dataForm => {
+//     try {
+//       await updateManPowerAvailabilityData({
+//         parameter: dataForm.parameter,
+//         available: dataForm.available,
+//         trained: dataForm.trained,
+//         available_percentage: dataForm.available_percentage,
+//         trained_percentage: dataForm.trained_percentage,
+//         gap_area: dataForm.gap_area,
+//         counter_measure_plan: dataForm.counter_measure_plan,
+//         responsibility: dataForm.responsibility,
+//         plan_closure_date: dataForm.plan_closure_date,
+//         image_path: dataForm.image_path,
+//       });
+
+//       // Refresh screen
+//       setRefresh(prev => !prev);
+//     } catch (error) {
+//       console.error('Error updating data:', error);
+//     } finally {
+//       onClose(); // modal close
+//     }
+//   };
+
+//   const renderItem = ({item}) => (
+//     <TouchableOpacity onPress={() => handleActionPlanModel(item)}>
+//       <View style={styles.card}>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Roles</Text>
+//             <Text style={styles.text}>{item.type}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Min. Required</Text>
+//             <Text style={styles.text}>{item.value}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Available</Text>
+//             <Text style={styles.text}>{item.available || 'NA'}</Text>
+//           </View>
+//         </View>
+//         <View style={styles.row}>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Trained</Text>
+//             <Text style={styles.text}>{item.trained || 'NA'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Available %</Text>
+//             <Text style={styles.text}>{item.available_percentage || 'NA'}</Text>
+//           </View>
+//           <View style={styles.cell}>
+//             <Text style={styles.header}>Trained %</Text>
+//             <Text style={styles.text}>{item.trained_percentage || 'NA'}</Text>
+//           </View>
+//         </View>
+//       </View>
+//     </TouchableOpacity>
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       {loading ? (
+//         <View style={styles.loaderContainer}>
+//           <Text>Loading...</Text>
+//         </View>
+//       ) : (
+//         <SafeAreaView style={{flex: 1}}>
+//           <FlatList
+//             data={data}
+//             renderItem={renderItem}
+//             keyExtractor={(item, index) =>
+//               item.id?.toString() || index.toString()
+//             }
+//             contentContainerStyle={{
+//               flexGrow: 1,
+//               paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+//             }}
+//             keyboardShouldPersistTaps="handled"
+//             showsVerticalScrollIndicator={false}
+//           />
+//         </SafeAreaView>
+//       )}
+//       {visible && selectedItem && (
+//         <ManPowerModal
+//           visible={visible}
+//           onClose={onClose}
+//           item={selectedItem}
+//           onSubmit={handleSubmit}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// export default ManpowerAvailabilityScreen;

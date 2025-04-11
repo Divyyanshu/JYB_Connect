@@ -60,9 +60,12 @@ const insertRecord = (
 
   db.transaction(tx => {
     tx.executeSql(
-      `INSERT INTO ServiceAttributes 
-      (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      // `INSERT INTO ServiceAttributes
+      // (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image)
+      // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+      `INSERT OR REPLACE INTO ServiceAttributes 
+(DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       [
         DefId,
         MainParameter,
@@ -521,6 +524,114 @@ const updateManPowerAvailabilityData = args => {
     });
   });
 };
+const createCompanyTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      'CREATE TABLE IF NOT EXISTS AccompaniedByCompany (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+    );
+  });
+};
+const createDealerTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+    );
+  });
+};
+
+const dropAllTables = async () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      'DROP TABLE IF EXISTS ServiceAttributes',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to drop ServiceAttributes', error);
+      },
+    );
+
+    tx.executeSql(
+      'DROP TABLE IF EXISTS KPI_PERFORMANCE',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to drop KPI_PERFORMANCE', error);
+      },
+    );
+    tx.executeSql(
+      'DROP TABLE IF EXISTS ManPowerAvailability',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to drop ManPowerAvailability', error);
+      },
+    );
+    tx.executeSql(
+      'DROP TABLE IF EXISTS Company',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to drop Company', error);
+      },
+    );
+    tx.executeSql(
+      'DROP TABLE IF EXISTS Dealer',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to drop Dealer', error);
+      },
+    );
+  });
+};
+const clearAllTables = async () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      'DELETE FROM ServiceAttributes',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear ServiceAttributes', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM KPI_PERFORMANCE',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear KPI_PERFORMANCE', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM ManPowerAvailability',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear ManPowerAvailability', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM Company',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear Company', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM Dealer',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear Dealer', error);
+      },
+    );
+  });
+};
 
 export {
   db,
@@ -543,6 +654,10 @@ export {
   fetchDataManPowerAvailability,
   clearTableManPowerAvailability,
   updateManPowerAvailabilityData,
+  createCompanyTable,
+  createDealerTable,
+  clearAllTables,
+  dropAllTables,
 };
 // const createManPowerAvailability = () => {
 //   db.transaction(tx => {

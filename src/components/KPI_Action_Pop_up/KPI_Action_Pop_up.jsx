@@ -16,8 +16,6 @@ import {COLORS} from '../../utils/colors';
 import {launchCamera} from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {updateKPIPerformanceData} from '../../database/db';
-import renderIf from '../../utils/renderIf';
-import {TextInput as PaperInput} from 'react-native-paper';
 
 const calculatePercentageAchieve = (mtd_plan, mtd_actual) => {
   if (!mtd_plan || !mtd_actual) return 0;

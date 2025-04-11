@@ -30,3 +30,45 @@ export const removeToken = async () => {
     console.error('Error removing token:', error);
   }
 };
+
+export const saveDealerCode = async dealerCode => {
+  try {
+    await AsyncStorage.setItem('dealerCode', dealerCode);
+    console.log('dealerCode Saved Successfully');
+  } catch (error) {
+    console.error('Error saving dealerCode:', error);
+  }
+};
+
+// Get Token
+export const getDealerCode = async () => {
+  try {
+    const dealerCode = await AsyncStorage.getItem('dealerCode');
+    return dealerCode ? dealerCode : null;
+  } catch (error) {
+    console.error('Error retrieving dealerCode:', error);
+    return null;
+  }
+};
+
+export const saveEmail = async Email => {
+  try {
+    await AsyncStorage.setItem('Email', Email);
+    console.log('Email Saved Successfully', Email);
+  } catch (error) {
+    console.error('Error saving Email:', error);
+  }
+};
+
+// Get Token
+export const getEmail = async () => {
+  try {
+    const Email = await AsyncStorage.getItem('Email');
+    console.log('Email >>>>>>>>>', Email);
+
+    return Email ? Email : null;
+  } catch (error) {
+    console.error('Error retrieving Email:', error);
+    return null;
+  }
+};

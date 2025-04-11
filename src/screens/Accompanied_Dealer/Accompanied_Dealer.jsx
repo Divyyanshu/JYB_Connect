@@ -31,17 +31,8 @@ const AccompaniedByDealer = () => {
   const [dealerList, setDealerList] = useState([]);
 
   useEffect(() => {
-    createDealerTable();
     fetchDealerData();
   }, []);
-
-  const createDealerTable = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
-      );
-    });
-  };
 
   const insertDealerData = () => {
     if (!post || !name || !mobile) {

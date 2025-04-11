@@ -6,7 +6,16 @@ import {Snackbar} from 'react-native-paper';
 import {styles} from './style';
 import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
-import {db, createTable, insertRecord, fetchRecords} from '../../database/db';
+import {
+  db,
+  createTable,
+  insertRecord,
+  fetchRecords,
+  create_KPI_Performance_Table,
+  createManPowerAvailability,
+  createCompanyTable,
+  createDealerTable,
+} from '../../database/db';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 
 const {width} = Dimensions.get('window');
@@ -51,6 +60,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     createTable();
+    console.log('createTable');
+    create_KPI_Performance_Table();
+    console.log('create_KPI_Performance_Table');
+    createManPowerAvailability();
+    console.log('createManPowerAvailability');
+    createCompanyTable();
+    console.log('createCompanyTable');
+    createDealerTable();
+    console.log('createDealerTable');
 
     const unsubscribe = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
@@ -68,25 +86,29 @@ const Dashboard = () => {
     return () => {
       unsubscribe();
     };
-  }, [wasOffline]);
+  }, []);
 
   const handleCardPress = type => {
-    console.log("card pressed")
+    console.log('card pressed');
     setModalType(type);
     setModalVisible(true);
   };
 
   return (
-    <View style={[styles.container, {padding: width * 0.05}]}>
+    <View
+      style={[
+        styles.container,
+        {padding: width * 0.05, alignItems: 'center', justifyContent: 'center'},
+      ]}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
 
-      <CustomCard
+      {/* <CustomCard
         centerName="Sales"
         imageSource={require('../../assets/icons/sales.png')}
         onPress={() =>
           showAlert('Coming Soon 🚀', 'Sales feature is under development.')
         }
-      />
+      /> */}
 
       <CustomCard
         centerName="Service"

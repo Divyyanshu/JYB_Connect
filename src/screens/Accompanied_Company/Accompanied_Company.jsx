@@ -31,18 +31,8 @@ const AccompaniedByCompany = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    createCompanyTable();
     fetchCompanyData();
   }, []);
-
-  const createCompanyTable = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS AccompaniedByCompany (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
-      );
-    });
-  };
-
   const insertCompanyData = () => {
     if (!post || !name || !mobile) return;
 

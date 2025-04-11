@@ -40,9 +40,11 @@ import {removeToken} from '../../../utils/shared';
 import {STACKS} from '../../../utils/stacks';
 import {SCREENS} from '../../../utils/screens';
 import {CustomButton} from '../../../uiKit/customButton';
+import {clearAllTables, dropAllTables} from '../../../database/db';
 
 const LogoutPage = ({navigation}) => {
   const logOut = async () => {
+    dropAllTables();
     try {
       await removeToken();
 

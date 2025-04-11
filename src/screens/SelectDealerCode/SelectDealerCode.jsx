@@ -19,12 +19,10 @@ import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../utils/screens';
 import {STACKS} from '../../utils/stacks';
 import axios from 'axios';
-import LinearGradient from 'react-native-linear-gradient';
 import {
+  clearAllTables,
   clearKPIPerformanceData,
-  // clearTableManPowerAvailability,
-  create_KPI_Performance_Table,
-  createManPowerAvailability,
+  clearTableManPowerAvailability,
   fetchDataManPowerAvailability,
   insert_KPI_Performance_Record,
   insertDataManPowerAvailability,
@@ -32,6 +30,7 @@ import {
 import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 import {COLORS} from '../../utils/colors';
+import {getDealerCode, getEmail, saveDealerCode} from '../../utils/shared';
 
 const {width} = Dimensions.get('window');
 
@@ -45,7 +44,9 @@ const SelectDealerCode = () => {
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const [selectedDealerCode, setSelectedDealerCode] = useState(null);
-  const [previousDealerCode, setPreviousDealerCode] = useState(null);
+  const [previousDealerCode, setPreviousDealerCode] = useState('');
+  const [userEmail, setUserEmail] = useState(null);
+
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [snackbar, setSnackbar] = useState({
     visible: false,
@@ -54,11 +55,6 @@ const SelectDealerCode = () => {
   });
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    create_KPI_Performance_Table();
-    createManPowerAvailability();
-  }, []);
 
   const checkInternet = async () => {
     const state = await NetInfo.fetch();
@@ -78,7 +74,7 @@ const SelectDealerCode = () => {
 
     setSelectedMonthIndex(month.value - 1);
     setSelectedMonth(month.value);
-    fetchDealerList(month.value, selectedYear);
+    fetchDealerList(month.value, selectedYear, userEmail);
   };
 
   const handleYearChange = async (year, index) => {
@@ -90,7 +86,7 @@ const SelectDealerCode = () => {
 
     setSelectedYearIndex(index);
     setSelectedYear(year);
-    fetchDealerList(selectedMonth, year);
+    fetchDealerList(selectedMonth, year, userEmail);
   };
 
   useEffect(() => {
@@ -100,36 +96,44 @@ const SelectDealerCode = () => {
         showSnackbar('No Internet Connection');
         return;
       }
-
+      let email = await getEmail();
+      setUserEmail(email);
       const monthValue = new Date().getMonth();
       const yearValue = new Date().getFullYear();
 
       setSelectedMonthIndex(monthValue);
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
+      let dealerCode = await getDealerCode();
+      console.log('get dealer code >>>>> ', dealerCode);
+      if (dealerCode) {
+        console.log('inside if condtion');
+        setPreviousDealerCode(dealerCode);
+      } else {
+        setPreviousDealerCode('');
+      }
 
-      fetchDealerList(monthValue + 1, yearValue);
-      fetchManPowerData();
+      fetchDealerList(monthValue + 1, yearValue, email);
     };
 
     init();
   }, []);
 
-  const fetchDealerList = async (month, year) => {
+  const fetchDealerList = async (month, year, userID) => {
     setLoading(true);
-    console.log("Month and year",month,year)
+    console.log('Month and year', month, year, userEmail);
     try {
       const response = await axios.post(
         `${BASE_URL}${API_ENDPOINTS.TRAVEL_DEALER_PLANNING}`,
         {
           Month: month,
           Year: year.toString(),
-          DealerCode: 'p.vishnu3@classiclegends.com',
+          DealerCode: userID,
         },
         {headers: {'Content-Type': 'application/json'}},
       );
 
-      console.log("response >>>>",response.data)
+      console.log('response >>>>', response.data);
       if (response.data?.Data) {
         setDealerData(response.data.Data);
       } else {
@@ -145,11 +149,12 @@ const SelectDealerCode = () => {
     }
   };
 
-  const fetchManPowerData = async () => {
+  const fetchManPowerData = async (plan, month, year, dealerCode) => {
     try {
+      clearTableManPowerAvailability();
       const response = await axios.post(
         'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
-        {ServiceVisit: 100},
+        {ServiceVisit: plan},
         {headers: {'Content-Type': 'application/json'}},
       );
 
@@ -158,15 +163,46 @@ const SelectDealerCode = () => {
         response.data.Data.forEach(item =>
           insertDataManPowerAvailability(item.Type, item.Values),
         );
+        saveDealerCode(dealerCode);
+        navigation.navigate(STACKS.MAIN_STACK, {
+          screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+          params: {dealerCode, month, year},
+        });
       }
 
-      fetchDataManPowerAvailability(dbData => {
-        setLoading(false);
-      });
+      // fetchDataManPowerAvailability(dbData => {
+      //   setLoading(false);
+      // });
     } catch (error) {
       console.error('ManPower API Error:', error);
       setLoading(false);
     }
+  };
+
+  const processKpiData = async (kpiData, month, year, dealerCode) => {
+    let Monthplan = '0';
+    for (const item of kpiData) {
+      console.log('Item >>>>>>>>', item);
+      if (item.Type == 'Service Visit') {
+        Monthplan = item.MonthPlan;
+      }
+
+      let status = await insert_KPI_Performance_Record(
+        item?.Type || '',
+        item?.MonthPlan || 0,
+        item?.PerCriteria || 0,
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+      );
+    }
+    console.log('Month Plan >>>>', Monthplan);
+    fetchManPowerData(Monthplan, month, year, dealerCode);
   };
 
   const fetchKpiData = async (dealerCode, month, year) => {
@@ -192,30 +228,9 @@ const SelectDealerCode = () => {
       );
 
       const kpiData = response.data?.Data || [];
+      console.log('kpiData >>>>>>>', kpiData);
       if (kpiData.length > 0) {
-        for (const item of kpiData) {
-          await insert_KPI_Performance_Record(
-            item?.Type || '',
-            item?.MonthPlan || 0,
-            item?.PerCriteria || 0,
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-          );
-        }
-
-        navigation.navigate(STACKS.MAIN_STACK, {
-          screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
-          params: {dealerCode, month, year, kpiData},
-        });
-
-        showSnackbar('KPI data synced successfully', 'success');
-      } else {
+        processKpiData(kpiData, month, year, dealerCode);
         showSnackbar('No KPI data found');
       }
     } catch (error) {
@@ -227,18 +242,30 @@ const SelectDealerCode = () => {
   };
 
   const handleDealerSelect = dealerCode => {
-    if (previousDealerCode && previousDealerCode !== dealerCode) {
+    console.log('previousDealerCode >>>>>', previousDealerCode);
+    if (previousDealerCode == '') {
+      fetchKpiData(dealerCode, selectedMonth, selectedYear);
+    } else if (previousDealerCode !== dealerCode) {
       setSelectedDealerCode(dealerCode);
       setPopupVisible(true);
     } else {
-      // If same dealer selected again or no previous dealer, proceed directly
-      setPreviousDealerCode(dealerCode);
       fetchKpiData(dealerCode, selectedMonth, selectedYear);
     }
+
+    // if (previousDealerCode && previousDealerCode !== dealerCode) {
+    //   setSelectedDealerCode(dealerCode);
+    //   setPopupVisible(true);
+    // } else {
+    //   // If same dealer selected again or no previous dealer, proceed directly
+    //   setPreviousDealerCode(dealerCode);
+    //   fetchKpiData(dealerCode, selectedMonth, selectedYear);
+    // }
   };
   const handleProcess = async () => {
     setPopupVisible(false);
-    setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
+    // all tables clear
+    await clearAllTables();
+    // setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
     await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear);
   };
 
@@ -252,11 +279,12 @@ const SelectDealerCode = () => {
     <View style={styles.container}>
       <View
         style={{
-          paddingVertical: 10,
+          paddingTop: 10,
           paddingHorizontal: 5,
-          marginBottom: 30,
+          marginBottom: 10,
           backgroundColor: COLORS.LIGHT_PRIMARY,
           borderRadius: 10,
+          paddingBottom: 20,
         }}>
         <Text style={styles.label}>Select Month:</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -279,7 +307,7 @@ const SelectDealerCode = () => {
           ))}
         </ScrollView>
 
-        <Text style={styles.label}>Select Year:</Text>
+        <Text style={[styles.label, {marginTop: 10}]}>Select Year:</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}

@@ -19,7 +19,7 @@ const Splash = () => {
         setTimeout(() => {
           SplashScreen.hide();
           if (token) {
-            navigation.replace(STACKS.DRAWER_STACK);
+            navigation.replace(STACKS.MAIN_STACK);
           } else {
             navigation.replace(STACKS.MAIN_STACK);
           }

@@ -25,7 +25,7 @@ const CustomModal = ({visible, onClose, modalType}) => {
   };
 
   const go_to_selectDealerCode = () => {
-    onClose()
+    onClose();
     navigation.navigate(STACKS.MAIN_STACK, {
       screen: SCREENS.MAIN_STACK.SELECT_DEALER_CODE,
     });
@@ -65,7 +65,7 @@ const CustomModal = ({visible, onClose, modalType}) => {
                     />
                     <Text style={styles.optionText}>Dealer Visit Report</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={styles.optionCard}
                     onPress={() =>
                       showAlert(
@@ -79,7 +79,7 @@ const CustomModal = ({visible, onClose, modalType}) => {
                     />
                     <Text style={styles.optionText}>Dealer Evaluation</Text>
                     <Text style={styles.comingSoonText}>Coming Soon</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
                 {/* Custom Alert */}
                 <CustomAlert

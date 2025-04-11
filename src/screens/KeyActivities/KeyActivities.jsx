@@ -91,7 +91,6 @@ const KeyActivities = () => {
       {loading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color={COLORS.PRIMARY} />
-          <Text style={styles.loadingText}>...loading</Text>
         </View>
       ) : (
         <SafeAreaView style={{flex: 1}}>
