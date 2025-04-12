@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 16,
+   // padding: 16,
   },
   activityContainer: {
     backgroundColor: COLORS.WHITE,

@@ -31,6 +31,7 @@ import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 import {COLORS} from '../../utils/colors';
 import {getDealerCode, getEmail, saveDealerCode} from '../../utils/shared';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const {width} = Dimensions.get('window');
 
@@ -273,6 +274,12 @@ const SelectDealerCode = () => {
 
   return (
     <View style={styles.container}>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'Select Dealer Code'}
+        navState={navigation}
+      />
       <View
         style={{
           paddingTop: 10,

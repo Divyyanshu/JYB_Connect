@@ -42,7 +42,7 @@ export const MainNavigator = ({navigation}) => {
         <Stack.Navigator
           initialRouteName={SCREENS.MAIN_STACK.LOGIN}
           screenOptions={{
-            headerShown: true,
+            headerShown: false,
             gestureEnabled: false,
             cardStyleInterpolator: ({current, next, inverted, layouts}) => {
               return {
@@ -68,7 +68,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.DASHBOARD}
             component={Dashboard}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Dashboard',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -80,7 +80,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
             component={SelectDealerCode}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Select Dealer Code',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 200},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -97,7 +97,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.KEY_ACTIVITIES}
             component={KeyActivities}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Key Activities',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -114,7 +114,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.SERVICE_ATTRIBUTES}
             component={ServiceAttributes}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Service Attributes',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -153,7 +153,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.DVR_SCORE}
             component={DVR_Score}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'DVR Score',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -170,7 +170,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.KPI_PERFORMANCE}
             component={KPI_Performance}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'KPI Performance',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -187,7 +187,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.MAN_POWER_STATUS}
             component={ManPower_Status}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Man Power Status',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -204,7 +204,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.COMPLAINTS_ANALYSIS}
             component={ComplaintsAnalysis}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Complaints Analysis',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -221,7 +221,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.REPEAT_JOB}
             component={RepeatJob_Analysis}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Repeat Job Card Analysis',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -238,7 +238,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.MINUTES_OF_MEETING}
             component={MinutesOfMeeting}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Minutes Of Meeting',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 80},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -255,7 +255,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.ACCOMPANIED_COMPANY}
             component={Accompanied_Company}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Accompanied By Company',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -272,7 +272,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.ACCOMPANIED_DEALER}
             component={Accompanied_Dealer}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Accompanied By Dealer',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -292,7 +292,7 @@ export const MainNavigator = ({navigation}) => {
         <Stack.Navigator
           initialRouteName={SCREENS.MAIN_STACK.DASHBOARD}
           screenOptions={{
-            headerShown: true,
+            headerShown: false,
             gestureEnabled: false,
             cardStyleInterpolator: ({current, next, inverted, layouts}) => {
               return {
@@ -313,7 +313,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.DASHBOARD}
             component={Dashboard}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Dashboard',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -325,7 +325,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
             component={SelectDealerCode}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Select Dealer Code',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -342,7 +342,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.KEY_ACTIVITIES}
             component={KeyActivities}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Key Activities',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -359,7 +359,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.SERVICE_ATTRIBUTES}
             component={ServiceAttributes}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Service Attributes',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -398,7 +398,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.DVR_SCORE}
             component={DVR_Score}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'DVR Score',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -415,7 +415,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.KPI_PERFORMANCE}
             component={KPI_Performance}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'KPI Performance',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -432,7 +432,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.MAN_POWER_STATUS}
             component={ManPower_Status}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Man Power Status',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -449,7 +449,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.COMPLAINTS_ANALYSIS}
             component={ComplaintsAnalysis}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Complaints Analysis',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -466,7 +466,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.REPEAT_JOB}
             component={RepeatJob_Analysis}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Repeat Job Card Analysis',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -483,7 +483,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.MINUTES_OF_MEETING}
             component={MinutesOfMeeting}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Minutes Of Meeting',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 80},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -500,7 +500,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.ACCOMPANIED_COMPANY}
             component={Accompanied_Company}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Accompanied By Company',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},
@@ -517,7 +517,7 @@ export const MainNavigator = ({navigation}) => {
             name={SCREENS.MAIN_STACK.ACCOMPANIED_DEALER}
             component={Accompanied_Dealer}
             options={({navigation}) => ({
-              headerShown: true,
+              headerShown: false,
               title: 'Accompanied By Dealer',
               headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
               headerTitleStyle: {color: COLORS.WHITE},

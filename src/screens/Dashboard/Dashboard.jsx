@@ -6,6 +6,7 @@ import {Snackbar} from 'react-native-paper';
 import {styles} from './style';
 import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
+import DeviceInfo from 'react-native-device-info';
 import {
   db,
   createTable,
@@ -18,16 +19,20 @@ import {
 } from '../../database/db';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 import {useFocusEffect} from '@react-navigation/native';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const {width} = Dimensions.get('window');
 
-const Dashboard = () => {
+const Dashboard = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState('');
   const [alertData, setAlertData] = useState({title: '', message: ''});
   const [alertVisible, setAlertVisible] = useState(false);
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
+  const deviceHeight = Dimensions.get('window').height;
+
+  console.log('deviceHeight>>>>>>', deviceHeight);
 
   const showAlert = (title, message) => {
     setAlertData({title, message});
@@ -118,12 +123,14 @@ const Dashboard = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {padding: width * 0.05, alignItems: 'center', justifyContent: 'center'},
-      ]}>
+    <View style={[styles.container]}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+      <Topbar
+        showBack={false}
+        showtitle={true}
+        title={'Dashboard'}
+        navState={navigation}
+      />
 
       {/* <CustomCard
         centerName="Sales"
@@ -133,24 +140,33 @@ const Dashboard = () => {
         }
       /> */}
 
-      <CustomCard
-        centerName="Service"
-        imageSource={require('../../assets/icons/service.png')}
-        onPress={() => handleCardPress('service')}
-      />
+      <View
+        style={{
+          backgroundColor: '#fff',
+          alignItems: 'center',
+          height:
+            deviceHeight - (DeviceInfo.hasNotch() == true ? 110 * 2 : 80 * 2),
+          justifyContent: 'center',
+        }}>
+        <CustomCard
+          centerName="Service"
+          imageSource={require('../../assets/icons/service.png')}
+          onPress={() => handleCardPress('service')}
+        />
 
-      <CustomAlert
-        visible={alertVisible}
-        onClose={() => setAlertVisible(false)}
-        title={alertData.title}
-        message={alertData.message}
-      />
+        <CustomAlert
+          visible={alertVisible}
+          onClose={() => setAlertVisible(false)}
+          title={alertData.title}
+          message={alertData.message}
+        />
 
-      <CustomModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        modalType={modalType}
-      />
+        <CustomModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          modalType={modalType}
+        />
+      </View>
 
       {/* Snackbar on reconnect */}
       <Snackbar

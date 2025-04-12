@@ -150,7 +150,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
           visible={visible}
           onClose={onClose}
           item={selectedItem}
-          onSubmit={() => handleSubmit(finalData)}
+          onSubmit={handleSubmit}
         />
       )}
     </View>

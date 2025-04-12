@@ -1240,7 +1240,7 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-date-picker (5.0.12):
+  - react-native-date-picker (5.0.10):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1751,17 +1751,15 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNDeviceInfo (14.0.4):
+    - React-Core
   - RNDevMenu (4.1.1):
     - React-Core
     - React-Core/DevSupport
     - React-RCTNetwork
   - RNFS (2.20.0):
     - React-Core
-<<<<<<< HEAD
-  - RNGestureHandler (2.25.0):
-=======
   - RNGestureHandler (2.24.0):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1782,11 +1780,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-<<<<<<< HEAD
-  - RNReanimated (3.17.3):
-=======
   - RNReanimated (3.17.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1808,17 +1802,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-<<<<<<< HEAD
-    - RNReanimated/reanimated (= 3.17.3)
-    - RNReanimated/worklets (= 3.17.3)
-    - Yoga
-  - RNReanimated/reanimated (3.17.3):
-=======
     - RNReanimated/reanimated (= 3.17.1)
     - RNReanimated/worklets (= 3.17.1)
     - Yoga
   - RNReanimated/reanimated (3.17.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1840,15 +1827,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-<<<<<<< HEAD
-    - RNReanimated/reanimated/apple (= 3.17.3)
-    - Yoga
-  - RNReanimated/reanimated/apple (3.17.3):
-=======
     - RNReanimated/reanimated/apple (= 3.17.1)
     - Yoga
   - RNReanimated/reanimated/apple (3.17.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1871,11 +1852,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-<<<<<<< HEAD
-  - RNReanimated/worklets (3.17.3):
-=======
   - RNReanimated/worklets (3.17.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1897,15 +1874,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-<<<<<<< HEAD
-    - RNReanimated/worklets/apple (= 3.17.3)
-    - Yoga
-  - RNReanimated/worklets/apple (3.17.3):
-=======
     - RNReanimated/worklets/apple (= 3.17.1)
     - Yoga
   - RNReanimated/worklets/apple (3.17.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1928,11 +1899,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-<<<<<<< HEAD
-  - RNScreens (4.10.0):
-=======
   - RNScreens (4.9.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1953,15 +1920,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-<<<<<<< HEAD
-    - RNScreens/common (= 4.10.0)
-    - Yoga
-  - RNScreens/common (4.10.0):
-=======
     - RNScreens/common (= 4.9.1)
     - Yoga
   - RNScreens/common (4.9.1):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1983,11 +1944,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-<<<<<<< HEAD
-  - RNSnackbar (2.9.0):
-=======
   - RNSnackbar (2.8.0):
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
     - React-Core
   - RNVectorIcons (10.2.0):
     - DoubleConversion
@@ -2096,6 +2053,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNDevMenu (from `../node_modules/react-native-dev-menu`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -2270,6 +2228,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNDevMenu:
     :path: "../node_modules/react-native-dev-menu"
   RNFS:
@@ -2289,101 +2249,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-<<<<<<< HEAD
-  BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
-=======
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 6fe148afcef2e3213e484758e3459609d40d57f5
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: b417d2b2aee3b89b58e63e23a51e02be91dc876d
-<<<<<<< HEAD
-  RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
-=======
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
   RCTDeprecation: b2eecf2d60216df56bc5e6be5f063826d3c1ee35
   RCTRequired: 78522de7dc73b81f3ed7890d145fa341f5bb32ea
   RCTTypeSafety: c135dd2bf50402d87fd12884cbad5d5e64850edd
   React: b229c49ed5898dab46d60f61ed5a0bfa2ee2fadb
   React-callinvoker: 2ac508e92c8bd9cf834cc7d7787d94352e4af58f
-<<<<<<< HEAD
-  React-Core: 13cdd1558d0b3f6d9d5a22e14d89150280e79f02
-  React-CoreModules: b07a6744f48305405e67c845ebf481b6551b712a
-  React-cxxreact: 1055a86c66ac35b4e80bd5fb766aed5f494dfff4
-  React-debug: 0a5fcdbacc6becba0521e910c1bcfdb20f32a3f6
-  React-defaultsnativemodule: 4bb28fc97fee5be63a9ebf8f7a435cfe8ba69459
-  React-domnativemodule: b36a11c2597243d7563985028c51ece988d8ae33
-  React-Fabric: afc561718f25b2cd800b709d934101afe376a12c
-  React-FabricComponents: f4e0a4e18a27bf6d39cbf2a0b42f37a92fa4e37f
-  React-FabricImage: 37d8e8b672eda68a19d71143eb65148084efb325
-  React-featureflags: 19682e02ef5861d96b992af16a19109c3dfc1200
-  React-featureflagsnativemodule: d7cddf6d907b4e5ab84f9e744b7e88461656e48c
-  React-graphics: b0f78580cdaf5800d25437e3d41cc6c3d83b7aea
-  React-hermes: 71186f872c932e4574d5feb3ed754dda63a0b3bd
-  React-idlecallbacksnativemodule: dd2af19cdd3bc55149d17a2409ed72b694dfbe9c
-  React-ImageManager: a77dde8d5aa6a2b6962c702bf3a47695ef0aa32b
-  React-jserrorhandler: 9c14e89f12d5904257a79aaf84a70cd2e5ac07ba
-  React-jsi: 0775a66820496769ad83e629f0f5cce621a57fc7
-  React-jsiexecutor: 2cf5ba481386803f3c88b85c63fa102cba5d769e
-  React-jsinspector: 8052d532bb7a98b6e021755674659802fb140cc5
-  React-jsinspectortracing: bdd8fd0adcb4813663562e7874c5842449df6d8a
-  React-jsitracing: 2bab3bf55de3d04baf205def375fa6643c47c794
-  React-logger: 795cd5055782db394f187f9db0477d4b25b44291
-  React-Mapbuffer: 0502faf46cab8fb89cfc7bf3e6c6109b6ef9b5de
-  React-microtasksnativemodule: 663bc64e3a96c5fc91081923ae7481adc1359a78
-  react-native-date-picker: d23f0a313972fe5336540d55380366367f8a2a51
-  react-native-image-picker: 0452fc9efc21101946746663bf34e0db5741f00c
-  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
-  react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
-  react-native-safe-area-context: 286b3e7b5589795bb85ffc38faf4c0706c48a092
-  react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
-  react-native-simple-toast: fe8a1112585a6f250ca645b7ce4e1d3abd40539b
-  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
-  react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
-  React-NativeModulesApple: 16fbd5b040ff6c492dacc361d49e63cba7a6a7a1
-  React-perflogger: ab51b7592532a0ea45bf6eed7e6cae14a368b678
-  React-performancetimeline: bc2e48198ec814d578ac8401f65d78a574358203
-  React-RCTActionSheet: 592674cf61142497e0e820688f5a696e41bf16dd
-  React-RCTAnimation: 8fbb8dba757b49c78f4db403133ab6399a4ce952
-  React-RCTAppDelegate: 7f88baa8cb4e5d6c38bb4d84339925c70c9ac864
-  React-RCTBlob: f89b162d0fe6b570a18e755eb16cbe356d3c6d17
-  React-RCTFabric: 8ad6d875abe6e87312cef90e4b15ef7f6bed72e6
-  React-RCTFBReactNativeSpec: 8c29630c2f379c729300e4c1e540f3d1b78d1936
-  React-RCTImage: ccac9969940f170503857733f9a5f63578e106e1
-  React-RCTLinking: d82427bbf18415a3732105383dff119131cadd90
-  React-RCTNetwork: 12ad4d0fbde939e00251ca5ca890da2e6825cc3c
-  React-RCTSettings: e7865bf9f455abf427da349c855f8644b5c39afa
-  React-RCTText: 2cdfd88745059ec3202a0842ea75a956c7d6f27d
-  React-RCTVibration: a3a1458e6230dfd64b3768ebc0a4aac430d9d508
-  React-rendererconsistency: 64e897e00d2568fd8dfe31e2496f80e85c0aaad1
-  React-rendererdebug: a3f6d3ae7d2fa0035885026756281c07ee32479e
-  React-rncore: 58748c2aa445f56b99e5118dad0aedb51c40ce9f
-  React-RuntimeApple: f0fda7bacabd32daa099cfda8f07466c30acd149
-  React-RuntimeCore: 683ee0b6a76d4b4bf6fbf83a541895b4887cc636
-  React-runtimeexecutor: a188df372373baf5066e6e229177836488799f80
-  React-RuntimeHermes: 907c8e9bec13ea6466b94828c088c24590d4d0b6
-  React-runtimescheduler: a2e2a39125dd6426b5d8b773f689d660cd7c5f60
-  React-timing: bb220a53a795ed57976a4855c521f3de2f298fe5
-  React-utils: 300d8bbb6555dcffaca71e7a0663201b5c7edbbc
-  ReactAppDependencyProvider: f2e81d80afd71a8058589e19d8a134243fa53f17
-  ReactCodegen: a63a0ab6ae824aef2e8c744981edd718b16eb9f2
-  ReactCommon: 3d39389f8e2a2157d5c999f8fba57bd1c8f226f0
-  RNCAsyncStorage: 4f4de141719fef3490c87a0dd779575c64c0472c
-  RNCMaskedView: 18c76ebdf9752bb75652829f99f6c3d1318cc864
-  RNCPicker: ffbd7b9fc7c1341929e61dbef6219f7860f57418
-  RNDateTimePicker: 5567e082958470867c4a27dd90cdaf2ea54bde0c
-  RNDevMenu: 72807568fe4188bd4c40ce32675d82434b43c45d
-  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 66e593addd8952725107cfaa4f5e3378e946b541
-  RNReanimated: 7531838a08d600caf2c961a21b79d5212a7b76ac
-  RNScreens: 0f01bbed9bd8045a8d58e4b46993c28c7f498f3c
-  RNSnackbar: b0914bd060cdb82862dc1a987be57a8b918610bf
-  RNVectorIcons: 14a0c42f16a26bcc3e79a19bc1c5718284b1d469
-=======
   React-Core: 325b4f6d9162ae8b9a6ff42fe78e260eb124180d
   React-CoreModules: 558041e5258f70cd1092f82778d07b8b2ff01897
   React-cxxreact: 8fff17cbe76e6a8f9991b59552e1235429f9c74b
@@ -2449,6 +2327,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 308c763227e237d4d260bd8841870e099572bb3e
   RNCPicker: cfb51a08c6e10357d9a65832e791825b0747b483
   RNDateTimePicker: e30677c15dfba25452b1434181970162115cc4fe
+  RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNDevMenu: 0ce599ea7d4144d6fc3126c85c23f0488409af0d
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 8b1080a6db0be82dbca18550d6212b885bfab6b2
@@ -2456,17 +2335,10 @@ SPEC CHECKSUMS:
   RNScreens: 0d4cb9afe052607ad0aa71f645a88bb7c7f2e64c
   RNSnackbar: f5ad232be3bcab6d5ef7e3b02cdaae621c944b75
   RNVectorIcons: bd818296a51dc2bb8c3bd97a3ca399df1afe216d
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   Yoga: afd04ff05ebe0121a00c468a8a3c8080221cb14c
 
-<<<<<<< HEAD
-PODFILE CHECKSUM: 22a420a751d85da5b7b0ace2dca53ce66531230e
-
-COCOAPODS: 1.14.3
-=======
 PODFILE CHECKSUM: 35cb780655fa9dc7ffbd3e133f255e63091e3b73
 
 COCOAPODS: 1.16.2
->>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
