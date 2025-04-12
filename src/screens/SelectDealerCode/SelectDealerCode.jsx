@@ -186,7 +186,7 @@ const SelectDealerCode = () => {
 
       let status = await insert_KPI_Performance_Record(
         item?.Type || '',
-        item?.MonthPlan || 0,
+        item?.MonthPlan || '',
         item?.PerCriteria || 0,
         ' ',
         ' ',

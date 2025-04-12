@@ -4,15 +4,16 @@ import {COLORS} from '../../utils/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
- //   padding: 10,
     backgroundColor: '#fff',
   },
   card: {
-    padding: 10,
+    padding: 2,
     marginVertical: 10,
     marginHorizontal: 10,
     borderRadius: 8,
-    backgroundColor: '#F1EFEC',
+    backgroundColor: COLORS.GREY,
+    borderWidth: 0.5,
+    borderColor: COLORS.DISABLE,
   },
   row: {
     flexDirection: 'row',
@@ -30,18 +31,16 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.LIGHT_PRIMARY,
     width: '100%',
     padding: 5,
     textAlign: 'center',
-    color: '#fff',
+    color: COLORS.PRIMARY,
   },
   text: {
     width: '100%',
     fontSize: 12,
     padding: 5,
-    borderRightWidth: 1,
-    borderColor: 'grey',
     textAlign: 'center',
   },
   loaderContainer: {

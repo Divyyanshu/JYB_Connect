@@ -16,6 +16,7 @@ import {COLORS} from '../../utils/colors';
 import {launchCamera} from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {updateKPIPerformanceData} from '../../database/db';
+import renderIf from '../../utils/renderIf';
 
 const calculatePercentageAchieve = (mtd_plan, mtd_actual) => {
   if (!mtd_plan || !mtd_actual) return 0;
@@ -152,6 +153,7 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
           </TouchableOpacity>
           <Text style={styles.title}>Action Plan</Text>
           <View style={{alignItems: 'flex-start'}}>
+            {renderIf}
             <Text style={{marginBottom: 5}}>
               {item.parameter}: {percentageAchieve}% of{' '}
               {item.percentage_criteria}%

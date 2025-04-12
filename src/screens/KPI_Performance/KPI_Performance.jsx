@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {styles} from './style';
 import KPI_Action_Pop_up from '../../components/KPI_Action_Pop_up/KPI_Action_Pop_up';
@@ -35,6 +36,7 @@ const KPIPerformance = ({navigation}) => {
       try {
         setLoading(true);
         const localData = await fetch_KPI_Performance_Data();
+        console.log('local data >>>>>', localData);
         setData(localData || []);
         console.log('data from local data >>>.', localData);
       } catch (error) {
@@ -49,9 +51,17 @@ const KPIPerformance = ({navigation}) => {
   }, [navigation, refresh]);
 
   const handleActionPlanModel = (item, index) => {
-    setSelectedItem(item);
-    setSelectedRowIndex(index);
-    setVisible(true);
+    console.log('item log >>> ', item);
+    if (item.month_plan == '') {
+      Alert.alert(
+        `Month plan is pending for ${item.parameter}.`,
+        `Kindly fill month plan form web portal.`,
+      );
+    } else {
+      setSelectedItem(item);
+      setSelectedRowIndex(index);
+      setVisible(true);
+    }
   };
 
   const onClose = () => {
@@ -99,12 +109,14 @@ const KPIPerformance = ({navigation}) => {
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>Month Plan</Text>
-              <Text style={styles.text}>{parseFloat(item.month_plan)}</Text>
+              <Text style={styles.text}>
+                {item.month_plan == '' ? '' : parseFloat(item.month_plan)}
+              </Text>
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>% Criteria</Text>
               <Text style={styles.text}>
-                {parseFloat(item.percentage_criteria) + '%'}
+                {parseFloat(item.percentage_criteria)}
               </Text>
             </View>
           </View>
@@ -115,12 +127,16 @@ const KPIPerformance = ({navigation}) => {
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>MTD Actual</Text>
-              <Text style={styles.text}>{parseFloat(item.mtd_actual)}</Text>
+              <Text style={styles.text}>
+                {item.mtd_actual == ' ' ? '' : parseFloat(item.mtd_actual)}
+              </Text>
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>% Achieve</Text>
               <Text style={styles.text}>
-                {parseFloat(item.percentage_achieve) + '%'}
+                {item.percentage_achieve == ' '
+                  ? ''
+                  : parseFloat(item.percentage_achieve)}
               </Text>
             </View>
           </View>
@@ -130,10 +146,10 @@ const KPIPerformance = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-            <Topbar
+      <Topbar
         showBack={true}
         showtitle={true}
-        title={"KPI Performance"}
+        title={'KPI Performance'}
         navState={navigation}
       />
       {loading ? (
@@ -141,7 +157,7 @@ const KPIPerformance = ({navigation}) => {
           <Text style={styles.loadingText}>Data Loading...</Text>
         </View>
       ) : (
-        <View style={{flex: 1,paddingHorizontal:16}}>
+        <View style={{flex: 1, paddingHorizontal: 16}}>
           <FlatList
             data={data}
             renderItem={renderItem}
