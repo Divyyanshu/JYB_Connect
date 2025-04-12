@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Linking,
+  Alert,
 } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import renderIf from "../../utils/renderIf";
@@ -16,8 +17,55 @@ const deviceWidth = Dimensions.get("window").width;
 import { semiBold, deleteNotificationApi, baseURL } from "../../Constant";
 import DeviceInfo from "react-native-device-info";
 import { COLORS } from "../../utils/colors";
+import { dropAllTables } from "../../database/db";
+import { removeToken } from "../../utils/shared";
 
 const Topbar = (props) => {
+
+  function LogoutButtonClicked() {
+    console.log("Logout Button Clicked")
+    Alert.alert("Are you sure you want to logout?", "", [
+      { text: "No", style: "cancel" },
+      { text: "Yes", onPress: () => clearUserData()},
+    ]);
+
+  }
+  async function clearUserData() {
+    dropAllTables();
+    try {
+      await removeToken();
+
+      Toast.show({
+        type: 'success',
+        text1: 'Logout Successful',
+        text2: 'You have been logged out successfully!',
+      });
+
+      // Slight delay for better UX before navigating
+      setTimeout(() => {
+        props.navState.reset({
+          index: 0,
+          routes: [
+            {
+              name: STACKS.MAIN_STACK,
+              state: {
+                routes: [{name: SCREENS.MAIN_STACK.LOGIN}],
+              },
+            },
+          ],
+        });
+      }, 1000);
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Logout Failed',
+        text2: 'Something went wrong. Please try again!',
+      });
+      console.error('Logout Error:', error);
+    }
+
+
+  }
 
   return (
     <View
@@ -82,7 +130,7 @@ const Topbar = (props) => {
             style={{
               color: "#fff",
               fontSize: 22,
-              fontFamily:"Helvetica",
+              fontFamily: "Helvetica",
               width: "95%",
               textAlign: "center",
             }}
@@ -91,9 +139,35 @@ const Topbar = (props) => {
           </Text>
         </TouchableOpacity>
       )}
-   
 
-  
+      {renderIf(
+        props.showLogout == true,
+        <View
+          style={{
+            position: "absolute",
+            right: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            bottom: 0,
+            height: 44,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              LogoutButtonClicked()
+            }}
+          >
+            <Image
+              source={require("../../assets/icons/logout.png")}
+              style={{ margin: 10, width: 34, height: 34 }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+
+
     </View>
   );
 };

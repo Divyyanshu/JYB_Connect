@@ -143,6 +143,7 @@ const Dashboard = ({navigation}) => {
       <Topbar
         showBack={false}
         showtitle={true}
+        showLogout = {true}
         title={'Dashboard'}
         navState={navigation}
       />
