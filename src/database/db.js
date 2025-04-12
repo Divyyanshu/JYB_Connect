@@ -91,15 +91,22 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
 };
 
 const fetchRecords = () => {
-  db.transaction(tx => {
-    tx.executeSql(
-      `SELECT * FROM ServiceAttributes;`,
-      [],
-      (_, results) => {
-        console.log('Fetched Records:', results.rows.raw());
-      },
-      error => console.error('Error fetching records', error),
-    );
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ServiceAttributes;`,
+        [],
+        (_, results) => {
+          const records = results.rows.raw();
+          console.log('Fetched Records:', records.length);
+          resolve(records.length);
+        },
+        error => {
+          console.error('Error fetching records', error);
+          reject(error);
+        }
+      );
+    });
   });
 };
 

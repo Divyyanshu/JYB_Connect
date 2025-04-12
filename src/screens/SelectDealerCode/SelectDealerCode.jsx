@@ -30,7 +30,7 @@ import {
 import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 import {COLORS} from '../../utils/colors';
-import {getDealerCode, getEmail, saveDealerCode} from '../../utils/shared';
+import {getDealerCode, getDealerName, getEmail, saveDealerCode, saveDealerName} from '../../utils/shared';
 import Topbar from '../../components/CommonComponents/TopBar';
 
 const {width} = Dimensions.get('window');
@@ -46,6 +46,11 @@ const SelectDealerCode = () => {
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const [selectedDealerCode, setSelectedDealerCode] = useState(null);
   const [previousDealerCode, setPreviousDealerCode] = useState('');
+
+  // added by puru
+  const [previousDealerName, setPreviousDealerName] = useState('');
+  const [selectedDealerName, setSelectedDealerName] = useState(null);
+
   const [userEmail, setUserEmail] = useState(null);
 
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -106,12 +111,15 @@ const SelectDealerCode = () => {
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
       let dealerCode = await getDealerCode();
+      let dealerName = await getDealerName()
       console.log('get dealer code >>>>> ', dealerCode);
       if (dealerCode) {
         console.log('inside if condtion');
         setPreviousDealerCode(dealerCode);
+        setPreviousDealerName(dealerName)
       } else {
         setPreviousDealerCode('');
+        setPreviousDealerName('')
       }
 
       fetchDealerList(monthValue + 1, yearValue, email);
@@ -150,7 +158,7 @@ const SelectDealerCode = () => {
     }
   };
 
-  const fetchManPowerData = async (plan, month, year, dealerCode) => {
+  const fetchManPowerData = async (plan, month, year, dealerCode,dealerName) => {
     try {
       clearTableManPowerAvailability();
       const response = await axios.post(
@@ -165,6 +173,7 @@ const SelectDealerCode = () => {
           insertDataManPowerAvailability(item.Type, item.Values),
         );
         saveDealerCode(dealerCode);
+        saveDealerName(dealerName)
         navigation.navigate(STACKS.MAIN_STACK, {
           screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
           params: {dealerCode, month, year},
@@ -176,7 +185,7 @@ const SelectDealerCode = () => {
     }
   };
 
-  const processKpiData = async (kpiData, month, year, dealerCode) => {
+  const processKpiData = async (kpiData, month, year, dealerCode,dealerName) => {
     let Monthplan = '0';
     for (const item of kpiData) {
       console.log('Item >>>>>>>>', item);
@@ -199,10 +208,10 @@ const SelectDealerCode = () => {
       );
     }
     console.log('Month Plan >>>>', Monthplan);
-    fetchManPowerData(Monthplan, month, year, dealerCode);
+    fetchManPowerData(Monthplan, month, year, dealerCode,dealerName);
   };
 
-  const fetchKpiData = async (dealerCode, month, year) => {
+  const fetchKpiData = async (dealerCode, month, year,dealerName) => {
     const isConnected = await checkInternet();
     if (!isConnected) {
       showSnackbar('No Internet Connection');
@@ -227,7 +236,7 @@ const SelectDealerCode = () => {
       const kpiData = response.data?.Data || [];
       console.log('kpiData >>>>>>>', kpiData);
       if (kpiData.length > 0) {
-        processKpiData(kpiData, month, year, dealerCode);
+        processKpiData(kpiData, month, year, dealerCode,dealerName);
         showSnackbar('No KPI data found');
       }
     } catch (error) {
@@ -238,15 +247,17 @@ const SelectDealerCode = () => {
     }
   };
 
-  const handleDealerSelect = dealerCode => {
+  const handleDealerSelect = (dealerCode,dealerName) => {
     console.log('previousDealerCode >>>>>', previousDealerCode);
     if (previousDealerCode == '') {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
     } else if (previousDealerCode !== dealerCode) {
       setSelectedDealerCode(dealerCode);
+      setSelectedDealerName(dealerName)
+
       setPopupVisible(true);
     } else {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
     }
 
     // if (previousDealerCode && previousDealerCode !== dealerCode) {
@@ -263,7 +274,7 @@ const SelectDealerCode = () => {
     // all tables clear
     await clearAllTables();
     // setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
-    await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear);
+    await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear,selectedDealerName);
   };
 
   const formatDate = dateStr => {
@@ -349,10 +360,10 @@ const SelectDealerCode = () => {
             renderItem={({item}) => (
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => handleDealerSelect(item.DealerCode)}>
+                onPress={() => handleDealerSelect(item.DealerCode,item.DealerName)}>
                 <View>
-                  <Text style={styles.title}>{item.DealerCode}</Text>
-                  <Text style={styles.status}>{item.Status}</Text>
+                  <Text style={styles.title}>{item.DealerName}</Text>
+                  <Text style={styles.status}>{item.DealerCode}</Text>
                 </View>
                 <View>
                   <Text style={styles.dealerDate}>
@@ -363,7 +374,7 @@ const SelectDealerCode = () => {
                   visible={isPopupVisible}
                   onConfirm={handleProcess}
                   onCancel={() => setPopupVisible(false)}
-                  message={`Are you sure you want to proceed with Dealer Code: ${selectedDealerCode}? You have previously filled data for Dealer Code: ${previousDealerCode}. Clicking 'Yes' will clear all previously entered data.`}
+                  message={`Are you sure you want to proceed with Dealer Code: ${selectedDealerCode} (${selectedDealerName})? You have previously filled data for Dealer Code: ${previousDealerCode} (${previousDealerName}). Clicking 'Yes' will clear all previously entered data.`}
                 />
               </TouchableOpacity>
             )}
