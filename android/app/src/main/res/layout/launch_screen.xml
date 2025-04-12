@@ -3,12 +3,17 @@
     android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#28282B"
-    >
-    <ImageView 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:src="@drawable/screen" 
-        android:scaleType="centerCrop" 
+    android:background="#990021">
+
+    <!-- Centered white text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="JYB Connect"
+        android:textColor="#FFFFFF"
+        android:background="@android:color/transparent"
+        android:padding="16dp"
+        android:textSize="18sp"
         android:layout_centerInParent="true" />
+        
 </RelativeLayout>

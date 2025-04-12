@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   appText: {
-    fontSize: 40,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '500',
     color: COLORS.OFF_WHITE,
     textAlign: 'center',
     fontFamily: 'Aptos-Black',

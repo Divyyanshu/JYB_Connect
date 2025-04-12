@@ -87,10 +87,10 @@ const Attributes = ({navigation}) => {
       <Topbar
         showBack={true}
         showtitle={true}
-        title={"Attributes"}
+        title={'Attributes'}
         navState={navigation}
       />
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, padding: 10}}>
         <FlatList
           data={data}
           extraData={[data, highlightedIndex]}
