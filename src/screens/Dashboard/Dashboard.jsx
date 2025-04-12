@@ -78,7 +78,7 @@ const Dashboard = ({navigation}) => {
             '',
           );
         });
-        fetchRecords();
+        
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -107,7 +107,7 @@ const Dashboard = ({navigation}) => {
           setIsSnackbarVisible(true);
           setWasOffline(false);
         }
-        fetchData();
+        checkServiceAttributeStatus();
       }
     });
 
@@ -115,6 +115,21 @@ const Dashboard = ({navigation}) => {
       unsubscribe();
     };
   }, []);
+
+  const checkServiceAttributeStatus = async () => {
+
+    let serviceAttributesRecords = await fetchRecords();
+    console.log("serviceAttributesRecords >>>>>",serviceAttributesRecords)
+    
+    if(serviceAttributesRecords == 0){
+
+      fetchData();
+    }
+    else{
+      console.log("No Need to fetch the data")
+    }
+
+  }
 
   const handleCardPress = type => {
     console.log('card pressed');

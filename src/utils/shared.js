@@ -72,3 +72,25 @@ export const getEmail = async () => {
     return null;
   }
 };
+
+
+
+export const saveDealerName = async dealerName => {
+  try {
+    await AsyncStorage.setItem('dealerName', dealerName);
+    console.log('dealerCode Saved Successfully');
+  } catch (error) {
+    console.error('Error saving dealerName:', error);
+  }
+};
+
+// Get Token
+export const getDealerName = async () => {
+  try {
+    const dealerName = await AsyncStorage.getItem('dealerName');
+    return dealerName ? dealerName : null;
+  } catch (error) {
+    console.error('Error retrieving dealerName:', error);
+    return null;
+  }
+};
