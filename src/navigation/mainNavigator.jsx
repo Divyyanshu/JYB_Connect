@@ -71,7 +71,6 @@ export const MainNavigator = ({navigation}) => {
             headerLeft: null,
           })}
         />
-
         <Stack.Screen
           name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
           component={SelectDealerCode}
@@ -252,7 +251,7 @@ export const MainNavigator = ({navigation}) => {
           component={Accompanied_Company}
           options={({navigation}) => ({
             headerShown: true,
-            title: 'Accompanied By Company',
+            title: 'Company Representative',
             headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
             headerTitleStyle: {color: COLORS.WHITE},
             headerLeft: () => (
@@ -269,7 +268,7 @@ export const MainNavigator = ({navigation}) => {
           component={Accompanied_Dealer}
           options={({navigation}) => ({
             headerShown: true,
-            title: 'Accompanied By Dealer',
+            title: 'Dealer Representative',
             headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
             headerTitleStyle: {color: COLORS.WHITE},
             headerLeft: () => (

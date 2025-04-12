@@ -169,10 +169,6 @@ const SelectDealerCode = () => {
           params: {dealerCode, month, year},
         });
       }
-
-      // fetchDataManPowerAvailability(dbData => {
-      //   setLoading(false);
-      // });
     } catch (error) {
       console.error('ManPower API Error:', error);
       setLoading(false);

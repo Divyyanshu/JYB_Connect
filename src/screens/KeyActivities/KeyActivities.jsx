@@ -27,8 +27,8 @@ const activities = [
   {id: '5', title: 'Complaints Analysis', completed: false},
   {id: '6', title: 'Repeat Job Card Analysis', completed: false},
   {id: '7', title: 'Minutes of Meeting', completed: false},
-  {id: '8', title: 'Accompanied By Company', completed: false},
-  {id: '9', title: 'Accompanied By Dealer', completed: false},
+  {id: '8', title: 'Company Representative', completed: false},
+  {id: '9', title: 'Dealer Representative', completed: false},
 ];
 
 const screenMapping = {
@@ -74,10 +74,10 @@ const KeyActivities = () => {
     const allCompleted = selected.every(item => item.completed);
 
     if (allCompleted) {
-      setAlertTitle('✅ Success');
+      setAlertTitle('Success');
       setAlertMessage('All activities have been completed successfully.');
     } else {
-      setAlertTitle('⚠️ Incomplete');
+      setAlertTitle('Incomplete');
       setAlertMessage('Please complete all activities before submitting.');
     }
 
