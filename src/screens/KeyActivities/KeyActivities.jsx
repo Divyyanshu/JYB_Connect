@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   SafeAreaView,
   Platform,
+  Modal,
+  Dimensions,
 } from 'react-native';
 import {styles} from './style';
 import {CustomButton} from '../../uiKit/customButton';
@@ -18,6 +20,8 @@ import {STACKS} from '../../utils/stacks';
 import {COLORS} from '../../utils/colors';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
+import DeviceInfo from 'react-native-device-info';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const activities = [
   {id: '1', title: 'Service Attributes', completed: true},
@@ -51,12 +55,12 @@ const KeyActivities = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
+  const deviceHeight = Dimensions.get('window').height;
 
   const toggleSelection = id => {
     setLoading(true);
 
     setTimeout(() => {
-      setLoading(false);
       const screenName = screenMapping[id];
       if (screenName) {
         navigation.navigate(STACKS.MAIN_STACK, {screen: screenName});
@@ -67,6 +71,7 @@ const KeyActivities = () => {
           item.id === id ? {...item, completed: !item.completed} : item,
         ),
       );
+         setLoading(false);
     }, 1200);
   };
 
@@ -87,55 +92,89 @@ const KeyActivities = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
-
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={"Key Activities"}
+        navState={navigation}
+      />
+      <Modal
+        visible={loading}
+        animationType={'none'}
+        transparent={true}
+        onRequestClose={() => {}}>
+        <View
+          style={[
+            {
+              top: DeviceInfo.hasNotch() == true ? 110 : 80,
+              height:
+                DeviceInfo.hasNotch() == true
+                  ? deviceHeight - 110
+                  : deviceHeight - 80,
+              alignItems: 'center',
+              backgroundColor: 'rgba(0,0,0,0.4)',
+            },
+          ]}>
+          <View
+            style={{
+              height: 80,
+              width: 80,
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              justifyContent: 'center',
+              position:"absolute",
+              top :     DeviceInfo.hasNotch() == true
+              ? (deviceHeight - 220 - 80)/2
+              : (deviceHeight - 160 - 80)/2
+            }}>
+            <Image
+              source={require('../../assets/icons/loader.gif')}
+              resizeMode="contain"
+              style={{height: 50, width: 50, alignSelf: 'center'}}
+            />
+          </View>
         </View>
-      ) : (
-        <SafeAreaView style={{flex: 1}}>
-          <FlatList
-            data={selected}
-            keyExtractor={item => item.id}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              flexGrow: 1,
-              paddingBottom: Platform.OS === 'ios' ? 40 : 60,
-            }}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.activityContainer}
-                onPress={() => toggleSelection(item.id)}>
-                <View style={styles.activityRow}>
-                  <Text style={styles.activityText}>{item.title}</Text>
-                  {item.completed && (
-                    <Image
-                      source={require('../../assets/icons/check_tick.png')}
-                      style={styles.tickIcon}
-                      resizeMode="contain"
-                    />
-                  )}
-                </View>
-              </TouchableOpacity>
-            )}
-            ListFooterComponent={
-              <View style={styles.submitButton}>
-                <CustomButton
-                  title="SUBMIT"
-                  onPress={handleSubmit}
-                  disabled={!selected.every(item => item.completed)}
-                  variant={
-                    selected.every(item => item.completed)
-                      ? 'primary'
-                      : 'secondary'
-                  }
+      </Modal>
+
+      <FlatList
+        data={selected}
+        keyExtractor={item => item.id}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+        }}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={styles.activityContainer}
+            onPress={() => toggleSelection(item.id)}>
+            <View style={styles.activityRow}>
+              <Text style={styles.activityText}>{item.title}</Text>
+              {item.completed && (
+                <Image
+                  source={require('../../assets/icons/check_tick.png')}
+                  style={styles.tickIcon}
+                  resizeMode="contain"
                 />
-              </View>
-            }
-          />
-        </SafeAreaView>
-      )}
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
+        ListFooterComponent={
+          <View style={styles.submitButton}>
+            <CustomButton
+              title="SUBMIT"
+              onPress={handleSubmit}
+              disabled={!selected.every(item => item.completed)}
+              variant={
+                selected.every(item => item.completed) ? 'primary' : 'secondary'
+              }
+            />
+          </View>
+        }
+      />
+
       <CustomAlert
         visible={alertVisible}
         onClose={() => setAlertVisible(false)}

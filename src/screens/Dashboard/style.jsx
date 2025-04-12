@@ -4,10 +4,10 @@ import {COLORS} from '../../utils/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+ //   alignItems: 'center',
     backgroundColor: 'white',
-    padding: 20,
-    gap: 10,
+ //   padding: 20,
+  //  gap: 10,
   },
   modalOverlay: {
     flex: 1,

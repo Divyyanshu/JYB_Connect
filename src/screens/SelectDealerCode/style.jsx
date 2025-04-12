@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     // paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
-    paddingVertical: 5,
+ //   paddingVertical: 5,
     backgroundColor: '#fff',
   },
   label: {

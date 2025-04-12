@@ -6,6 +6,7 @@ import {Snackbar} from 'react-native-paper';
 import {styles} from './style';
 import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
+import DeviceInfo from "react-native-device-info";
 import {
   db,
   createTable,
@@ -17,16 +18,20 @@ import {
   createDealerTable,
 } from '../../database/db';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const {width} = Dimensions.get('window');
 
-const Dashboard = () => {
+const Dashboard = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState('');
   const [alertData, setAlertData] = useState({title: '', message: ''});
   const [alertVisible, setAlertVisible] = useState(false);
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
+  const deviceHeight = Dimensions.get("window").height;
+
+  console.log("deviceHeight>>>>>>",deviceHeight)
 
   const showAlert = (title, message) => {
     setAlertData({title, message});
@@ -98,9 +103,15 @@ const Dashboard = () => {
     <View
       style={[
         styles.container,
-        {padding: width * 0.05, alignItems: 'center', justifyContent: 'center'},
+  
       ]}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+      <Topbar
+        showBack={false}
+        showtitle={true}
+        title={"Dashboard"}
+        navState={navigation}
+      />
 
       {/* <CustomCard
         centerName="Sales"
@@ -109,6 +120,8 @@ const Dashboard = () => {
           showAlert('Coming Soon 🚀', 'Sales feature is under development.')
         }
       /> */}
+
+      <View style={{backgroundColor:"#fff",alignItems:"center",height: deviceHeight - (DeviceInfo.hasNotch() == true ? 110 * 2 : 80*2),justifyContent:"center"}}>
 
       <CustomCard
         centerName="Service"
@@ -128,6 +141,10 @@ const Dashboard = () => {
         onClose={() => setModalVisible(false)}
         modalType={modalType}
       />
+
+      </View>
+
+   
 
       {/* Snackbar on reconnect */}
       <Snackbar

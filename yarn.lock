@@ -5911,6 +5911,11 @@ react-native-dev-menu@^4.1.1:
   resolved "https://registry.yarnpkg.com/react-native-dev-menu/-/react-native-dev-menu-4.1.1.tgz#7e2b3bfa7345946330ead3d0696b5de257c55553"
   integrity sha512-jdYjoTpFHvGXW12enaTnrgOoEgVF5JVqv4hcO8K0KV66Cvk8YLwD3XHsEiqMat+4C1osa+IG5Yt3qAiMOLBQxQ==
 
+react-native-device-info@^14.0.4:
+  version "14.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-14.0.4.tgz#56b24ace9ff29a66bdfc667209086421ed6cfdce"
+  integrity sha512-NX0wMAknSDBeFnEnSFQ8kkAcQrFHrG4Cl0mVjoD+0++iaKrOupiGpBXqs8xR0SeJyPC5zpdPl4h/SaBGly6UxA==
+
 react-native-drawer-layout@^4.1.6:
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/react-native-drawer-layout/-/react-native-drawer-layout-4.1.6.tgz#4a806a83a812a366d042543fa66a3a345a217843"
