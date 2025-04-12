@@ -63,6 +63,9 @@ const ServiceAttributeModel = ({
       console.log('Gap area is present');
       setIsMaxObtGreater(true);
       setMarksObtained(item.MaxObt);
+    } else {
+      console.log('Gap area is present else condition >>>>>>');
+      setMarksObtained(item.MaxObt);
     }
   }, []);
   const handleValidate = () => {

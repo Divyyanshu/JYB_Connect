@@ -153,7 +153,6 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
           </TouchableOpacity>
           <Text style={styles.title}>Action Plan</Text>
           <View style={{alignItems: 'flex-start'}}>
-            {renderIf}
             <Text style={{marginBottom: 5}}>
               {item.parameter}: {percentageAchieve}% of{' '}
               {item.percentage_criteria}%

@@ -79,7 +79,7 @@ const LoginPage = ({navigation}) => {
   };
 
   const validateForm = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email.trim()) {
       alert('Please enter Email address.');
@@ -90,10 +90,10 @@ const LoginPage = ({navigation}) => {
       return false;
     }
 
-    if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address.');
-      return false;
-    }
+    // if (!emailRegex.test(email)) {
+    //   alert('Please enter a valid email address.');
+    //   return false;
+    // }
 
     return true;
   };
@@ -117,12 +117,12 @@ const LoginPage = ({navigation}) => {
         <Text style={styles.Subtitle}>Sign In</Text>
         <View style={styles.inputBoxContainer}>
           <PaperInput
-            label="Email"
+            label="User Name"
             value={email}
             onChangeText={setEmail}
             mode="outlined"
             autoCapitalize="none"
-            keyboardType="email-address"
+            keyboardType="default"
             style={{width: '100%', backgroundColor: '#fff'}}
             theme={{colors: {primary: COLORS.PRIMARY}}}
           />
