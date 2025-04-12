@@ -12,6 +12,7 @@
 		5F3821D3F87DA27D0418B566 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		DF1BB6B4C42F359E9A3C38DE /* libPods-JawaAudit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2718E7F647FCEB8587836AD8 /* libPods-JawaAudit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,8 +20,14 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = JawaAudit/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = JawaAudit/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = JawaAudit/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		20C00C88B763CD30FE3063D7 /* Pods-JawaAudit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JawaAudit.release.xcconfig"; path = "Target Support Files/Pods-JawaAudit/Pods-JawaAudit.release.xcconfig"; sourceTree = "<group>"; };
 		59FE9D73026860BA5BDA5060 /* libPods-JawaAudit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JawaAudit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+=======
+		2718E7F647FCEB8587836AD8 /* libPods-JawaAudit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JawaAudit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D42379039D2E083EE816056 /* Pods-JawaAudit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JawaAudit.release.xcconfig"; path = "Target Support Files/Pods-JawaAudit/Pods-JawaAudit.release.xcconfig"; sourceTree = "<group>"; };
+		7081D59879FE5334912A4221 /* Pods-JawaAudit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JawaAudit.debug.xcconfig"; path = "Target Support Files/Pods-JawaAudit/Pods-JawaAudit.debug.xcconfig"; sourceTree = "<group>"; };
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = JawaAudit/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = JawaAudit/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C0D88ECAC8FC306B384744BA /* Pods-JawaAudit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JawaAudit.debug.xcconfig"; path = "Target Support Files/Pods-JawaAudit/Pods-JawaAudit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -32,7 +39,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				5C5DE6816299B1D3415FB37D /* libPods-JawaAudit.a in Frameworks */,
+=======
+				DF1BB6B4C42F359E9A3C38DE /* libPods-JawaAudit.a in Frameworks */,
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,7 +73,11 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+<<<<<<< HEAD
 				59FE9D73026860BA5BDA5060 /* libPods-JawaAudit.a */,
+=======
+				2718E7F647FCEB8587836AD8 /* libPods-JawaAudit.a */,
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -100,8 +115,13 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				C0D88ECAC8FC306B384744BA /* Pods-JawaAudit.debug.xcconfig */,
 				20C00C88B763CD30FE3063D7 /* Pods-JawaAudit.release.xcconfig */,
+=======
+				7081D59879FE5334912A4221 /* Pods-JawaAudit.debug.xcconfig */,
+				4D42379039D2E083EE816056 /* Pods-JawaAudit.release.xcconfig */,
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -113,13 +133,22 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "JawaAudit" */;
 			buildPhases = (
+<<<<<<< HEAD
 				52F547261B0F73781A2DF558 /* [CP] Check Pods Manifest.lock */,
+=======
+				D65E7E607A618813BCDEBFA3 /* [CP] Check Pods Manifest.lock */,
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+<<<<<<< HEAD
 				B6103709CEF4A44F45E53B70 /* [CP] Embed Pods Frameworks */,
 				DAAC707F389867E957B0E33B /* [CP] Copy Pods Resources */,
+=======
+				E3212334F7C24032E4EB1085 /* [CP] Embed Pods Frameworks */,
+				12FDB80045332AA2C78A25B5 /* [CP] Copy Pods Resources */,
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			);
 			buildRules = (
 			);
@@ -191,7 +220,28 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
+<<<<<<< HEAD
 		52F547261B0F73781A2DF558 /* [CP] Check Pods Manifest.lock */ = {
+=======
+		12FDB80045332AA2C78A25B5 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-JawaAudit/Pods-JawaAudit-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-JawaAudit/Pods-JawaAudit-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JawaAudit/Pods-JawaAudit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D65E7E607A618813BCDEBFA3 /* [CP] Check Pods Manifest.lock */ = {
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -213,7 +263,11 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD
 		B6103709CEF4A44F45E53B70 /* [CP] Embed Pods Frameworks */ = {
+=======
+		E3212334F7C24032E4EB1085 /* [CP] Embed Pods Frameworks */ = {
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -230,6 +284,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JawaAudit/Pods-JawaAudit-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< HEAD
 		DAAC707F389867E957B0E33B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -247,6 +302,8 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JawaAudit/Pods-JawaAudit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+=======
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -263,7 +320,11 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = C0D88ECAC8FC306B384744BA /* Pods-JawaAudit.debug.xcconfig */;
+=======
+			baseConfigurationReference = 7081D59879FE5334912A4221 /* Pods-JawaAudit.debug.xcconfig */;
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -292,7 +353,11 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = 20C00C88B763CD30FE3063D7 /* Pods-JawaAudit.release.xcconfig */;
+=======
+			baseConfigurationReference = 4D42379039D2E083EE816056 /* Pods-JawaAudit.release.xcconfig */;
+>>>>>>> dd3c617f03b91559db52b3aca8c8a4cdcac104cb
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
