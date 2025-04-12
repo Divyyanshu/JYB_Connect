@@ -12,6 +12,7 @@ import {
   fetch_KPI_Performance_Data,
   updateKPIPerformanceData,
 } from '../../database/db';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
@@ -129,12 +130,18 @@ const KPIPerformance = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
+            <Topbar
+        showBack={true}
+        showtitle={true}
+        title={"KPI Performance"}
+        navState={navigation}
+      />
       {loading ? (
         <View style={styles.loaderContainer}>
           <Text style={styles.loadingText}>Data Loading...</Text>
         </View>
       ) : (
-        <SafeAreaView style={{flex: 1}}>
+        <View style={{flex: 1,paddingHorizontal:16}}>
           <FlatList
             data={data}
             renderItem={renderItem}
@@ -148,7 +155,7 @@ const KPIPerformance = ({navigation}) => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           />
-        </SafeAreaView>
+        </View>
       )}
       {visible && selectedItem && (
         <KPI_Action_Pop_up

@@ -16,6 +16,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../utils/screens';
 import LinearGradient from 'react-native-linear-gradient';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const ServiceAttributes = () => {
   const [data, setData] = useState([]);
@@ -73,6 +74,13 @@ const ServiceAttributes = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={"Service Attributes"}
+        navState={navigation}
+      />
+      <View style={{padding:16}}>
       <FlatList
         data={data}
         keyExtractor={(item, index) => index.toString()}
@@ -93,6 +101,8 @@ const ServiceAttributes = () => {
         }}
         showsVerticalScrollIndicator={false}
       />
+      </View>
+
     </View>
   );
 };

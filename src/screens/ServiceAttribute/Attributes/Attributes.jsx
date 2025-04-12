@@ -19,6 +19,7 @@ import ServiceAttributeModel from '../../../components/ServiceAttributeModel/Ser
 import {CustomButton} from '../../../uiKit/customButton';
 import renderIf from '../../../utils/renderIf';
 import {COLORS} from '../../../utils/colors';
+import Topbar from '../../../components/CommonComponents/TopBar';
 
 var selectedRowIndex = 0;
 
@@ -83,7 +84,13 @@ const Attributes = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
-      <SafeAreaView style={{flex: 1}}>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={"Attributes"}
+        navState={navigation}
+      />
+      <View style={{flex: 1}}>
         <FlatList
           data={data}
           extraData={[data, highlightedIndex]}
@@ -211,7 +218,7 @@ const Attributes = ({navigation}) => {
             onSubmit={handleSubmit}
           />,
         )}
-      </SafeAreaView>
+      </View>
     </View>
   );
 };
