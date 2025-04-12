@@ -23,7 +23,7 @@ import {getToken} from '../utils/shared';
 const Stack = createStackNavigator();
 
 export const MainNavigator = ({navigation}) => {
-  const [userToken, setToken] = useState("");
+  const [userToken, setToken] = useState('');
   useEffect(() => {
     getAuthState();
   }, []);
@@ -34,9 +34,9 @@ export const MainNavigator = ({navigation}) => {
     setToken(token);
   };
 
-  if(userToken == ""){
-    return null
-  }else{
+  if (userToken == '') {
+    return null;
+  } else {
     if (userToken == null) {
       return (
         <Stack.Navigator
@@ -75,7 +75,7 @@ export const MainNavigator = ({navigation}) => {
               headerLeft: null,
             })}
           />
-  
+
           <Stack.Screen
             name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
             component={SelectDealerCode}
@@ -293,230 +293,6 @@ export const MainNavigator = ({navigation}) => {
           initialRouteName={SCREENS.MAIN_STACK.DASHBOARD}
           screenOptions={{
             headerShown: true,
-<<<<<<< HEAD
-            title: 'Key Activities',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.SERVICE_ATTRIBUTES}
-          component={ServiceAttributes}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Service Attributes',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.ATTRIBUTES}
-          component={Attributes}
-          options={({route, navigation}) => ({
-            title: route.params?.mainParam || 'Attributes',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  if (navigation.canGoBack()) {
-                    navigation.goBack();
-                  } else {
-                    navigation.navigate(SCREENS.MAIN_STACK.DASHBOARD);
-                  }
-                }}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.DVR_SCORE}
-          component={DVR_Score}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'DVR Score',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.KPI_PERFORMANCE}
-          component={KPI_Performance}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'KPI Performance',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.MAN_POWER_STATUS}
-          component={ManPower_Status}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Man Power Status',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.COMPLAINTS_ANALYSIS}
-          component={ComplaintsAnalysis}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Complaints Analysis',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.REPEAT_JOB}
-          component={RepeatJob_Analysis}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Repeat Job Card Analysis',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.MINUTES_OF_MEETING}
-          component={MinutesOfMeeting}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Minutes Of Meeting',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 80},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.ACCOMPANIED_COMPANY}
-          component={Accompanied_Company}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Company Representative',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.ACCOMPANIED_DEALER}
-          component={Accompanied_Dealer}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Dealer Representative',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{padding: 10}}>
-                <Icon name="arrow-back" size={32} color={COLORS.WHITE} />
-              </TouchableOpacity>
-            ),
-          })}
-        />
-      </Stack.Navigator>
-    );
-  } else {
-    return (
-      <Stack.Navigator
-        initialRouteName={SCREENS.MAIN_STACK.DASHBOARD}
-        screenOptions={{
-          headerShown: true,
-          gestureEnabled: false,
-          cardStyleInterpolator: ({current, next, inverted, layouts}) => {
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateX: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.width, 0],
-                    }),
-                  },
-                ],
-              },
-            };
-          },
-        }}>
-        <Stack.Screen
-          name={SCREENS.MAIN_STACK.DASHBOARD}
-          component={Dashboard}
-          options={({navigation}) => ({
-            headerShown: true,
-            title: 'Dashboard',
-            headerStyle: {backgroundColor: COLORS.PRIMARY, height: 100},
-            headerTitleStyle: {color: COLORS.WHITE},
-            headerLeft: null,
-          })}
-        />
-=======
             gestureEnabled: false,
             cardStyleInterpolator: ({current, next, inverted, layouts}) => {
               return {
@@ -544,7 +320,7 @@ export const MainNavigator = ({navigation}) => {
               headerLeft: null,
             })}
           />
-  
+
           <Stack.Screen
             name={SCREENS.MAIN_STACK.SELECT_DEALER_CODE}
             component={SelectDealerCode}
@@ -762,9 +538,5 @@ export const MainNavigator = ({navigation}) => {
         </Stack.Navigator>
       );
     }
->>>>>>> 7666699945e56a2e9f0c3da0e7e9bb044b9f950b
-
   }
-
-
 };

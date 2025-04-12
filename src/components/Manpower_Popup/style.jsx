@@ -23,23 +23,45 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 12,
     fontWeight: 'bold',
+    fontSize: 18,
   },
   subtitle: {
     textAlign: 'center',
     marginBottom: 8,
     color: '#666',
   },
-  input: {
-    marginVertical: 6,
-    backgroundColor: 'white',
-  },
-  percent: {
+  label: {
     fontSize: 14,
+    marginTop: 8,
+    marginBottom: 4,
     color: '#333',
-    marginTop: 4,
+  },
+  nativeInput: {
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
   },
   button: {
     marginTop: 10,
     alignSelf: 'center',
+    width: '90%',
+  },
+  submitBtn: {
+    marginTop: 20,
+    alignSelf: 'center',
+    width: '90%',
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  image: {
+    width: '50%',
+    height: 150,
+    borderRadius: 10,
   },
 });

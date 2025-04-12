@@ -25,10 +25,6 @@ const LoginPage = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    // if (!email.trim() || !password.trim()) {
-    //   Alert.alert('Validation Error', 'Both fields are required!');
-    //   return;
-    // }
     const validationStatus = validateForm();
     if (validationStatus == true) {
       setLoading(true);

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Dimensions, StatusBar} from 'react-native';
+import {View, Dimensions, StatusBar, BackHandler, Alert} from 'react-native';
 import axios from 'axios';
 import NetInfo from '@react-native-community/netinfo';
 import {Snackbar} from 'react-native-paper';
@@ -17,6 +17,7 @@ import {
   createDealerTable,
 } from '../../database/db';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
@@ -33,6 +34,28 @@ const Dashboard = () => {
     setAlertVisible(true);
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const backAction = () => {
+        Alert.alert('Confirm!', 'Are you sure you want to exit the app?', [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {text: 'YES', onPress: () => BackHandler.exitApp()},
+        ]);
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+
+      return () => backHandler.remove();
+    }, []),
+  );
   const fetchData = async () => {
     try {
       const response = await axios.get(
