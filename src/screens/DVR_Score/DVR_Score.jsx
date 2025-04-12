@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, StatusBar} from 'react-native';
 import {styles} from './style';
 import {getDvrScoreData} from '../../database/db';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const DVRScoreScreen = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -53,6 +54,12 @@ const DVRScoreScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'DVR Score'}
+        navState={navigation}
+      />
       <View style={styles.tableContainer}>
         <View style={styles.headerRow}>
           {['Area', 'Max Marks', 'Marks Obtained', '% Achieved'].map(

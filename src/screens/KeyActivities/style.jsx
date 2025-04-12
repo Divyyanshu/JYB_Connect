@@ -5,12 +5,15 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-   // padding: 16,
   },
   activityContainer: {
     backgroundColor: COLORS.WHITE,
     padding: 10,
     borderRadius: 8,
+  },
+  flatListContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   activityRow: {
     flexDirection: 'row',

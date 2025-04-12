@@ -6,8 +6,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.WHITE,
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    // paddingHorizontal: 20,
+    // paddingVertical: 20,
   },
   tableContainer: {
     width: '100%',

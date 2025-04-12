@@ -14,6 +14,7 @@ import {
   updateManPowerAvailabilityData,
 } from '../../database/db';
 import ManPowerModal from '../../components/Manpower_Popup/Manpower_Popup';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
@@ -125,6 +126,12 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'Man Power Status'}
+        navState={navigation}
+      />
       {loading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator animating={true} size="large" />

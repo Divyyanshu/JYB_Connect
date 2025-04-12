@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
 import {TextInput, Button, DataTable, Text} from 'react-native-paper';
 import SQLite from 'react-native-sqlite-storage';
+import Topbar from '../../components/CommonComponents/TopBar';
+import {styles} from './style';
 
 const db = SQLite.openDatabase({name: 'repeatCard.db'});
 
-const RepeatJobCardScreen = () => {
+const RepeatJobCardScreen = ({navigation}) => {
   const [repeatCard, setRepeatCard] = useState('');
   const [repeatPercent, setRepeatPercent] = useState('');
   const [mtdServiceVisit, setMtdServiceVisit] = useState(5);
@@ -83,56 +85,64 @@ const RepeatJobCardScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff', padding: 16}}>
-      <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 10}}>
-        Repeat Job Card Entry
-      </Text>
-
-      <TextInput
-        label="Nos. of Repeat Job Card"
-        value={repeatCard}
-        onChangeText={text => setRepeatCard(text.replace(/[^0-9]/g, ''))}
-        mode="outlined"
-        keyboardType="numeric"
-        style={{marginBottom: 10}}
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'Repeat Job Analysis'}
+        navState={navigation}
       />
+      <View style={styles.container}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 10}}>
+          Repeat Job Card Entry
+        </Text>
 
-      <TextInput
-        label="Repeat Job Card %"
-        value={repeatPercent}
-        mode="outlined"
-        disabled
-        style={{marginBottom: 20, backgroundColor: '#f1f1f1'}}
-      />
+        <TextInput
+          label="Nos. of Repeat Job Card"
+          value={repeatCard}
+          onChangeText={text => setRepeatCard(text.replace(/[^0-9]/g, ''))}
+          mode="outlined"
+          keyboardType="numeric"
+          style={{marginBottom: 10}}
+        />
 
-      <Button
-        mode="contained"
-        onPress={handleSubmit}
-        buttonColor="#b3002d"
-        textColor="white"
-        disabled={!repeatCard || !repeatPercent}>
-        Submit
-      </Button>
+        <TextInput
+          label="Repeat Job Card %"
+          value={repeatPercent}
+          mode="outlined"
+          disabled
+          style={{marginBottom: 20, backgroundColor: '#f1f1f1'}}
+        />
 
-      {showTable && (
-        <DataTable style={{marginTop: 30}}>
-          <DataTable.Header>
-            <DataTable.Title>Repeat Job Card Nos.</DataTable.Title>
-            <DataTable.Title>Repeat Job Card %</DataTable.Title>
-          </DataTable.Header>
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          buttonColor="#b3002d"
+          textColor="white"
+          disabled={!repeatCard || !repeatPercent}>
+          Submit
+        </Button>
 
-          <FlatList
-            data={data}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => (
-              <DataTable.Row>
-                <DataTable.Cell>{item.card_no}</DataTable.Cell>
-                <DataTable.Cell>{item.card_percent}%</DataTable.Cell>
-              </DataTable.Row>
-            )}
-          />
-        </DataTable>
-      )}
+        {showTable && (
+          <DataTable style={{marginTop: 30}}>
+            <DataTable.Header>
+              <DataTable.Title>Repeat Job Card Nos.</DataTable.Title>
+              <DataTable.Title>Repeat Job Card %</DataTable.Title>
+            </DataTable.Header>
+
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({item}) => (
+                <DataTable.Row>
+                  <DataTable.Cell>{item.card_no}</DataTable.Cell>
+                  <DataTable.Cell>{item.card_percent}%</DataTable.Cell>
+                </DataTable.Row>
+              )}
+            />
+          </DataTable>
+        )}
+      </View>
     </View>
   );
 };

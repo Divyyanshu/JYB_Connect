@@ -14,8 +14,9 @@ import {
 import {CustomButton} from '../../uiKit/customButton';
 import {styles} from './style';
 import ServiceAttributeModel from '../../components/ServiceAttributeModel/ServiceAttributeModel';
+import Topbar from '../../components/CommonComponents/TopBar';
 
-const CustomerComplaintAnalysis = () => {
+const CustomerComplaintAnalysis = ({navigation}) => {
   const [formData, setFormData] = useState({
     received: '',
     closed: '',
@@ -56,6 +57,12 @@ const CustomerComplaintAnalysis = () => {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{flex: 1}}>
+        <Topbar
+          showBack={true}
+          showtitle={true}
+          title={'Complaints Analysis'}
+          navState={navigation}
+        />
         <ScrollView contentContainerStyle={{flex: 1}}>
           <View style={styles.container}>
             <TextInput

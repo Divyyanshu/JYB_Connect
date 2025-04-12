@@ -56,7 +56,7 @@ const KeyActivities = () => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const deviceHeight = Dimensions.get('window').height;
-
+  console.log('DeviceInfo.hasNotch()', DeviceInfo.hasNotch());
   const toggleSelection = id => {
     setLoading(true);
 
@@ -71,7 +71,7 @@ const KeyActivities = () => {
           item.id === id ? {...item, completed: !item.completed} : item,
         ),
       );
-         setLoading(false);
+      setLoading(false);
     }, 1200);
   };
 
@@ -95,7 +95,7 @@ const KeyActivities = () => {
       <Topbar
         showBack={true}
         showtitle={true}
-        title={"Key Activities"}
+        title={'Key Activities'}
         navState={navigation}
       />
       <Modal
@@ -122,10 +122,11 @@ const KeyActivities = () => {
               backgroundColor: '#fff',
               borderRadius: 12,
               justifyContent: 'center',
-              position:"absolute",
-              top :     DeviceInfo.hasNotch() == true
-              ? (deviceHeight - 220 - 80)/2
-              : (deviceHeight - 160 - 80)/2
+              position: 'absolute',
+              top:
+                DeviceInfo.hasNotch() == true
+                  ? (deviceHeight - 220 - 80) / 2
+                  : (deviceHeight - 160 - 80) / 2,
             }}>
             <Image
               source={require('../../assets/icons/loader.gif')}
@@ -136,45 +137,48 @@ const KeyActivities = () => {
         </View>
       </Modal>
 
-      <FlatList
-        data={selected}
-        keyExtractor={item => item.id}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          flexGrow: 1,
-          paddingBottom: Platform.OS === 'ios' ? 40 : 60,
-        }}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.activityContainer}
-            onPress={() => toggleSelection(item.id)}>
-            <View style={styles.activityRow}>
-              <Text style={styles.activityText}>{item.title}</Text>
-              {item.completed && (
-                <Image
-                  source={require('../../assets/icons/check_tick.png')}
-                  style={styles.tickIcon}
-                  resizeMode="contain"
-                />
-              )}
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={selected}
+          keyExtractor={item => item.id}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+          }}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.activityContainer}
+              onPress={() => toggleSelection(item.id)}>
+              <View style={styles.activityRow}>
+                <Text style={styles.activityText}>{item.title}</Text>
+                {item.completed && (
+                  <Image
+                    source={require('../../assets/icons/check_tick.png')}
+                    style={styles.tickIcon}
+                    resizeMode="contain"
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
+          )}
+          ListFooterComponent={
+            <View style={styles.submitButton}>
+              <CustomButton
+                title="SUBMIT"
+                onPress={handleSubmit}
+                disabled={!selected.every(item => item.completed)}
+                variant={
+                  selected.every(item => item.completed)
+                    ? 'primary'
+                    : 'secondary'
+                }
+              />
             </View>
-          </TouchableOpacity>
-        )}
-        ListFooterComponent={
-          <View style={styles.submitButton}>
-            <CustomButton
-              title="SUBMIT"
-              onPress={handleSubmit}
-              disabled={!selected.every(item => item.completed)}
-              variant={
-                selected.every(item => item.completed) ? 'primary' : 'secondary'
-              }
-            />
-          </View>
-        }
-      />
-
+          }
+        />
+      </View>
       <CustomAlert
         visible={alertVisible}
         onClose={() => setAlertVisible(false)}
