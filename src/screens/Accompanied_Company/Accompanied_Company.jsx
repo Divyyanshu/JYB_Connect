@@ -75,13 +75,13 @@ const AccompaniedByCompany = ({navigation}) => {
 
   return (
     <Provider>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'Company Representative'}
+        navState={navigation}
+      />
       <View style={styles.container}>
-        <Topbar
-          showBack={true}
-          showtitle={true}
-          title={'Company Representative'}
-          navState={navigation}
-        />
         {list.length === 0 ? (
           <>
             <Text

@@ -75,13 +75,13 @@ const AccompaniedByDealer = ({navigation}) => {
 
   return (
     <Provider>
+      <Topbar
+        showBack={true}
+        showtitle={true}
+        title={'Dealer Representative'}
+        navState={navigation}
+      />
       <View style={styles.container}>
-        <Topbar
-          showBack={true}
-          showtitle={true}
-          title={'Company Representative'}
-          navState={navigation}
-        />
         {dealerList.length === 0 ? (
           <>
             <Text
