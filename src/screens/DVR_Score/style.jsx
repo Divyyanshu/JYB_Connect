@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
   },
   tableContainer: {
     width: '100%',
+    // height: '100%',
+    // paddingHorizontal: 20,
+    // paddingVertical: 20,
     backgroundColor: COLORS.WHITE,
     borderRadius: 10,
     overflow: 'hidden',

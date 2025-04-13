@@ -104,7 +104,7 @@ const fetchRecords = () => {
         error => {
           console.error('Error fetching records', error);
           reject(error);
-        }
+        },
       );
     });
   });
@@ -541,7 +541,7 @@ const createCompanyTable = () => {
 const createDealerTable = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+      'CREATE TABLE IF NOT EXISTS AccompaniedByDealer (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
     );
   });
 };
@@ -574,19 +574,19 @@ const dropAllTables = async () => {
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS Company',
+      'DROP TABLE IF EXISTS AccompaniedByCompany',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop Company', error);
+        console.error('Failed to drop AccompaniedByCompany', error);
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS Dealer',
+      'DROP TABLE IF EXISTS AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop Dealer', error);
+        console.error('Failed to drop AccompaniedByDealer', error);
       },
     );
   });
@@ -621,20 +621,20 @@ const clearAllTables = async () => {
     );
 
     tx.executeSql(
-      'DELETE FROM Company',
+      'DELETE FROM AccompaniedByCompany',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear Company', error);
+        console.error('Failed to clear AccompaniedByCompany', error);
       },
     );
 
     tx.executeSql(
-      'DELETE FROM Dealer',
+      'DELETE FROM AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear Dealer', error);
+        console.error('Failed to clear AccompaniedByDealer', error);
       },
     );
   });
