@@ -4,12 +4,12 @@ import {COLORS} from '../../utils/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5,
     backgroundColor: COLORS.WHITE,
     paddingVertical: 6,
   },
   tableContainer: {
     marginHorizontal: 40,
+    marginVertical: 20,
     backgroundColor: COLORS.WHITE,
   },
   headerRow: {

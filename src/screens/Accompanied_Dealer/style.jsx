@@ -4,7 +4,6 @@ import {COLORS} from '../../utils/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: '#f4f4f4',
   },
   fab: {

@@ -15,6 +15,7 @@ import {styles} from './style';
 import {COLORS} from '../../utils/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {db} from '../../database/db';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const postOptions = [
   {label: 'Dealer Principle', value: 'Dealer Principle'},
@@ -23,7 +24,7 @@ const postOptions = [
   {label: 'Sales Manager', value: 'Sales Manager'},
 ];
 
-const AccompaniedByDealer = () => {
+const AccompaniedByDealer = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [post, setPost] = useState('');
   const [name, setName] = useState('');
@@ -75,6 +76,12 @@ const AccompaniedByDealer = () => {
   return (
     <Provider>
       <View style={styles.container}>
+        <Topbar
+          showBack={true}
+          showtitle={true}
+          title={'Company Representative'}
+          navState={navigation}
+        />
         {dealerList.length === 0 ? (
           <>
             <Text

@@ -15,6 +15,7 @@ import {styles} from './style';
 import {COLORS} from '../../utils/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {db} from '../../database/db';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const postOptions = [
   {label: 'Service Head', value: 'Service Head'},
@@ -23,7 +24,7 @@ const postOptions = [
   {label: 'Sales Regional Manager', value: 'Sales Regional Manager'},
 ];
 
-const AccompaniedByCompany = () => {
+const AccompaniedByCompany = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [post, setPost] = useState('');
   const [name, setName] = useState('');
@@ -75,6 +76,12 @@ const AccompaniedByCompany = () => {
   return (
     <Provider>
       <View style={styles.container}>
+        <Topbar
+          showBack={true}
+          showtitle={true}
+          title={'Company Representative'}
+          navState={navigation}
+        />
         {list.length === 0 ? (
           <>
             <Text

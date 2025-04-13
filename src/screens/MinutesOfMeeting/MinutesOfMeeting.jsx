@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import {styles} from './style';
+import Topbar from '../../components/CommonComponents/TopBar';
 
 const MinutesOfMeeting = ({navigation}) => {
   const [data, setData] = useState([
@@ -71,6 +72,12 @@ const MinutesOfMeeting = ({navigation}) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
+        <Topbar
+          showBack={true}
+          showtitle={true}
+          title={'Minutes of Meeting'}
+          navState={navigation}
+        />
 
         {/* Table Header */}
         <View style={styles.tableContainer}>

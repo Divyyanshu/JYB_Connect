@@ -49,7 +49,7 @@ const Attributes = ({navigation}) => {
 
   const handleRowPress = async (item, index) => {
     if (!item.MaxObtain || item.MaxMarks < 5) {
-      setHighlightedIndex(index); // 👈 Highlight on click
+      setHighlightedIndex(index);
       setSelectedItem(item);
       selectedRowIndex = index;
       let DefId_Data = await getDetailsValuesFromServiceAttributes(item.DefId);
