@@ -148,102 +148,162 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
     <Modal visible={visible} transparent animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Icon name="close" size={32} color={COLORS.PRIMARY} />
-          </TouchableOpacity>
           <Text style={styles.title}>Action Plan</Text>
-          <View style={{alignItems: 'flex-start'}}>
-            <Text style={{marginBottom: 5}}>
-              {item.parameter}: {percentageAchieve}% of{' '}
-              {item.percentage_criteria}%
-            </Text>
-            <Text style={{marginBottom: 5}}>MTD Plan : {item.mtd_plan}</Text>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>MTD Actual : </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter MTD Actual"
-              onChangeText={handleMTDActualChange}
-              value={formData.mtd_actual}
-              keyboardType="number-pad"
-              maxLength={4}
-            />
-          </View>
-          {isMTDActualFilled && !isCriteriaMeet && (
-            <>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Gap Area : </Text>
-                <TextInput
-                  style={styles.input}
-                  value={
-                    formData.gapArea != undefined && formData.gapArea != ''
-                  }
-                  placeholder="Enter Gap Area"
-                  onChangeText={text => handleInputChange('gapArea', text)}
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Counter Measure Plan : </Text>
-                <TextInput
-                  style={styles.input}
-                  value={
-                    formData.actionPlan != undefined &&
-                    formData.actionPlan != ''
-                  }
-                  placeholder="Enter Counter Measure"
-                  onChangeText={text => handleInputChange('actionPlan', text)}
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Responsibility : </Text>
-                <TextInput
-                  style={styles.input}
-                  value={
-                    formData.responsibility != undefined &&
-                    formData.responsibility != ''
-                  }
-                  placeholder="Enter Responsibility"
-                  onChangeText={text =>
-                    handleInputChange('responsibility', text)
-                  }
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Plan Closure Date : </Text>
-                <TouchableOpacity
-                  style={styles.input}
-                  onPress={() => setShowDatePicker(true)}>
+          <View
+            style={{
+              padding: 20,
+              backgroundColor: 'white',
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+            }}>
+            <View style={{alignItems: 'flex-start'}}>
+              {isMTDActualFilled && (
+                <View style={{alignSelf: 'center'}}>
                   <Text
                     style={{
-                      color: formData.planClosureDate ? '#000' : '#999',
-                      fontSize: 14,
+                      textAlign: 'center',
+                      fontWeight: '600',
+                      color: 'grey',
                     }}>
-                    {formData.planClosureDate
-                      ? `📅 ${formData.planClosureDate}`
-                      : '📅 Enter Date'}
+                    {item.parameter}
                   </Text>
-                </TouchableOpacity>
-                {showDatePicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                    onChange={handleDateChange}
-                    minimumDate={new Date()}
-                  />
-                )}
-              </View>
-              {formData.photo && isMTDActualFilled && !isCriteriaMeet && (
-                <Image source={{uri: formData.photo}} style={styles.image} />
+                  <Text style={{marginBottom: 5, color: 'grey'}}>
+                    Target Achieved {percentageAchieve}% of{' '}
+                    {item.percentage_criteria}%
+                  </Text>
+                </View>
               )}
-              <View style={styles.buttonContainer}>
-                <CustomButton title="Click Photo" onPress={openCamera} />
-              </View>
-            </>
-          )}
-          <View style={[styles.buttonContainer, {marginTop: 10}]}>
-            <CustomButton title={'Submit'} onPress={handleSubmit} />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>MTD Actual : </Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter MTD Actual"
+                onChangeText={handleMTDActualChange}
+                value={formData.mtd_actual}
+                keyboardType="number-pad"
+                maxLength={4}
+              />
+            </View>
+            {isMTDActualFilled && !isCriteriaMeet && (
+              <>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Gap Area : </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={
+                      formData.gapArea != undefined && formData.gapArea != ''
+                    }
+                    placeholder="Enter Gap Area"
+                    onChangeText={text => handleInputChange('gapArea', text)}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Counter Measure Plan : </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={
+                      formData.actionPlan != undefined &&
+                      formData.actionPlan != ''
+                    }
+                    placeholder="Enter Counter Measure"
+                    onChangeText={text => handleInputChange('actionPlan', text)}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Responsibility : </Text>
+                  <TextInput
+                    style={styles.input}
+                    value={
+                      formData.responsibility != undefined &&
+                      formData.responsibility != ''
+                    }
+                    placeholder="Enter Responsibility"
+                    onChangeText={text =>
+                      handleInputChange('responsibility', text)
+                    }
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Plan Closure Date : </Text>
+                  <TouchableOpacity
+                    style={styles.input}
+                    onPress={() => setShowDatePicker(true)}>
+                    <Text
+                      style={{
+                        color: formData.planClosureDate ? '#000' : '#999',
+                        fontSize: 14,
+                      }}>
+                      {formData.planClosureDate
+                        ? `${formData.planClosureDate}`
+                        : 'Enter Date'}
+                    </Text>
+                  </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={selectedDate}
+                      mode="date"
+                      display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+                      onChange={handleDateChange}
+                      minimumDate={new Date()}
+                    />
+                  )}
+                </View>
+                {formData.photo && isMTDActualFilled && !isCriteriaMeet && (
+                  <Image source={{uri: formData.photo}} style={styles.image} />
+                )}
+                <View style={styles.buttonContainer}>
+                  <CustomButton title="Click Photo" onPress={openCamera} />
+                </View>
+              </>
+            )}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+              <TouchableOpacity
+                style={{
+                  paddingVertical: 10,
+                  paddingHorizontal: 30,
+                  backgroundColor: COLORS.PRIMARY,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  borderColor: COLORS.PRIMARY,
+                }}
+                onPress={() => handleSubmit()}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    color: 'white',
+                  }}>
+                  SUBMIT
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  paddingVertical: 10,
+                  paddingHorizontal: 30,
+                  backgroundColor: COLORS.WHITE,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  borderColor: COLORS.PRIMARY,
+                }}
+                onPress={onClose}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    color: COLORS.PRIMARY,
+                  }}>
+                  CLOSE
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

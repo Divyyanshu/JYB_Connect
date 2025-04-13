@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from '../../utils/colors';
 
 export const styles = StyleSheet.create({
   modalContainer: {
@@ -8,11 +9,9 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.25)',
   },
   modalContent: {
-    width: 340,
-    padding: 20,
-    backgroundColor: '#fff',
+    width: '90%',
+    backgroundColor: COLORS.PRIMARY,
     borderRadius: 12,
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.25,
@@ -28,8 +27,9 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
+    padding: 10,
+    color: 'white',
+    textAlign: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -65,9 +65,8 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: 'center',
-    marginTop: 20,
-    gap: 10,
-    paddingHorizontal: 10,
+    marginVertical: 16,
+    alignItems: 'center',
   },
   placeholderStyle: {
     flex: 1,
