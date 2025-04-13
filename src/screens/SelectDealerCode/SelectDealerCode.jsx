@@ -116,23 +116,40 @@ const SelectDealerCode = () => {
       setSelectedMonthIndex(monthValue);
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
-      let dealerCode = await getDealerCode();
-      let dealerName = await getDealerName();
-      console.log('get dealer code >>>>> ', dealerCode);
-      if (dealerCode) {
-        console.log('inside if condtion');
-        setPreviousDealerCode(dealerCode);
-        setPreviousDealerName(dealerName);
-      } else {
-        setPreviousDealerCode('');
-        setPreviousDealerName('');
-      }
+
 
       fetchDealerList(monthValue + 1, yearValue, email);
     };
 
     init();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe2 = navigation.addListener('focus', () => {
+      console.log('focus revived');
+
+      setDelarCodeStatus()
+  
+    });
+    return unsubscribe2;
+  }, [navigation]);
+
+  const setDelarCodeStatus = async () =>{
+    let dealerCode = await getDealerCode();
+    let dealerName = await getDealerName();
+    console.log('get dealer code >>>>> ', dealerCode);
+    if (dealerCode) {
+      console.log('inside if condtion');
+      setPreviousDealerCode(dealerCode);
+      setPreviousDealerName(dealerName);
+    } else {
+      setPreviousDealerCode('');
+      setPreviousDealerName('');
+    }
+
+  }
+
+
 
   const fetchDealerList = async (month, year, userID) => {
     setLoading(true);

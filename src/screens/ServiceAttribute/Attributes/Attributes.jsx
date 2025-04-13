@@ -38,8 +38,13 @@ const Attributes = ({navigation}) => {
 
   const fetchDetails = () => {
     getDetailsByMainParameter(mainParam, detailsList => {
-      console.log('Fetched Data:', detailsList);
-      setData([...detailsList]);
+      // console.log('Fetched Data:', detailsList);
+      // setData([...detailsList]);
+      const updatedList = detailsList.map(item => ({
+        ...item,
+        isExpanded: false,
+      }));
+      setData(updatedList);
     });
   };
 
@@ -81,6 +86,18 @@ const Attributes = ({navigation}) => {
     console.log('tempDict', tempDict);
   };
 
+  const toggleEyeSelection = (item,index) => {
+    setData(prevData => {
+      const updatedData = [...prevData];
+      updatedData[index] = {
+        ...updatedData[index],
+        isExpanded: !updatedData[index].isExpanded,
+      };
+      return updatedData;
+    });
+
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
@@ -121,14 +138,35 @@ const Attributes = ({navigation}) => {
                   backgroundColor: backgroundColor,
                 }}>
                 {/* Sub Parameters */}
-                <View style={{flexDirection: 'column'}}>
+                <View
+                  style={{flexDirection: 'column'}}>
                   <Text
+                    numberOfLines={item.isExpanded == false ? 2 : 99}
                     style={[
                       styles.cell,
                       {fontWeight: '700', color: 'black', fontSize: 13},
                     ]}>
                     {item.SubParameters}
                   </Text>
+
+                  <TouchableOpacity
+                    style={{alignSelf:"flex-end",width:30,height:30,marginTop:0,justifyContent:"center",alignItems:"center"}}
+                    onPress={() => toggleEyeSelection(item,index)}>
+                    {item.isExpanded == false && (
+                      <Image
+                        source={require('../../../assets/icons/show.png')}
+                        style={{height:24,width:24}}
+                        resizeMode="contain"
+                      />
+                    )}
+                      {item.isExpanded == true && (
+                      <Image
+                        source={require('../../../assets/icons/hide.png')}
+                        style={{height:24,width:24}}
+                        resizeMode="contain"
+                      />
+                    )}
+                  </TouchableOpacity>
                 </View>
                 <View style={{flexDirection: 'column', marginTop: 6}}>
                   <Text
