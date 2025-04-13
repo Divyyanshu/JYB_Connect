@@ -30,7 +30,13 @@ import {
 import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 import {COLORS} from '../../utils/colors';
-import {getDealerCode, getDealerName, getEmail, saveDealerCode, saveDealerName} from '../../utils/shared';
+import {
+  getDealerCode,
+  getDealerName,
+  getEmail,
+  saveDealerCode,
+  saveDealerName,
+} from '../../utils/shared';
 import Topbar from '../../components/CommonComponents/TopBar';
 
 const {width} = Dimensions.get('window');
@@ -111,15 +117,15 @@ const SelectDealerCode = () => {
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
       let dealerCode = await getDealerCode();
-      let dealerName = await getDealerName()
+      let dealerName = await getDealerName();
       console.log('get dealer code >>>>> ', dealerCode);
       if (dealerCode) {
         console.log('inside if condtion');
         setPreviousDealerCode(dealerCode);
-        setPreviousDealerName(dealerName)
+        setPreviousDealerName(dealerName);
       } else {
         setPreviousDealerCode('');
-        setPreviousDealerName('')
+        setPreviousDealerName('');
       }
 
       fetchDealerList(monthValue + 1, yearValue, email);
@@ -158,7 +164,13 @@ const SelectDealerCode = () => {
     }
   };
 
-  const fetchManPowerData = async (plan, month, year, dealerCode,dealerName) => {
+  const fetchManPowerData = async (
+    plan,
+    month,
+    year,
+    dealerCode,
+    dealerName,
+  ) => {
     try {
       clearTableManPowerAvailability();
       const response = await axios.post(
@@ -173,7 +185,7 @@ const SelectDealerCode = () => {
           insertDataManPowerAvailability(item.Type, item.Values),
         );
         saveDealerCode(dealerCode);
-        saveDealerName(dealerName)
+        saveDealerName(dealerName);
         navigation.navigate(STACKS.MAIN_STACK, {
           screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
           params: {dealerCode, month, year},
@@ -185,7 +197,13 @@ const SelectDealerCode = () => {
     }
   };
 
-  const processKpiData = async (kpiData, month, year, dealerCode,dealerName) => {
+  const processKpiData = async (
+    kpiData,
+    month,
+    year,
+    dealerCode,
+    dealerName,
+  ) => {
     let Monthplan = '0';
     for (const item of kpiData) {
       console.log('Item >>>>>>>>', item);
@@ -208,10 +226,10 @@ const SelectDealerCode = () => {
       );
     }
     console.log('Month Plan >>>>', Monthplan);
-    fetchManPowerData(Monthplan, month, year, dealerCode,dealerName);
+    fetchManPowerData(Monthplan, month, year, dealerCode, dealerName);
   };
 
-  const fetchKpiData = async (dealerCode, month, year,dealerName) => {
+  const fetchKpiData = async (dealerCode, month, year, dealerName) => {
     const isConnected = await checkInternet();
     if (!isConnected) {
       showSnackbar('No Internet Connection');
@@ -236,7 +254,7 @@ const SelectDealerCode = () => {
       const kpiData = response.data?.Data || [];
       console.log('kpiData >>>>>>>', kpiData);
       if (kpiData.length > 0) {
-        processKpiData(kpiData, month, year, dealerCode,dealerName);
+        processKpiData(kpiData, month, year, dealerCode, dealerName);
         showSnackbar('No KPI data found');
       }
     } catch (error) {
@@ -247,17 +265,17 @@ const SelectDealerCode = () => {
     }
   };
 
-  const handleDealerSelect = (dealerCode,dealerName) => {
+  const handleDealerSelect = (dealerCode, dealerName) => {
     console.log('previousDealerCode >>>>>', previousDealerCode);
     if (previousDealerCode == '') {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
     } else if (previousDealerCode !== dealerCode) {
       setSelectedDealerCode(dealerCode);
-      setSelectedDealerName(dealerName)
+      setSelectedDealerName(dealerName);
 
       setPopupVisible(true);
     } else {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
     }
 
     // if (previousDealerCode && previousDealerCode !== dealerCode) {
@@ -274,7 +292,12 @@ const SelectDealerCode = () => {
     // all tables clear
     await clearAllTables();
     // setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
-    await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear,selectedDealerName);
+    await fetchKpiData(
+      selectedDealerCode,
+      selectedMonth,
+      selectedYear,
+      selectedDealerName,
+    );
   };
 
   const formatDate = dateStr => {
@@ -360,7 +383,9 @@ const SelectDealerCode = () => {
             renderItem={({item}) => (
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => handleDealerSelect(item.DealerCode,item.DealerName)}>
+                onPress={() =>
+                  handleDealerSelect(item.DealerCode, item.DealerName)
+                }>
                 <View>
                   <Text style={styles.title}>{item.DealerName}</Text>
                   <Text style={styles.status}>{item.DealerCode}</Text>
