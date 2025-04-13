@@ -67,6 +67,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 16,
     alignItems: 'center',
+    borderRadius: 20,
   },
   placeholderStyle: {
     flex: 1,

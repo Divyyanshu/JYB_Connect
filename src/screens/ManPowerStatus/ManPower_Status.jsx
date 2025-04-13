@@ -36,7 +36,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
     try {
       setLoading(true);
       await fetchDataManPowerAvailability(dbData => {
-        console.log('Fetched data from  man power DB:', dbData);
+        console.log('Fetched data from man power DB:', dbData);
         setData(dbData);
       });
     } catch (error) {
@@ -69,7 +69,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
   const handleSubmit = async dataForm => {
     try {
       await updateManPowerAvailabilityData({
-        parameter: dataForm.parameter,
+        type: dataForm.parameter,
         available: dataForm.available,
         trained: dataForm.trained,
         available_percentage: dataForm.available_percentage,
@@ -141,7 +141,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
           <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={(item, index) => item.parameter || index.toString()}
+            keyExtractor={(item, index) => item.type || index.toString()}
             contentContainerStyle={{
               flexGrow: 1,
               paddingBottom: Platform.OS === 'ios' ? 40 : 60,

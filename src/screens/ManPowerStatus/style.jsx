@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   card: {
-    padding: 10,
+    padding: 2,
     marginVertical: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 18,
     borderRadius: 8,
-    backgroundColor: '#F1EFEC',
+    backgroundColor: COLORS.GREY,
+    borderWidth: 0.5,
+    borderColor: COLORS.DISABLE,
   },
   row: {
     flexDirection: 'row',
@@ -20,8 +22,6 @@ export const styles = StyleSheet.create({
     width: '33.5%',
     alignItems: 'center',
     marginBottom: 10,
-    borderRightWidth: 1,
-    borderColor: '#fff',
   },
   editCell: {
     flex: 1,
@@ -29,18 +29,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    backgroundColor: COLORS.PRIMARY,
+    backgroundColor: COLORS.LIGHT_PRIMARY,
     width: '100%',
     padding: 5,
     textAlign: 'center',
-    color: '#fff',
+    color: COLORS.PRIMARY,
+    fontWeight: '500',
   },
   text: {
     width: '100%',
     fontSize: 12,
     padding: 5,
-    borderRightWidth: 1,
-    borderColor: 'grey',
     textAlign: 'center',
   },
   loaderContainer: {
