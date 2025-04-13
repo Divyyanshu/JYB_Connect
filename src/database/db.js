@@ -451,31 +451,84 @@ const updateKPIPerformanceData = args => {
   });
 };
 // ManPowerAvailability : -
-
 const createManPowerAvailability = () => {
   db.transaction(tx => {
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS ManPowerAvailability (
-        type TEXT,
-        value TEXT
-      );`,
+         type TEXT,
+         value TEXT,
+         available TEXT,
+         trained TEXT,
+         available_percentage TEXT,
+         trained_percentage TEXT,
+         gap_area TEXT,
+         counter_measure_plan TEXT,
+         responsibility TEXT,
+         plan_closure_date TEXT,
+         image_path TEXT
+       );`,
       [],
-      () => console.log('Table Created ManPowerAvailability'),
-      error =>
-        console.error('Table Creation ManPowerAvailability Error:', error),
+      () => console.log('Table Created: ManPowerAvailability'),
+      error => console.error('Table Creation Error:', error),
     );
   });
 };
-const insertDataManPowerAvailability = (type, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'INSERT INTO ManPowerAvailability (type, value) VALUES (?, ?);',
-      [type, value],
-      (_, result) => console.log('Data Inserted:', result),
-      error => console.error('Insert Error:', error),
-    );
+
+const insertDataManPowerAvailability = (
+  type,
+  value,
+  available,
+  trained,
+  available_percentage,
+  trained_percentage,
+  gap_area,
+  counter_measure_plan,
+  responsibility,
+  plan_closure_date,
+  image_path,
+) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO ManPowerAvailability (
+           type,
+           value,
+           available,
+           trained,
+           available_percentage,
+           trained_percentage,
+           gap_area,
+           counter_measure_plan,
+           responsibility,
+           plan_closure_date,
+           image_path
+         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [
+          type || '',
+          value || '',
+          available || '',
+          trained || '',
+          available_percentage || '',
+          trained_percentage || '',
+          gap_area || '',
+          counter_measure_plan || '',
+          responsibility || '',
+          plan_closure_date || '',
+          image_path || '',
+        ],
+        (_, result) => {
+          console.log('Data Inserted:', result);
+          resolve(result);
+        },
+        (_, error) => {
+          console.error('Insert Error:', error);
+          reject(error);
+        },
+      );
+    });
   });
 };
+
 const fetchDataManPowerAvailability = callback => {
   db.transaction(tx => {
     tx.executeSql(
@@ -497,7 +550,18 @@ const clearTableManPowerAvailability = () => {
     );
   });
 };
-const updateManPowerAvailabilityData = args => {
+const updateManPowerAvailabilityData = ({
+  type,
+  available,
+  trained,
+  available_percentage,
+  trained_percentage,
+  gap_area,
+  counter_measure_plan,
+  responsibility,
+  plan_closure_date,
+  image_path,
+}) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -512,25 +576,32 @@ const updateManPowerAvailabilityData = args => {
            responsibility = ?,
            plan_closure_date = ?,
            image_path = ?
-         WHERE parameter = ?;`,
+         WHERE type = ?;`,
         [
-          args.available,
-          args.trained,
-          args.available_percentage,
-          args.trained_percentage,
-          args.gap_area,
-          args.counter_measure_plan,
-          args.responsibility,
-          args.plan_closure_date,
-          args.image_path,
-          args.parameter,
+          available,
+          trained,
+          available_percentage,
+          trained_percentage,
+          gap_area,
+          counter_measure_plan,
+          responsibility,
+          plan_closure_date,
+          image_path,
+          type,
         ],
-        (_, result) => resolve(result),
-        (_, error) => reject(error),
+        (_, result) => {
+          console.log('Update Success:', result);
+          resolve(result);
+        },
+        (_, error) => {
+          console.error('Update Error:', error);
+          reject(error);
+        },
       );
     });
   });
 };
+
 const createCompanyTable = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -666,80 +737,3 @@ export {
   clearAllTables,
   dropAllTables,
 };
-// const createManPowerAvailability = () => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       `CREATE TABLE IF NOT EXISTS ManPowerAvailability (
-//         type TEXT,
-//         value TEXT,
-//         available REAL,
-//         trained REAL,
-//         available_percentage REAL,
-//         trained_percentage REAL,
-//         gap_area TEXT,
-//         counter_measure_plan TEXT,
-//         responsibility TEXT,
-//         plan_closure_date TEXT,
-//         image_path TEXT
-//       );`,
-//       [],
-//       () => console.log('Table Created: ManPowerAvailability'),
-//       error => console.error('Table Creation Error:', error),
-//     );
-//   });
-// };
-
-// const insertDataManPowerAvailability = (form, item) => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       `INSERT INTO ManPowerAvailability (
-//         type,
-//         value,
-//         available,
-//         trained,
-//         available_percentage,
-//         trained_percentage,
-//         gap_area,
-//         counter_measure_plan,
-//         responsibility,
-//         plan_closure_date,
-//         image_path
-//       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-//       [
-//         item?.type || '',
-//         item?.value || '',
-//         form.available,
-//         form.trained,
-//         form.availablePercentage,
-//         form.trainedPercentage,
-//         form.gap_area,
-//         form.counter_measure_plan,
-//         form.responsibility,
-//         form.plan_closure_date,
-//         form.image_path,
-//       ],
-//       (_, result) => console.log('Data Inserted:', result),
-//       error => console.error('Insert Error:', error),
-//     );
-//   });
-// };
-// const fetchDataManPowerAvailability = callback => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       'SELECT * FROM ManPowerAvailability;',
-//       [],
-//       (_, {rows}) => callback(rows.raw()),
-//       error => console.error('Fetch Error:', error),
-//     );
-//   });
-// };
-// const clearTableManPowerAvailability = () => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       'DELETE FROM ManPowerAvailability;',
-//       [],
-//       () => console.log('🧹 Table Cleared'),
-//       error => console.error('Clear Table Error:', error),
-//     );
-//   });
-// };
