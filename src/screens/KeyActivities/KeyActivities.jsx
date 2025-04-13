@@ -112,17 +112,19 @@ const KeyActivities = () => {
                   ? deviceHeight - 110
                   : deviceHeight - 80,
               alignItems: 'center',
-              backgroundColor: 'rgba(0,0,0,0.4)',
+           //   backgroundColor: 'rgba(0,0,0,0.4)',
             },
           ]}>
           <View
             style={{
               height: 80,
               width: 80,
-              backgroundColor: '#fff',
+              backgroundColor: "#fff",
               borderRadius: 12,
               justifyContent: 'center',
               position: 'absolute',
+              borderWidth:2,
+              borderColor:"#D4D4D4",
               top:
                 DeviceInfo.hasNotch() == true
                   ? (deviceHeight - 220 - 80) / 2

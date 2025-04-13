@@ -10,6 +10,7 @@ import {
   Image,
   SafeAreaView,
   Platform,
+  Modal,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {Snackbar} from 'react-native-paper';
@@ -30,8 +31,15 @@ import {
 import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 import {COLORS} from '../../utils/colors';
-import {getDealerCode, getDealerName, getEmail, saveDealerCode, saveDealerName} from '../../utils/shared';
+import {
+  getDealerCode,
+  getDealerName,
+  getEmail,
+  saveDealerCode,
+  saveDealerName,
+} from '../../utils/shared';
 import Topbar from '../../components/CommonComponents/TopBar';
+import DeviceInfo from 'react-native-device-info';
 
 const {width} = Dimensions.get('window');
 
@@ -94,6 +102,7 @@ const SelectDealerCode = () => {
     setSelectedYear(year);
     fetchDealerList(selectedMonth, year, userEmail);
   };
+  const deviceHeight = Dimensions.get('window').height;
 
   useEffect(() => {
     const init = async () => {
@@ -111,15 +120,15 @@ const SelectDealerCode = () => {
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
       let dealerCode = await getDealerCode();
-      let dealerName = await getDealerName()
+      let dealerName = await getDealerName();
       console.log('get dealer code >>>>> ', dealerCode);
       if (dealerCode) {
         console.log('inside if condtion');
         setPreviousDealerCode(dealerCode);
-        setPreviousDealerName(dealerName)
+        setPreviousDealerName(dealerName);
       } else {
         setPreviousDealerCode('');
-        setPreviousDealerName('')
+        setPreviousDealerName('');
       }
 
       fetchDealerList(monthValue + 1, yearValue, email);
@@ -158,7 +167,13 @@ const SelectDealerCode = () => {
     }
   };
 
-  const fetchManPowerData = async (plan, month, year, dealerCode,dealerName) => {
+  const fetchManPowerData = async (
+    plan,
+    month,
+    year,
+    dealerCode,
+    dealerName,
+  ) => {
     try {
       clearTableManPowerAvailability();
       const response = await axios.post(
@@ -173,7 +188,7 @@ const SelectDealerCode = () => {
           insertDataManPowerAvailability(item.Type, item.Values),
         );
         saveDealerCode(dealerCode);
-        saveDealerName(dealerName)
+        saveDealerName(dealerName);
         navigation.navigate(STACKS.MAIN_STACK, {
           screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
           params: {dealerCode, month, year},
@@ -185,7 +200,13 @@ const SelectDealerCode = () => {
     }
   };
 
-  const processKpiData = async (kpiData, month, year, dealerCode,dealerName) => {
+  const processKpiData = async (
+    kpiData,
+    month,
+    year,
+    dealerCode,
+    dealerName,
+  ) => {
     let Monthplan = '0';
     for (const item of kpiData) {
       console.log('Item >>>>>>>>', item);
@@ -208,10 +229,10 @@ const SelectDealerCode = () => {
       );
     }
     console.log('Month Plan >>>>', Monthplan);
-    fetchManPowerData(Monthplan, month, year, dealerCode,dealerName);
+    fetchManPowerData(Monthplan, month, year, dealerCode, dealerName);
   };
 
-  const fetchKpiData = async (dealerCode, month, year,dealerName) => {
+  const fetchKpiData = async (dealerCode, month, year, dealerName) => {
     const isConnected = await checkInternet();
     if (!isConnected) {
       showSnackbar('No Internet Connection');
@@ -236,7 +257,7 @@ const SelectDealerCode = () => {
       const kpiData = response.data?.Data || [];
       console.log('kpiData >>>>>>>', kpiData);
       if (kpiData.length > 0) {
-        processKpiData(kpiData, month, year, dealerCode,dealerName);
+        processKpiData(kpiData, month, year, dealerCode, dealerName);
         showSnackbar('No KPI data found');
       }
     } catch (error) {
@@ -247,17 +268,17 @@ const SelectDealerCode = () => {
     }
   };
 
-  const handleDealerSelect = (dealerCode,dealerName) => {
+  const handleDealerSelect = (dealerCode, dealerName) => {
     console.log('previousDealerCode >>>>>', previousDealerCode);
     if (previousDealerCode == '') {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
     } else if (previousDealerCode !== dealerCode) {
       setSelectedDealerCode(dealerCode);
-      setSelectedDealerName(dealerName)
+      setSelectedDealerName(dealerName);
 
       setPopupVisible(true);
     } else {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear,dealerName);
+      fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
     }
 
     // if (previousDealerCode && previousDealerCode !== dealerCode) {
@@ -274,7 +295,12 @@ const SelectDealerCode = () => {
     // all tables clear
     await clearAllTables();
     // setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
-    await fetchKpiData(selectedDealerCode, selectedMonth, selectedYear,selectedDealerName);
+    await fetchKpiData(
+      selectedDealerCode,
+      selectedMonth,
+      selectedYear,
+      selectedDealerName,
+    );
   };
 
   const formatDate = dateStr => {
@@ -285,12 +311,54 @@ const SelectDealerCode = () => {
 
   return (
     <View style={styles.container}>
+      <Modal
+        visible={loading}
+        animationType={'none'}
+        transparent={true}
+        onRequestClose={() => {}}>
+        <View
+          style={[
+            {
+              top: DeviceInfo.hasNotch() == true ? 110 : 80,
+              height:
+                DeviceInfo.hasNotch() == true
+                  ? deviceHeight - 110
+                  : deviceHeight - 80,
+              alignItems: 'center',
+              //   backgroundColor: 'rgba(0,0,0,0.4)',
+            },
+          ]}>
+          <View
+            style={{
+              height: 80,
+              width: 80,
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              justifyContent: 'center',
+              position: 'absolute',
+              borderWidth: 2,
+              borderColor: '#D4D4D4',
+              top:
+                DeviceInfo.hasNotch() == true
+                  ? (deviceHeight - 220 - 80) / 2
+                  : (deviceHeight - 160 - 80) / 2,
+            }}>
+            <Image
+              source={require('../../assets/icons/loader.gif')}
+              resizeMode="contain"
+              style={{height: 50, width: 50, alignSelf: 'center'}}
+            />
+          </View>
+        </View>
+      </Modal>
+
       <Topbar
         showBack={true}
         showtitle={true}
         title={'Select Dealer Code'}
         navState={navigation}
       />
+
       <View
         style={{
           paddingTop: 10,
@@ -346,64 +414,63 @@ const SelectDealerCode = () => {
         </ScrollView>
       </View>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#007bff" />
-      ) : (
-        <SafeAreaView style={{flex: 1}}>
-          <FlatList
-            data={dealerData}
-            keyExtractor={item => item.Id.toString()}
-            contentContainerStyle={{
-              flexGrow: 1,
-              paddingBottom: Platform.OS === 'ios' ? 40 : 60,
-            }}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => handleDealerSelect(item.DealerCode,item.DealerName)}>
-                <View>
-                  <Text style={styles.title}>{item.DealerName}</Text>
-                  <Text style={styles.status}>{item.DealerCode}</Text>
-                </View>
-                <View>
-                  <Text style={styles.dealerDate}>
-                    {formatDate(item.PlanDate)}
-                  </Text>
-                </View>
-                <ConfirmationPopup
-                  visible={isPopupVisible}
-                  onConfirm={handleProcess}
-                  onCancel={() => setPopupVisible(false)}
-                  message={`Are you sure you want to proceed with Dealer Code: ${selectedDealerCode} (${selectedDealerName})? You have previously filled data for Dealer Code: ${previousDealerCode} (${previousDealerName}). Clicking 'Yes' will clear all previously entered data.`}
-                />
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={() => (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    color: '#555',
-                    padding: 20,
-                  }}>
-                  No Data Found
-                </Text>
-                <Image
-                  source={require('../../assets/images/no_data.png')}
-                  style={{height: 100, width: 100}}
-                  resizeMode="center"
-                />
+      <View style={{flex: 1}}>
+        <FlatList
+          data={dealerData}
+          keyExtractor={item => item.Id.toString()}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: Platform.OS === 'ios' ? 40 : 60,
+          }}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() =>
+                handleDealerSelect(item.DealerCode, item.DealerName)
+              }>
+              <View>
+                <Text style={styles.title}>{item.DealerName}</Text>
+                <Text style={styles.status}>{item.DealerCode}</Text>
               </View>
-            )}
-          />
-        </SafeAreaView>
-      )}
+              <View>
+                <Text style={styles.dealerDate}>
+                  {formatDate(item.PlanDate)}
+                </Text>
+              </View>
+              <ConfirmationPopup
+                visible={isPopupVisible}
+                onConfirm={handleProcess}
+                onCancel={() => setPopupVisible(false)}
+                message={`Are you sure you want to proceed with Dealer Code: ${selectedDealerCode} (${selectedDealerName})? You have previously filled data for Dealer Code: ${previousDealerCode} (${previousDealerName}). Clicking 'Yes' will clear all previously entered data.`}
+              />
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#555',
+                  padding: 20,
+                }}>
+                No Data Found
+              </Text>
+              <Image
+                source={require('../../assets/images/no_data.png')}
+                style={{height: 100, width: 100}}
+                resizeMode="center"
+              />
+            </View>
+          )}
+        />
+      </View>
+
       <Snackbar
         visible={snackbar.visible}
         onDismiss={() => setSnackbar({...snackbar, visible: false})}

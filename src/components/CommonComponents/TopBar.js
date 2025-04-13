@@ -19,6 +19,9 @@ import DeviceInfo from "react-native-device-info";
 import { COLORS } from "../../utils/colors";
 import { dropAllTables } from "../../database/db";
 import { removeToken } from "../../utils/shared";
+import { SCREENS } from "../../utils/screens";
+import Toast from 'react-native-toast-message';
+import { STACKS } from "../../utils/stacks";
 
 const Topbar = (props) => {
 
@@ -41,7 +44,9 @@ const Topbar = (props) => {
         text2: 'You have been logged out successfully!',
       });
 
-      // Slight delay for better UX before navigating
+    //  props.navState.navigate(SCREENS.MAIN_STACK.LOGIN)
+
+   //   Slight delay for better UX before navigating
       setTimeout(() => {
         props.navState.reset({
           index: 0,
