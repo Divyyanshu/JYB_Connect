@@ -3031,6 +3031,11 @@ data-view-byte-offset@^1.0.1:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
+date-fns@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-4.1.0.tgz"
+  integrity sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==
+
 dayjs@^1.8.15:
   version "1.11.13"
   resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.13.tgz"
@@ -6089,7 +6094,14 @@ react-native-orientation-locker@^1.7.0:
   resolved "https://registry.npmjs.org/react-native-orientation-locker/-/react-native-orientation-locker-1.7.0.tgz"
   integrity sha512-2PhG4UyRJktb3KCTISStuu8/q+Q3q3oPesGg9DhdY0b6Cu/ZzxkCvkbJte2TPWRYkS0JpClimvqVaonulGvDrA==
 
-react-native-paper@^5.13.1:
+react-native-paper-dates@^0.22.40:
+  version "0.22.40"
+  resolved "https://registry.npmjs.org/react-native-paper-dates/-/react-native-paper-dates-0.22.40.tgz"
+  integrity sha512-G9uPqQFvx6ghMKUcSDaIAb5BKgkJXUKajGwv1v4+j0ekDizLJ+SSJLGHhakotQg9H6hkFOWVmDMOeqBgwVlDXg==
+  dependencies:
+    color "^4.2.3"
+
+react-native-paper@*, react-native-paper@^5.13.1:
   version "5.13.1"
   resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.13.1.tgz"
   integrity sha512-8frKVKJ5JBd8WL1G3tpcYzOgK40kxkD/U+yLHGKNeLnD6v1Qc9W6DxWTHWN7lsX/DPYnhgvw1aKkYaPTmDj5pg==

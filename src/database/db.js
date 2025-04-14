@@ -708,6 +708,102 @@ const clearAllTables = async () => {
   });
 };
 
+//complaint analyis
+
+const createTableComplaintAnalysis = async () => {
+  const db = await SQLite.openDatabase({
+    name: 'ComplaintAnalysisDB',
+    location: 'default',
+  });
+
+  db.transaction(tx => {
+    tx.executeSql(
+      `CREATE TABLE IF NOT EXISTS ComplaintAnalysis (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        received INTEGER,
+        closed INTEGER,
+        within72 INTEGER,
+        occurrence REAL,
+        gapArea TEXT,
+        counterMeasure TEXT,
+        responsibility TEXT,
+        planClosureDate TEXT
+      )`,
+    );
+  });
+};
+const insertComplaintAnalysis = async () => {
+  const {
+    received,
+    closed,
+    within72,
+    occurrence,
+    gapArea,
+    counterMeasure,
+    responsibility,
+    planClosureDate,
+  } = formData;
+
+  const db = await SQLite.openDatabase({
+    name: 'ComplaintAnalysisDB',
+    location: 'default',
+  });
+
+  db.transaction(tx => {
+    tx.executeSql(
+      'INSERT INTO ComplaintAnalysis (received, closed, within72, occurrence, gapArea, counterMeasure, responsibility, planClosureDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        received,
+        closed,
+        within72,
+        occurrence,
+        gapArea,
+        counterMeasure,
+        responsibility,
+        planClosureDate,
+      ],
+      (tx, results) => {
+        console.log('Data inserted successfully', results);
+      },
+      error => {
+        console.log('Error inserting data', error);
+      },
+    );
+  });
+};
+const fetchDataComplaintAnalysis = async () => {
+  const db = await SQLite.openDatabase({
+    name: 'ComplaintAnalysisDB',
+    location: 'default',
+  });
+
+  db.transaction(tx => {
+    tx.executeSql(
+      'SELECT * FROM ComplaintAnalysis ORDER BY id DESC LIMIT 1', // Fetch the latest entry
+      [],
+      (tx, results) => {
+        if (results.rows.length > 0) {
+          const data = results.rows.item(0);
+          setFormData({
+            ...formData,
+            received: data.received.toString(),
+            closed: data.closed.toString(),
+            within72: data.within72.toString(),
+            occurrence: data.occurrence.toString(),
+            gapArea: data.gapArea,
+            counterMeasure: data.counterMeasure,
+            responsibility: data.responsibility,
+            planClosureDate: data.planClosureDate,
+          });
+        }
+      },
+      error => {
+        console.log('Error fetching data', error);
+      },
+    );
+  });
+};
+
 export {
   db,
   createTable,
@@ -733,4 +829,7 @@ export {
   createDealerTable,
   clearAllTables,
   dropAllTables,
+  createTableComplaintAnalysis,
+  insertComplaintAnalysis,
+  fetchDataComplaintAnalysis,
 };

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
 import {TextInput, Button, Text} from 'react-native-paper';
 import SQLite from 'react-native-sqlite-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {styles} from './style';
 import {COLORS} from '../../utils/colors';
@@ -11,7 +12,7 @@ const db = SQLite.openDatabase({name: 'repeatCard.db'});
 const RepeatJobCardScreen = ({navigation}) => {
   const [repeatCard, setRepeatCard] = useState('');
   const [repeatPercent, setRepeatPercent] = useState('');
-  const [mtdServiceVisit, setMtdServiceVisit] = useState(5);
+  const [mtdServiceVisit, setMtdServiceVisit] = useState(0);
   const [data, setData] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
@@ -25,34 +26,33 @@ const RepeatJobCardScreen = ({navigation}) => {
         );`,
       );
     });
-    fetchMTDServiceVisit();
+
+    getMTDFromAsyncStorage();
     fetchData();
   }, []);
 
   useEffect(() => {
     if (repeatCard && mtdServiceVisit) {
       const percent = (
-        (parseInt(repeatCard) / parseInt(mtdServiceVisit)) *
+        (parseInt(repeatCard) / parseFloat(mtdServiceVisit)) *
         100
       ).toFixed(2);
       setRepeatPercent(percent.toString());
     }
   }, [repeatCard, mtdServiceVisit]);
 
-  const fetchMTDServiceVisit = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        `SELECT * FROM KPI_PERFORMANCE WHERE parameter = ?`,
-        ['Service Visit'],
-        (txObj, resultSet) => {
-          if (resultSet.rows.length > 0) {
-            const serviceVisit = resultSet.rows.item(0);
-            setMtdServiceVisit(serviceVisit.mtd_actual);
-          }
-        },
-        error => console.error('Fetch MTD error:', error),
-      );
-    });
+  const getMTDFromAsyncStorage = async () => {
+    try {
+      const storedMTD = await AsyncStorage.getItem('MTD_SERVICE_VISIT');
+      if (storedMTD) {
+        setMtdServiceVisit(parseFloat(storedMTD));
+        console.log('MTD_SERVICE_VISIT from AsyncStorage:', storedMTD);
+      } else {
+        console.warn('MTD_SERVICE_VISIT not found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error reading MTD_SERVICE_VISIT:', error);
+    }
   };
 
   const fetchData = () => {
@@ -105,7 +105,6 @@ const RepeatJobCardScreen = ({navigation}) => {
               borderColor: COLORS.DISABLE,
               marginBottom: 20,
             }}>
-            {/* Header Row */}
             <View
               style={{
                 flexDirection: 'row',
@@ -166,6 +165,7 @@ const RepeatJobCardScreen = ({navigation}) => {
             />
           </View>
         )}
+
         <TextInput
           label="Nos. of Repeat Job Card"
           value={repeatCard}

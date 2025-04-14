@@ -1,35 +1,47 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  TextInput,
   Alert,
-  TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  View,
 } from 'react-native';
-import {CustomButton} from '../../uiKit/customButton';
-import {styles} from './style';
-import ServiceAttributeModel from '../../components/ServiceAttributeModel/ServiceAttributeModel';
+import {TextInput, Button} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../../components/CommonComponents/TopBar';
+import {COLORS} from '../../utils/colors';
+import {styles} from './style';
+import {CustomButton} from '../../uiKit/customButton';
 
 const CustomerComplaintAnalysis = ({navigation}) => {
   const [formData, setFormData] = useState({
     received: '',
     closed: '',
     within72: '',
-    occurrences: '',
+    occurrence: '',
+    gapArea: '',
+    counterMeasure: '',
+    responsibility: '',
+    planClosureDate: '',
   });
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [mtdServiceVisit, setMtdServiceVisit] = useState(null);
+  useEffect(() => {
+    const fetchServiceVisit = async () => {
+      try {
+        const value = await AsyncStorage.getItem('MTD_SERVICE_VISIT');
+        if (value) setMtdServiceVisit(Number(value));
+      } catch (error) {
+        console.log('Error fetching service visit:', error);
+      }
+    };
+    fetchServiceVisit();
+  }, []);
 
   const handleChange = (key, value) => {
-    if (!/^\d*$/.test(value)) return;
-
+    const numericFields = ['received', 'closed', 'within72'];
+    if (numericFields.includes(key) && !/^\d*$/.test(value)) return;
     if (
       key !== 'received' &&
       formData.received !== '' &&
@@ -37,19 +49,33 @@ const CustomerComplaintAnalysis = ({navigation}) => {
     ) {
       Alert.alert(
         'Invalid Input',
-        'Value cannot be greater than Complaint Received',
+        'Value cannot be greater than Complaints Received',
       );
       return;
     }
 
-    setFormData(prevState => ({
-      ...prevState,
+    const updatedForm = {
+      ...formData,
       [key]: value,
-    }));
+    };
+    if (
+      key === 'within72' &&
+      formData.received &&
+      mtdServiceVisit &&
+      Number(formData.received) > 0
+    ) {
+      const occurrence = (
+        (Number(formData.received) / mtdServiceVisit) *
+        100
+      ).toFixed(2);
+      updatedForm.occurrence = occurrence;
+    }
+
+    setFormData(updatedForm);
   };
 
   const handleSubmit = () => {
-    Alert.alert('OK');
+    Alert.alert('Submitted', JSON.stringify(formData, null, 2));
   };
 
   return (
@@ -63,56 +89,95 @@ const CustomerComplaintAnalysis = ({navigation}) => {
           title={'Complaints Analysis'}
           navState={navigation}
         />
-        <ScrollView contentContainerStyle={{flex: 1}}>
-          <View style={styles.container}>
+        <ScrollView contentContainerStyle={{padding: 20, paddingBottom: 60}}>
+          <TextInput
+            label="No. of Complaints Received"
+            value={formData.received}
+            onChangeText={text => handleChange('received', text)}
+            mode="outlined"
+            keyboardType="numeric"
+            outlineColor="#999"
+            activeOutlineColor={COLORS.PRIMARY}
+            style={{marginBottom: 12, backgroundColor: 'white'}}
+          />
+          {formData.received !== '' && (
             <TextInput
-              style={styles.input}
-              placeholder="Number of Complaint Received"
-              keyboardType="numeric"
-              value={formData.received}
-              onChangeText={text => handleChange('received', text)}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Number of Complaint Closed"
-              keyboardType="numeric"
+              label="No. of Complaints Closed"
               value={formData.closed}
               onChangeText={text => handleChange('closed', text)}
-            />
-
-            <View style={styles.pendingContainer}>
-              <Text style={styles.pendingHeading}>Pending Complaints</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Complaint Received within 72hrs"
-                keyboardType="numeric"
-                value={formData.within72}
-                onChangeText={text => handleChange('within72', text)}
-              />
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Complaint Occurrences"
+              mode="outlined"
               keyboardType="numeric"
-              value={formData.occurrences}
-              onChangeText={text => handleChange('occurrences', text)}
+              outlineColor="#999"
+              activeOutlineColor={COLORS.PRIMARY}
+              style={{marginBottom: 12, backgroundColor: 'white'}}
             />
-            <TouchableOpacity
-              style={styles.actionPlanContainer}
-              onPress={() => setModalVisible(true)}>
-              <Text style={styles.action_text}>Action Plan</Text>
-            </TouchableOpacity>
-            <ServiceAttributeModel
-              visible={modalVisible}
-              item={selectedItem}
-              onClose={() => setModalVisible(false)}
-              onSubmit={() => setModalVisible(false)}
+          )}
+          {formData.closed !== '' && (
+            <TextInput
+              label="No. Closed in 72 Hours"
+              value={formData.within72}
+              onChangeText={text => handleChange('within72', text)}
+              mode="outlined"
+              keyboardType="numeric"
+              outlineColor="#999"
+              activeOutlineColor={COLORS.PRIMARY}
+              style={{marginBottom: 12, backgroundColor: 'white'}}
             />
+          )}
+          {formData.within72 !== '' && formData.occurrence && (
+            <TextInput
+              label="Complaint Occurrence %"
+              value={formData.occurrence}
+              mode="outlined"
+              disabled
+              style={{marginBottom: 12, backgroundColor: '#f1f1f1'}}
+            />
+          )}
+          {formData.within72 !== '' &&
+            Number(formData.received) > Number(formData.closed) && (
+              <>
+                <TextInput
+                  label="Gap Area"
+                  value={formData.gapArea}
+                  onChangeText={text => handleChange('gapArea', text)}
+                  mode="outlined"
+                  outlineColor="#999"
+                  activeOutlineColor={COLORS.PRIMARY}
+                  style={{marginBottom: 12, backgroundColor: 'white'}}
+                />
+                <TextInput
+                  label="Counter Measure Plan"
+                  value={formData.counterMeasure}
+                  onChangeText={text => handleChange('counterMeasure', text)}
+                  mode="outlined"
+                  outlineColor="#999"
+                  activeOutlineColor={COLORS.PRIMARY}
+                  style={{marginBottom: 12, backgroundColor: 'white'}}
+                />
+                <TextInput
+                  label="Responsibility"
+                  value={formData.responsibility}
+                  onChangeText={text => handleChange('responsibility', text)}
+                  mode="outlined"
+                  outlineColor="#999"
+                  activeOutlineColor={COLORS.PRIMARY}
+                  style={{marginBottom: 12, backgroundColor: 'white'}}
+                />
+                <TextInput
+                  label="Plan Closure Date"
+                  value={formData.planClosureDate}
+                  onChangeText={text => handleChange('planClosureDate', text)}
+                  mode="outlined"
+                  placeholder="YYYY-MM-DD"
+                  style={{marginBottom: 24, backgroundColor: 'white'}}
+                />
+              </>
+            )}
+          {formData.within72 !== '' && (
             <View style={styles.ButtonContainer}>
-              <CustomButton title={'Next'} onPress={handleSubmit} />
+              <CustomButton title={'Submit'} onPress={handleSubmit} />
             </View>
-          </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

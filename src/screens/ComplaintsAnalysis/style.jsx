@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   ButtonContainer: {
-    margin: 20,
+    textAlign: 'center',
   },
   modalContainer: {
     flex: 1,
