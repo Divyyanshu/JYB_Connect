@@ -42,7 +42,7 @@ const AccompaniedByDealer = ({navigation}) => {
 
     db.transaction(tx => {
       tx.executeSql(
-        'INSERT INTO AccompaniedBy (post, name, mobile) VALUES (?, ?, ?);',
+        'INSERT INTO AccompaniedByDealer (post, name, mobile) VALUES (?, ?, ?);',
         [post, name, mobile],
         () => {
           fetchDealerData();
@@ -54,7 +54,7 @@ const AccompaniedByDealer = ({navigation}) => {
 
   const fetchDealerData = () => {
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM AccompaniedBy;', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM AccompaniedByDealer;', [], (tx, results) => {
         const rows = results.rows;
         let temp = [];
 
@@ -84,6 +84,15 @@ const AccompaniedByDealer = ({navigation}) => {
       <View style={styles.container}>
         {dealerList.length === 0 ? (
           <>
+            <Text
+              variant="titleLarge"
+              style={{
+                marginBottom: 20,
+                textAlign: 'center',
+                fontWeight: 'bold',
+              }}>
+              Dealer
+            </Text>
             <Dropdown
               style={styles.dropdown}
               data={postOptions}
@@ -149,10 +158,6 @@ const AccompaniedByDealer = ({navigation}) => {
                   </View>
                 )}
               />
-
-              <TouchableOpacity style={styles.fab}>
-                <Icon name="plus" color="#fff" size={24} />
-              </TouchableOpacity>
             </View>
 
             <FAB

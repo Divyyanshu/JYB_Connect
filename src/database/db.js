@@ -609,7 +609,7 @@ const createCompanyTable = () => {
 const createDealerTable = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+      'CREATE TABLE IF NOT EXISTS AccompaniedByDealer (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
     );
   });
 };
@@ -650,11 +650,11 @@ const dropAllTables = async () => {
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS AccompaniedBy',
+      'DROP TABLE IF EXISTS AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop AccompaniedBy', error);
+        console.error('Failed to drop AccompaniedByDealer', error);
       },
     );
   });
@@ -698,11 +698,11 @@ const clearAllTables = async () => {
     );
 
     tx.executeSql(
-      'DELETE FROM AccompaniedBy',
+      'DELETE FROM AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear AccompaniedBy', error);
+        console.error('Failed to clear AccompaniedByDealer', error);
       },
     );
   });

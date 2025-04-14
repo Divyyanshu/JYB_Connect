@@ -151,10 +151,6 @@ const AccompaniedByCompany = ({navigation}) => {
                   </View>
                 )}
               />
-
-              <TouchableOpacity style={styles.fab}>
-                <Icon name="plus" color="#fff" size={24} />
-              </TouchableOpacity>
             </View>
 
             <FAB
