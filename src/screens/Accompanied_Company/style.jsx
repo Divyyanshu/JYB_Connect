@@ -5,6 +5,13 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  containerTable: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 5,
   },
   headerRow: {
     flexDirection: 'row',
@@ -73,9 +80,9 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
   modal: {
-    backgroundColor: 'white',
-    padding: 30,
-    margin: 40,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 0,
+    margin: 20,
     borderRadius: 10,
   },
   input: {

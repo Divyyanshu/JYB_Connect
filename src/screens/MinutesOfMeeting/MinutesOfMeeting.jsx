@@ -9,50 +9,10 @@ import {
 import Orientation from 'react-native-orientation-locker';
 import {styles} from './style';
 import Topbar from '../../components/CommonComponents/TopBar';
+import {MOM_DATA} from '../../utils/constants';
 
 const MinutesOfMeeting = ({navigation}) => {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      parameters: 'Parameter 1',
-      clPlRemarks: 'Remark 1',
-      countermeasurePlan: 'Plan 1',
-      targetDate: '2025-04-20',
-      responsibility: 'Person A',
-    },
-    {
-      id: 2,
-      parameters: 'Parameter 2',
-      clPlRemarks: 'Remark 2',
-      countermeasurePlan: 'Plan 2',
-      targetDate: '2025-04-21',
-      responsibility: 'Person B',
-    },
-    {
-      id: 3,
-      parameters: 'Parameter 3',
-      clPlRemarks: 'Remark 3',
-      countermeasurePlan: 'Plan 3',
-      targetDate: '2025-04-22',
-      responsibility: 'Person C',
-    },
-    {
-      id: 4,
-      parameters: 'Parameter 4',
-      clPlRemarks: 'Remark 4',
-      countermeasurePlan: 'Plan 4',
-      targetDate: '2025-04-23',
-      responsibility: 'Person D',
-    },
-    {
-      id: 5,
-      parameters: 'Parameter 5',
-      clPlRemarks: 'Remark 5',
-      countermeasurePlan: 'Plan 5',
-      targetDate: '2025-04-24',
-      responsibility: 'Person E',
-    },
-  ]);
+  const [dataMom, setDataMom] = useState(MOM_DATA);
 
   useEffect(() => {
     Orientation.lockToLandscape();
@@ -87,7 +47,7 @@ const MinutesOfMeeting = ({navigation}) => {
           {/* Table Body */}
           <View style={{height: '75%'}}>
             <FlatList
-              data={data}
+              data={dataMom}
               keyExtractor={item => item.id.toString()}
               renderItem={({item}) => (
                 <View

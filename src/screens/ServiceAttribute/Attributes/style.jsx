@@ -5,8 +5,6 @@ import {COLORS} from '../../../utils/colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-  //  paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
- //   paddingVertical: 10,
     backgroundColor: COLORS.WHITE,
   },
   ButtonContainer: {

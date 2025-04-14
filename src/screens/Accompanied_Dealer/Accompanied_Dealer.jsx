@@ -84,15 +84,6 @@ const AccompaniedByDealer = ({navigation}) => {
       <View style={styles.container}>
         {dealerList.length === 0 ? (
           <>
-            <Text
-              variant="titleLarge"
-              style={{
-                marginBottom: 20,
-                textAlign: 'center',
-                fontWeight: 'bold',
-              }}>
-              Dealer
-            </Text>
             <Dropdown
               style={styles.dropdown}
               data={postOptions}
@@ -136,20 +127,17 @@ const AccompaniedByDealer = ({navigation}) => {
           </>
         ) : (
           <>
-            <View style={styles.container}>
+            <View style={styles.containerTable}>
               <FlatList
                 data={dealerList}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item}) => (
                   <View style={styles.card}>
-                    {/* Individual Card Header */}
                     <View style={styles.cardHeader}>
                       <Text style={styles.cardHeaderText}>Post</Text>
                       <Text style={styles.cardHeaderText}>Name</Text>
                       <Text style={styles.cardHeaderText}>Mobile</Text>
                     </View>
-
-                    {/* Card Content */}
                     <View style={styles.row}>
                       <Text style={styles.cellText}>{item.post}</Text>
                       <Text style={styles.cellText}>{item.name}</Text>
@@ -168,72 +156,94 @@ const AccompaniedByDealer = ({navigation}) => {
             />
           </>
         )}
-
         <Portal>
           <Modal
             visible={modalVisible}
             onDismiss={resetDealerForm}
             contentContainerStyle={styles.modal}>
+            {/* Title */}
             <Text
               variant="titleLarge"
               style={{
-                marginBottom: 20,
+                paddingVertical: 14,
                 textAlign: 'center',
+                color: 'white',
                 fontWeight: 'bold',
+                fontSize: 20,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
               }}>
-              Accompanied By
+              Dealer Representative
             </Text>
 
-            <Dropdown
-              style={styles.dropdown}
-              data={postOptions}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Post"
-              value={post}
-              onChange={item => setPost(item.value)}
-            />
-            <TextInput
-              label="Name"
-              value={name}
-              onChangeText={setName}
-              mode="outlined"
-              style={styles.input}
-              outlineColor="#999"
-              activeOutlineColor={COLORS.PRIMARY}
-            />
-            <TextInput
-              label="Mobile"
-              value={mobile}
-              onChangeText={text => {
-                const cleaned = text.replace(/[^0-9]/g, '').slice(0, 10);
-                setMobile(cleaned);
-              }}
-              mode="outlined"
-              keyboardType="number-pad"
-              maxLength={10}
-              style={styles.input}
-              outlineColor="#999"
-              activeOutlineColor={COLORS.PRIMARY}
-            />
+            {/* Form Container */}
+            <View
+              style={{
+                padding: 20,
+                backgroundColor: 'white',
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+              }}>
+              <Dropdown
+                style={styles.dropdown}
+                data={postOptions}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Post"
+                value={post}
+                onChange={item => setPost(item.value)}
+              />
 
-            <Button
-              mode="contained"
-              onPress={insertDealerData}
-              style={{marginTop: 10}}
-              buttonColor={COLORS.PRIMARY}>
-              Submit
-            </Button>
+              <TextInput
+                label="Name"
+                value={name}
+                onChangeText={setName}
+                mode="outlined"
+                style={styles.input}
+                outlineColor="#999"
+                activeOutlineColor={COLORS.PRIMARY}
+              />
 
-            <Button
-              onPress={resetDealerForm}
-              textColor="red"
-              style={{marginTop: 5}}
-              icon={({size, color}) => (
-                <Icon name="close" size={24} color={color} />
-              )}>
-              Cancel
-            </Button>
+              <TextInput
+                label="Mobile"
+                value={mobile}
+                onChangeText={text => {
+                  const cleaned = text.replace(/[^0-9]/g, '').slice(0, 10);
+                  setMobile(cleaned);
+                }}
+                mode="outlined"
+                keyboardType="number-pad"
+                maxLength={10}
+                style={styles.input}
+                outlineColor="#999"
+                activeOutlineColor={COLORS.PRIMARY}
+              />
+
+              {/* Buttons */}
+              <View
+                style={{
+                  marginTop: 10,
+                  gap: 10,
+                  alignSelf: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <Button
+                  mode="contained"
+                  onPress={insertDealerData}
+                  style={{marginRight: 5}}
+                  buttonColor={COLORS.PRIMARY}>
+                  Submit
+                </Button>
+
+                <Button
+                  mode="outlined"
+                  onPress={resetDealerForm}
+                  style={{marginLeft: 5, borderColor: COLORS.PRIMARY}}
+                  textColor={COLORS.PRIMARY}>
+                  Cancel
+                </Button>
+              </View>
+            </View>
           </Modal>
         </Portal>
       </View>

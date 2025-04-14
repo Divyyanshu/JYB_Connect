@@ -62,6 +62,7 @@ export const styles = StyleSheet.create({
   image: {
     width: 110,
     height: 110,
+    alignSelf: 'center',
   },
   buttonContainer: {
     justifyContent: 'center',
