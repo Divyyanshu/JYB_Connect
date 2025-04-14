@@ -121,7 +121,7 @@ const Topbar = props => {
             numberOfLines={1}
             style={{
               color: '#fff',
-              fontSize: 22,
+              fontSize: 18,
               fontFamily: 'Helvetica',
               width: '95%',
               textAlign: 'center',

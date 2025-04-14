@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, TouchableOpacity} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {
   TextInput,
@@ -84,15 +84,6 @@ const AccompaniedByDealer = ({navigation}) => {
       <View style={styles.container}>
         {dealerList.length === 0 ? (
           <>
-            <Text
-              variant="titleLarge"
-              style={{
-                marginBottom: 20,
-                textAlign: 'center',
-                fontWeight: 'bold',
-              }}>
-              Dealer
-            </Text>
             <Dropdown
               style={styles.dropdown}
               data={postOptions}
@@ -136,19 +127,34 @@ const AccompaniedByDealer = ({navigation}) => {
           </>
         ) : (
           <>
-            <FlatList
-              data={dealerList}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({item}) => (
-                <Card style={styles.card}>
-                  <Card.Content>
-                    <Text variant="titleMedium">Post: {item.post}</Text>
-                    <Text>Name: {item.name}</Text>
-                    <Text>Mobile: {item.mobile}</Text>
-                  </Card.Content>
-                </Card>
-              )}
-            />
+            <View style={styles.container}>
+              <FlatList
+                data={dealerList}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => (
+                  <View style={styles.card}>
+                    {/* Individual Card Header */}
+                    <View style={styles.cardHeader}>
+                      <Text style={styles.cardHeaderText}>Post</Text>
+                      <Text style={styles.cardHeaderText}>Name</Text>
+                      <Text style={styles.cardHeaderText}>Mobile</Text>
+                    </View>
+
+                    {/* Card Content */}
+                    <View style={styles.row}>
+                      <Text style={styles.cellText}>{item.post}</Text>
+                      <Text style={styles.cellText}>{item.name}</Text>
+                      <Text style={styles.cellText}>{item.mobile}</Text>
+                    </View>
+                  </View>
+                )}
+              />
+
+              <TouchableOpacity style={styles.fab}>
+                <Icon name="plus" color="#fff" size={24} />
+              </TouchableOpacity>
+            </View>
+
             <FAB
               icon="plus"
               color="white"

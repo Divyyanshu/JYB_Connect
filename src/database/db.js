@@ -60,9 +60,6 @@ const insertRecord = (
 
   db.transaction(tx => {
     tx.executeSql(
-      // `INSERT INTO ServiceAttributes
-      // (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image)
-      // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       `INSERT OR REPLACE INTO ServiceAttributes 
 (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image) 
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -612,7 +609,7 @@ const createCompanyTable = () => {
 const createDealerTable = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS AccompaniedByDealer (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+      'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
     );
   });
 };
@@ -653,11 +650,11 @@ const dropAllTables = async () => {
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS AccompaniedByDealer',
+      'DROP TABLE IF EXISTS AccompaniedBy',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop AccompaniedByDealer', error);
+        console.error('Failed to drop AccompaniedBy', error);
       },
     );
   });
@@ -701,11 +698,11 @@ const clearAllTables = async () => {
     );
 
     tx.executeSql(
-      'DELETE FROM AccompaniedByDealer',
+      'DELETE FROM AccompaniedBy',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear AccompaniedByDealer', error);
+        console.error('Failed to clear AccompaniedBy', error);
       },
     );
   });

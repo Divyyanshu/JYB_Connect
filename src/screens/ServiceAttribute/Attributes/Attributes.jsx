@@ -86,7 +86,7 @@ const Attributes = ({navigation}) => {
     console.log('tempDict', tempDict);
   };
 
-  const toggleEyeSelection = (item,index) => {
+  const toggleEyeSelection = (item, index) => {
     setData(prevData => {
       const updatedData = [...prevData];
       updatedData[index] = {
@@ -95,8 +95,7 @@ const Attributes = ({navigation}) => {
       };
       return updatedData;
     });
-
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -104,7 +103,7 @@ const Attributes = ({navigation}) => {
       <Topbar
         showBack={true}
         showtitle={true}
-        title={'Attributes'}
+        title={route.params?.mainParam || 'Attributes'}
         navState={navigation}
       />
       <View style={{flex: 1, padding: 10}}>
@@ -138,8 +137,7 @@ const Attributes = ({navigation}) => {
                   backgroundColor: backgroundColor,
                 }}>
                 {/* Sub Parameters */}
-                <View
-                  style={{flexDirection: 'column'}}>
+                <View style={{flexDirection: 'column'}}>
                   <Text
                     numberOfLines={item.isExpanded == false ? 2 : 99}
                     style={[
@@ -150,19 +148,26 @@ const Attributes = ({navigation}) => {
                   </Text>
 
                   <TouchableOpacity
-                    style={{alignSelf:"flex-end",width:30,height:30,marginTop:0,justifyContent:"center",alignItems:"center"}}
-                    onPress={() => toggleEyeSelection(item,index)}>
+                    style={{
+                      alignSelf: 'flex-end',
+                      width: 30,
+                      height: 30,
+                      marginTop: 0,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={() => toggleEyeSelection(item, index)}>
                     {item.isExpanded == false && (
                       <Image
                         source={require('../../../assets/icons/show.png')}
-                        style={{height:24,width:24}}
+                        style={{height: 24, width: 24}}
                         resizeMode="contain"
                       />
                     )}
-                      {item.isExpanded == true && (
+                    {item.isExpanded == true && (
                       <Image
                         source={require('../../../assets/icons/hide.png')}
-                        style={{height:24,width:24}}
+                        style={{height: 24, width: 24}}
                         resizeMode="contain"
                       />
                     )}
