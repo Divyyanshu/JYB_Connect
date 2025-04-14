@@ -8,7 +8,7 @@ import {
   Keyboard,
   View,
 } from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {COLORS} from '../../utils/colors';

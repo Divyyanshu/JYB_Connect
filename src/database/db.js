@@ -199,6 +199,7 @@ const getDetailsValuesFromServiceAttributes = DefId => {
     });
   });
 };
+
 const getDvrScoreData = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -804,6 +805,94 @@ const fetchDataComplaintAnalysis = async () => {
   });
 };
 
+const getMOMFromServiceAttributes = () => {
+  console.log('Fetching details for >>>>:');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ServiceAttributes WHERE GapArea IS NOT NULL AND GapArea != ' ';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            let detailsList = [];
+            console.log('Raw SQL Results:', results);
+            for (let i = 0; i < results.rows.length; i++) {
+              detailsList.push(results.rows.item(i));
+            }
+            console.log('Formatted Data:', detailsList);
+            resolve(detailsList);
+          } else {
+            reject(new Error('No data found for the given DefId'));
+          }
+        },
+        (_, error) => {
+          console.error('Error fetching details by main parameter', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const getMOMFromKPI_Performance = () => {
+  console.log('Fetching details for >>>>:');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM KPI_PERFORMANCE WHERE TRIM(gap_area) != '';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            let detailsList = [];
+            console.log('Raw SQL Results:', results);
+            for (let i = 0; i < results.rows.length; i++) {
+              detailsList.push(results.rows.item(i));
+            }
+            console.log('Formatted Data:', detailsList);
+            resolve(detailsList);
+          } else {
+            reject(new Error('No data found for the given gap_area'));
+          }
+        },
+        (_, error) => {
+          console.error('Error fetching details by main parameter', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const getMOMFromManPowerAvailability = () => {
+  console.log('Fetching details for >>>>:');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ManPowerAvailability WHERE TRIM(gap_area) != '';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            let detailsList = [];
+            console.log('Raw SQL Results:', results);
+            for (let i = 0; i < results.rows.length; i++) {
+              detailsList.push(results.rows.item(i));
+            }
+            console.log('Formatted Data:', detailsList);
+            resolve(detailsList);
+          } else {
+            reject(new Error('No data found for the given gap_area'));
+          }
+        },
+        (_, error) => {
+          console.error('Error fetching details by main parameter', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
 export {
   db,
   createTable,
@@ -832,4 +921,7 @@ export {
   createTableComplaintAnalysis,
   insertComplaintAnalysis,
   fetchDataComplaintAnalysis,
+  getMOMFromServiceAttributes,
+  getMOMFromKPI_Performance,
+  getMOMFromManPowerAvailability,
 };

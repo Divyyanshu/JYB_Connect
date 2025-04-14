@@ -10,6 +10,12 @@ import Orientation from 'react-native-orientation-locker';
 import {styles} from './style';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {MOM_DATA} from '../../utils/constants';
+import {
+  getMOMFromKPI_Performance,
+  getMOMFromManPowerAvailability,
+  getMOMFromServiceAttributes,
+} from '../../database/db';
+import {configureReanimatedLogger} from 'react-native-reanimated';
 
 const MinutesOfMeeting = ({navigation}) => {
   const [dataMom, setDataMom] = useState(MOM_DATA);
@@ -20,6 +26,59 @@ const MinutesOfMeeting = ({navigation}) => {
       Orientation.lockToPortrait();
     };
   }, []);
+
+  useEffect(() => {
+    console.log('j.........');
+    fetchMOMdata();
+  }, []);
+  const fetchMOMdata = async () => {
+    let MomFromServiceAttribute = await getMOMFromServiceAttributes();
+    let tempData = [];
+    var SerialNumber = 1;
+    for (let index = 0; index < MomFromServiceAttribute.length; index++) {
+      const item = MomFromServiceAttribute[index];
+      let tempDict = {};
+      tempDict['id'] = SerialNumber;
+      tempDict['parameters'] = item.MainParameter + ' ' + item.SubParameters;
+      tempDict['clPlRemarks'] = item.GapArea;
+      tempDict['countermeasurePlan'] = item.ActionPlan;
+      tempDict['targetDate'] = item.PlanDate;
+      tempDict['responsibility'] = item.Responsibility;
+
+      tempData.push(tempDict);
+      SerialNumber = SerialNumber + 1;
+    }
+    let MOMFromKPI_Performance = await getMOMFromKPI_Performance();
+    for (let index = 0; index < MOMFromKPI_Performance.length; index++) {
+      const item = MOMFromKPI_Performance[index];
+      let tempDict = {};
+      tempDict['id'] = SerialNumber;
+      tempDict['parameters'] = item.parameter;
+      tempDict['clPlRemarks'] = item.gap_area;
+      tempDict['countermeasurePlan'] = item.counter_measure_plan;
+      tempDict['targetDate'] = item.plan_closure_date;
+      tempDict['responsibility'] = item.responsibility;
+
+      tempData.push(tempDict);
+      SerialNumber = SerialNumber + 1;
+    }
+    let MOMFromManPowerAvailability = await getMOMFromManPowerAvailability();
+    for (let index = 0; index < MOMFromManPowerAvailability.length; index++) {
+      const item = MOMFromManPowerAvailability[index];
+      let tempDict = {};
+      tempDict['id'] = SerialNumber;
+      tempDict['parameters'] = item.type;
+      tempDict['clPlRemarks'] = item.gap_area;
+      tempDict['countermeasurePlan'] = item.counter_measure_plan;
+      tempDict['targetDate'] = item.plan_closure_date;
+      tempDict['responsibility'] = item.responsibility;
+
+      tempData.push(tempDict);
+      SerialNumber = SerialNumber + 1;
+    }
+    console.log('tempData >>>', tempData);
+    setDataMom(tempData);
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
