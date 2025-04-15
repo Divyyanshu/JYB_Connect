@@ -15,7 +15,6 @@ import {
 } from '../../database/db';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../utils/screens';
-import LinearGradient from 'react-native-linear-gradient';
 import Topbar from '../../components/CommonComponents/TopBar';
 
 const ServiceAttributes = () => {
@@ -77,32 +76,31 @@ const ServiceAttributes = () => {
       <Topbar
         showBack={true}
         showtitle={true}
-        title={"Service Attributes"}
+        title={'Service Attributes'}
         navState={navigation}
       />
-      <View style={{padding:16}}>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => {
-          return (
-            <TouchableOpacity
-              style={styles.serviceAttributeCard}
-              onPress={() => handleNavigator(item.name)}>
-              <Text style={styles.cardText}>{item.name}</Text>
-              {item.status == true && (
-                <Image
-                  source={require('../../assets/icons/tick.png')}
-                  style={{width: 32, height: 32}}
-                />
-              )}
-            </TouchableOpacity>
-          );
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+      <View style={{padding: 16}}>
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => {
+            return (
+              <TouchableOpacity
+                style={styles.serviceAttributeCard}
+                onPress={() => handleNavigator(item.name)}>
+                <Text style={styles.cardText}>{item.name}</Text>
+                {item.status == true && (
+                  <Image
+                    source={require('../../assets/icons/tick.png')}
+                    style={{width: 32, height: 32}}
+                  />
+                )}
+              </TouchableOpacity>
+            );
+          }}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
-
     </View>
   );
 };

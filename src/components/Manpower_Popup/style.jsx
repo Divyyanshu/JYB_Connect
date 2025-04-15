@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from '../../utils/colors';
 
 export const styles = StyleSheet.create({
   modalContainer: {
@@ -14,21 +15,21 @@ export const styles = StyleSheet.create({
     zIndex: 10,
   },
   surface: {
-    padding: 16,
     borderRadius: 12,
     elevation: 4,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.PRIMARY,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 12,
+    color: 'white',
+    padding: 10,
     fontWeight: 'bold',
     fontSize: 18,
   },
   subtitle: {
     textAlign: 'center',
     marginBottom: 8,
-    color: '#666',
+    color: 'grey',
   },
   label: {
     fontSize: 14,
@@ -40,14 +41,13 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#999',
     borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
     backgroundColor: '#fff',
   },
   button: {
     marginTop: 10,
     alignSelf: 'center',
-    width: '90%',
   },
   submitBtn: {
     marginTop: 20,

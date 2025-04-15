@@ -36,7 +36,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
     try {
       setLoading(true);
       await fetchDataManPowerAvailability(dbData => {
-        console.log('Fetched data from  man power DB:', dbData);
+        console.log('Fetched data from man power DB:', dbData);
         setData(dbData);
       });
     } catch (error) {
@@ -69,7 +69,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
   const handleSubmit = async dataForm => {
     try {
       await updateManPowerAvailabilityData({
-        parameter: dataForm.parameter,
+        type: dataForm.parameter,
         available: dataForm.available,
         trained: dataForm.trained,
         available_percentage: dataForm.available_percentage,
@@ -103,21 +103,21 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Available</Text>
-            <Text style={styles.text}>{item.available || 'NA'}</Text>
+            <Text style={styles.text}>{item.available || ''}</Text>
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.header}>Trained</Text>
-            <Text style={styles.text}>{item.trained || 'NA'}</Text>
+            <Text style={styles.text}>{item.trained || ''}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Available %</Text>
-            <Text style={styles.text}>{item.available_percentage || 'NA'}</Text>
+            <Text style={styles.text}>{item.available_percentage || ''}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Trained %</Text>
-            <Text style={styles.text}>{item.trained_percentage || 'NA'}</Text>
+            <Text style={styles.text}>{item.trained_percentage || ''}</Text>
           </View>
         </View>
       </View>
@@ -141,7 +141,7 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
           <FlatList
             data={data}
             renderItem={renderItem}
-            keyExtractor={(item, index) => item.parameter || index.toString()}
+            keyExtractor={(item, index) => item.type || index.toString()}
             contentContainerStyle={{
               flexGrow: 1,
               paddingBottom: Platform.OS === 'ios' ? 40 : 60,

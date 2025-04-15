@@ -60,9 +60,6 @@ const insertRecord = (
 
   db.transaction(tx => {
     tx.executeSql(
-      // `INSERT INTO ServiceAttributes
-      // (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image)
-      // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       `INSERT OR REPLACE INTO ServiceAttributes 
 (DefId, MainParameter, SubParameters, Checkpoints, MaxMarks, MaxObt, GapArea, ActionPlan, Responsibility, PlanDate, Image) 
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -104,7 +101,7 @@ const fetchRecords = () => {
         error => {
           console.error('Error fetching records', error);
           reject(error);
-        }
+        },
       );
     });
   });
@@ -202,6 +199,7 @@ const getDetailsValuesFromServiceAttributes = DefId => {
     });
   });
 };
+
 const getDvrScoreData = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -451,31 +449,84 @@ const updateKPIPerformanceData = args => {
   });
 };
 // ManPowerAvailability : -
-
 const createManPowerAvailability = () => {
   db.transaction(tx => {
     tx.executeSql(
       `CREATE TABLE IF NOT EXISTS ManPowerAvailability (
-        type TEXT,
-        value TEXT
-      );`,
+         type TEXT,
+         value TEXT,
+         available TEXT,
+         trained TEXT,
+         available_percentage TEXT,
+         trained_percentage TEXT,
+         gap_area TEXT,
+         counter_measure_plan TEXT,
+         responsibility TEXT,
+         plan_closure_date TEXT,
+         image_path TEXT
+       );`,
       [],
-      () => console.log('Table Created ManPowerAvailability'),
-      error =>
-        console.error('Table Creation ManPowerAvailability Error:', error),
+      () => console.log('Table Created: ManPowerAvailability'),
+      error => console.error('Table Creation Error:', error),
     );
   });
 };
-const insertDataManPowerAvailability = (type, value) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      'INSERT INTO ManPowerAvailability (type, value) VALUES (?, ?);',
-      [type, value],
-      (_, result) => console.log('Data Inserted:', result),
-      error => console.error('Insert Error:', error),
-    );
+
+const insertDataManPowerAvailability = (
+  type,
+  value,
+  available,
+  trained,
+  available_percentage,
+  trained_percentage,
+  gap_area,
+  counter_measure_plan,
+  responsibility,
+  plan_closure_date,
+  image_path,
+) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO ManPowerAvailability (
+           type,
+           value,
+           available,
+           trained,
+           available_percentage,
+           trained_percentage,
+           gap_area,
+           counter_measure_plan,
+           responsibility,
+           plan_closure_date,
+           image_path
+         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [
+          type || '',
+          value || '',
+          available || '',
+          trained || '',
+          available_percentage || '',
+          trained_percentage || '',
+          gap_area || '',
+          counter_measure_plan || '',
+          responsibility || '',
+          plan_closure_date || '',
+          image_path || '',
+        ],
+        (_, result) => {
+          console.log('Data Inserted:', result);
+          resolve(result);
+        },
+        (_, error) => {
+          console.error('Insert Error:', error);
+          reject(error);
+        },
+      );
+    });
   });
 };
+
 const fetchDataManPowerAvailability = callback => {
   db.transaction(tx => {
     tx.executeSql(
@@ -497,7 +548,18 @@ const clearTableManPowerAvailability = () => {
     );
   });
 };
-const updateManPowerAvailabilityData = args => {
+const updateManPowerAvailabilityData = ({
+  type,
+  available,
+  trained,
+  available_percentage,
+  trained_percentage,
+  gap_area,
+  counter_measure_plan,
+  responsibility,
+  plan_closure_date,
+  image_path,
+}) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
@@ -512,25 +574,32 @@ const updateManPowerAvailabilityData = args => {
            responsibility = ?,
            plan_closure_date = ?,
            image_path = ?
-         WHERE parameter = ?;`,
+         WHERE type = ?;`,
         [
-          args.available,
-          args.trained,
-          args.available_percentage,
-          args.trained_percentage,
-          args.gap_area,
-          args.counter_measure_plan,
-          args.responsibility,
-          args.plan_closure_date,
-          args.image_path,
-          args.parameter,
+          available,
+          trained,
+          available_percentage,
+          trained_percentage,
+          gap_area,
+          counter_measure_plan,
+          responsibility,
+          plan_closure_date,
+          image_path,
+          type,
         ],
-        (_, result) => resolve(result),
-        (_, error) => reject(error),
+        (_, result) => {
+          console.log('Update Success:', result);
+          resolve(result);
+        },
+        (_, error) => {
+          console.error('Update Error:', error);
+          reject(error);
+        },
       );
     });
   });
 };
+
 const createCompanyTable = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -541,7 +610,7 @@ const createCompanyTable = () => {
 const createDealerTable = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS AccompaniedBy (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
+      'CREATE TABLE IF NOT EXISTS AccompaniedByDealer (id INTEGER PRIMARY KEY AUTOINCREMENT, post TEXT, name TEXT, mobile TEXT);',
     );
   });
 };
@@ -578,30 +647,21 @@ const dropAllTables = async () => {
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop Company', error);
+        console.error('Failed to drop AccompaniedByCompany', error);
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS AccompaniedBy',
+      'DROP TABLE IF EXISTS AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to drop Dealer', error);
+        console.error('Failed to drop AccompaniedByDealer', error);
       },
     );
   });
 };
 const clearAllTables = async () => {
   db.transaction(tx => {
-    tx.executeSql(
-      'DELETE FROM ServiceAttributes',
-      [],
-      (_, results) => {},
-      error => {
-        console.error('Failed to clear ServiceAttributes', error);
-      },
-    );
-
     tx.executeSql(
       'DELETE FROM KPI_PERFORMANCE',
       [],
@@ -610,7 +670,6 @@ const clearAllTables = async () => {
         console.error('Failed to clear KPI_PERFORMANCE', error);
       },
     );
-
     tx.executeSql(
       'DELETE FROM ManPowerAvailability',
       [],
@@ -619,25 +678,276 @@ const clearAllTables = async () => {
         console.error('Failed to clear ManPowerAvailability', error);
       },
     );
-
     tx.executeSql(
       'DELETE FROM AccompaniedByCompany',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear Company', error);
+        console.error('Failed to clear AccompaniedByCompany', error);
       },
     );
-
     tx.executeSql(
-      'DELETE FROM AccompaniedBy',
+      'DELETE FROM AccompaniedByDealer',
       [],
       (_, results) => {},
       error => {
-        console.error('Failed to clear Dealer', error);
+        console.error('Failed to clear AccompaniedByDealer', error);
       },
     );
   });
+};
+//complaint analyis
+const createTableComplaintAnalysis = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `CREATE TABLE IF NOT EXISTS CustomerComplaintAnalysis (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        received TEXT,
+        closed TEXT,
+        within72 TEXT,
+        occurrence TEXT,
+        gapArea TEXT,
+        counterMeasure TEXT,
+        responsibility TEXT,
+        planClosureDate TEXT
+      )`,
+      [],
+      () => {},
+      error => console.log('Create Table Error:', error),
+    );
+  });
+};
+
+const insertComplaintAnalysis = formData => {
+  const {
+    received,
+    closed,
+    within72,
+    occurrence,
+    gapArea,
+    counterMeasure,
+    responsibility,
+    planClosureDate,
+  } = formData;
+
+  db.transaction(tx => {
+    tx.executeSql(
+      `INSERT INTO CustomerComplaintAnalysis (received, closed, within72, occurrence, gapArea, counterMeasure, responsibility, planClosureDate)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        received,
+        closed,
+        within72,
+        occurrence,
+        gapArea,
+        counterMeasure,
+        responsibility,
+        planClosureDate,
+      ],
+      () => {
+        console.log('Data inserted successfully');
+      },
+      error => {
+        console.log('Insert Error:', error);
+      },
+    );
+  });
+};
+
+const fetchDataComplaintAnalysis = (setFormData, setIsSubmitted) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `SELECT * FROM CustomerComplaintAnalysis ORDER BY id DESC LIMIT 1`,
+      [],
+      (tx, results) => {
+        if (results.rows.length > 0) {
+          const data = results.rows.item(0);
+          setFormData(data);
+          setIsSubmitted(true);
+        }
+      },
+      error => console.log('Fetch Data Error:', error),
+    );
+  });
+};
+const clearCustomerComplaintAnalysisTableData = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM CustomerComplaintAnalysis`,
+      [],
+      () => {
+        console.log('All data cleared from the table.');
+      },
+      error => console.log('Clear Table Data Error:', error),
+    );
+  });
+};
+const getMOMFromServiceAttributes = () => {
+  console.log('Fetching MOM from ServiceAttributes');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ServiceAttributes WHERE TRIM(GapArea) != '';`,
+        [],
+        (_, results) => {
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
+          }
+          console.log('ServiceAttributes Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching ServiceAttributes:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const getMOMFromKPI_Performance = () => {
+  console.log('Fetching MOM from KPI_PERFORMANCE');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM KPI_PERFORMANCE WHERE TRIM(gap_area) != '';`,
+        [],
+        (_, results) => {
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
+          }
+          console.log('KPI_PERFORMANCE Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching KPI_PERFORMANCE:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const getMOMFromManPowerAvailability = () => {
+  console.log('Fetching MOM from ManPowerAvailability');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ManPowerAvailability WHERE TRIM(gap_area) != '';`,
+        [],
+        (_, results) => {
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
+          }
+          console.log('ManPowerAvailability Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching ManPowerAvailability:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const getMOMFromComplaintAnalysis = () => {
+  console.log('Fetching MOM from CustomerComplaintAnalysis');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM CustomerComplaintAnalysis WHERE gapArea IS NOT NULL AND TRIM(gapArea) != '';`,
+        [],
+        (_, results) => {
+          const rows = results.rows;
+          const detailsList = [];
+
+          for (let i = 0; i < rows.length; i++) {
+            const item = rows.item(i);
+            detailsList.push(item);
+          }
+
+          console.log('ComplaintAnalysis Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching ComplaintAnalysis:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const clearRepeatCardTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM RepeatCard`,
+      [],
+      () => {
+        console.log('All data from RepeatCard table deleted successfully.');
+      },
+      error => console.log('Clear RepeatCard Table Error:', error),
+    );
+  });
+};
+
+const clearServiceAttributeTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM ServiceAttributes`,
+      [],
+      () => {
+        console.log('All data from ServiceAttributes table deleted successfully.');
+      },
+      error => console.log('Clear ServiceAttributes Table Error:', error),
+    );
+  });
+};
+
+export const createMOMTable = async () => {
+  const db = await getDBConnection();
+  await db.executeSql(
+    `CREATE TABLE IF NOT EXISTS MOMEntries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      parameters TEXT,
+      clPlRemarks TEXT,
+      countermeasurePlan TEXT,
+      targetDate TEXT,
+      responsibility TEXT
+    );`,
+  );
+};
+export const insertMOMEntry = async entry => {
+  const db = await getDBConnection();
+  await db.executeSql(
+    `INSERT INTO MOMEntries (parameters, clPlRemarks, countermeasurePlan, targetDate, responsibility)
+     VALUES (?, ?, ?, ?, ?)`,
+    [
+      entry.parameters,
+      entry.clPlRemarks,
+      entry.countermeasurePlan,
+      entry.targetDate,
+      entry.responsibility,
+    ],
+  );
+};
+
+export const getMOMEntries = async () => {
+  const db = await getDBConnection();
+  const results = await db.executeSql(`SELECT * FROM MOMEntries`);
+  const rows = results[0].rows;
+  const entries = [];
+  for (let i = 0; i < rows.length; i++) {
+    entries.push(rows.item(i));
+  }
+  return entries;
 };
 
 export {
@@ -665,81 +975,14 @@ export {
   createDealerTable,
   clearAllTables,
   dropAllTables,
+  createTableComplaintAnalysis,
+  insertComplaintAnalysis,
+  fetchDataComplaintAnalysis,
+  getMOMFromServiceAttributes,
+  getMOMFromKPI_Performance,
+  getMOMFromManPowerAvailability,
+  getMOMFromComplaintAnalysis,
+  clearRepeatCardTable,
+  clearCustomerComplaintAnalysisTableData,
+  clearServiceAttributeTable
 };
-// const createManPowerAvailability = () => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       `CREATE TABLE IF NOT EXISTS ManPowerAvailability (
-//         type TEXT,
-//         value TEXT,
-//         available REAL,
-//         trained REAL,
-//         available_percentage REAL,
-//         trained_percentage REAL,
-//         gap_area TEXT,
-//         counter_measure_plan TEXT,
-//         responsibility TEXT,
-//         plan_closure_date TEXT,
-//         image_path TEXT
-//       );`,
-//       [],
-//       () => console.log('Table Created: ManPowerAvailability'),
-//       error => console.error('Table Creation Error:', error),
-//     );
-//   });
-// };
-
-// const insertDataManPowerAvailability = (form, item) => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       `INSERT INTO ManPowerAvailability (
-//         type,
-//         value,
-//         available,
-//         trained,
-//         available_percentage,
-//         trained_percentage,
-//         gap_area,
-//         counter_measure_plan,
-//         responsibility,
-//         plan_closure_date,
-//         image_path
-//       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-//       [
-//         item?.type || '',
-//         item?.value || '',
-//         form.available,
-//         form.trained,
-//         form.availablePercentage,
-//         form.trainedPercentage,
-//         form.gap_area,
-//         form.counter_measure_plan,
-//         form.responsibility,
-//         form.plan_closure_date,
-//         form.image_path,
-//       ],
-//       (_, result) => console.log('Data Inserted:', result),
-//       error => console.error('Insert Error:', error),
-//     );
-//   });
-// };
-// const fetchDataManPowerAvailability = callback => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       'SELECT * FROM ManPowerAvailability;',
-//       [],
-//       (_, {rows}) => callback(rows.raw()),
-//       error => console.error('Fetch Error:', error),
-//     );
-//   });
-// };
-// const clearTableManPowerAvailability = () => {
-//   db.transaction(tx => {
-//     tx.executeSql(
-//       'DELETE FROM ManPowerAvailability;',
-//       [],
-//       () => console.log('🧹 Table Cleared'),
-//       error => console.error('Clear Table Error:', error),
-//     );
-//   });
-// };

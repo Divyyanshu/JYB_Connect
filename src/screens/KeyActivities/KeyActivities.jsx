@@ -6,8 +6,6 @@ import {
   FlatList,
   StatusBar,
   Image,
-  ActivityIndicator,
-  SafeAreaView,
   Platform,
   Modal,
   Dimensions,
@@ -17,16 +15,14 @@ import {CustomButton} from '../../uiKit/customButton';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../utils/screens';
 import {STACKS} from '../../utils/stacks';
-import {COLORS} from '../../utils/colors';
-import LinearGradient from 'react-native-linear-gradient';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 import DeviceInfo from 'react-native-device-info';
 import Topbar from '../../components/CommonComponents/TopBar';
 
 const activities = [
-  {id: '1', title: 'Service Attributes', completed: true},
-  {id: '2', title: 'KPI Performance', completed: true},
-  {id: '3', title: 'DVR Score', completed: true},
+  {id: '1', title: 'Service Attributes', completed: false},
+  {id: '2', title: 'KPI Performance', completed: false},
+  {id: '3', title: 'DVR Score', completed: false},
   {id: '4', title: 'Man Power Status', completed: false},
   {id: '5', title: 'Complaints Analysis', completed: false},
   {id: '6', title: 'Repeat Job Card Analysis', completed: false},
@@ -112,19 +108,18 @@ const KeyActivities = () => {
                   ? deviceHeight - 110
                   : deviceHeight - 80,
               alignItems: 'center',
-           //   backgroundColor: 'rgba(0,0,0,0.4)',
             },
           ]}>
           <View
             style={{
               height: 80,
               width: 80,
-              backgroundColor: "#fff",
+              backgroundColor: '#fff',
               borderRadius: 12,
               justifyContent: 'center',
               position: 'absolute',
-              borderWidth:2,
-              borderColor:"#D4D4D4",
+              borderWidth: 2,
+              borderColor: '#D4D4D4',
               top:
                 DeviceInfo.hasNotch() == true
                   ? (deviceHeight - 220 - 80) / 2
@@ -138,7 +133,6 @@ const KeyActivities = () => {
           </View>
         </View>
       </Modal>
-
       <View style={styles.flatListContainer}>
         <FlatList
           data={selected}

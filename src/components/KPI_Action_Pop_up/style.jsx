@@ -62,11 +62,13 @@ export const styles = StyleSheet.create({
   image: {
     width: 110,
     height: 110,
+    alignSelf: 'center',
   },
   buttonContainer: {
     justifyContent: 'center',
     marginVertical: 16,
     alignItems: 'center',
+    borderRadius: 20,
   },
   placeholderStyle: {
     flex: 1,

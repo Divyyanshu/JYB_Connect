@@ -21,11 +21,15 @@ import {STACKS} from '../../utils/stacks';
 import axios from 'axios';
 import {
   clearAllTables,
+  clearCustomerComplaintAnalysisTableData,
   clearKPIPerformanceData,
+  clearRepeatCardTable,
   clearTableManPowerAvailability,
   fetchDataManPowerAvailability,
   insert_KPI_Performance_Record,
   insertDataManPowerAvailability,
+  clearServiceAttributeTable,
+  insertRecord,
 } from '../../database/db';
 import {API_ENDPOINTS, BASE_URL} from '../../api/endPoints';
 import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
@@ -117,7 +121,6 @@ const SelectDealerCode = () => {
       setSelectedMonth(monthValue + 1);
       setSelectedYear(yearValue);
 
-
       fetchDealerList(monthValue + 1, yearValue, email);
     };
 
@@ -128,13 +131,12 @@ const SelectDealerCode = () => {
     const unsubscribe2 = navigation.addListener('focus', () => {
       console.log('focus revived');
 
-      setDelarCodeStatus()
-  
+      setDelarCodeStatus();
     });
     return unsubscribe2;
   }, [navigation]);
 
-  const setDelarCodeStatus = async () =>{
+  const setDelarCodeStatus = async () => {
     let dealerCode = await getDealerCode();
     let dealerName = await getDealerName();
     console.log('get dealer code >>>>> ', dealerCode);
@@ -146,10 +148,7 @@ const SelectDealerCode = () => {
       setPreviousDealerCode('');
       setPreviousDealerName('');
     }
-
-  }
-
-
+  };
 
   const fetchDealerList = async (month, year, userID) => {
     setLoading(true);
@@ -180,7 +179,6 @@ const SelectDealerCode = () => {
       setLoading(false);
     }
   };
-
   const fetchManPowerData = async (
     plan,
     month,
@@ -189,28 +187,78 @@ const SelectDealerCode = () => {
     dealerName,
   ) => {
     try {
-      clearTableManPowerAvailability();
+      await clearTableManPowerAvailability();
+      await clearCustomerComplaintAnalysisTableData();
+      await clearRepeatCardTable();
+
       const response = await axios.post(
         'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
         {ServiceVisit: plan},
         {headers: {'Content-Type': 'application/json'}},
       );
 
-      if (response.data?.Data?.length > 0) {
-        console.log('rs >>>..', response);
-        response.data.Data.forEach(item =>
-          insertDataManPowerAvailability(item.Type, item.Values),
-        );
+      const manpowerData = response?.data?.Data;
+
+      if (manpowerData?.length > 0) {
+        console.log('API Response:', response);
+        for (const item of manpowerData) {
+          await insertDataManPowerAvailability(
+            item.Type,
+            item.Values,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+          );
+        }
         saveDealerCode(dealerCode);
         saveDealerName(dealerName);
+        await fetchDataServiceAttributeData(dealerCode, month, year)
+        // navigation.navigate(STACKS.MAIN_STACK, {
+        //   screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+        //   params: {dealerCode, month, year},
+        // });
+      }
+    } catch (error) {
+      console.error('ManPower API Error:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchDataServiceAttributeData = async (dealerCode,month,year) => {
+    try {
+      // code added by Puru
+      clearServiceAttributeTable();
+      const response = await axios.get(
+        'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforServiceAttribute',
+      );
+
+      if (response.data && response.data.Data) {
+        console.log("Service Attribute Api response >>>>",response.data.Data)
+        response.data.Data.forEach(async item => {
+          await insertRecord(
+            item.DefId,
+            item.MainParameter,
+            item.SubParameters,
+            item.Checkpoints,
+            item.MaxMarks,
+            '',
+          );
+        });
+
         navigation.navigate(STACKS.MAIN_STACK, {
           screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
           params: {dealerCode, month, year},
         });
       }
     } catch (error) {
-      console.error('ManPower API Error:', error);
-      setLoading(false);
+      console.error('Error fetching data:', error);
+      showAlert('Error', 'Failed to fetch data from server.');
     }
   };
 
@@ -292,7 +340,12 @@ const SelectDealerCode = () => {
 
       setPopupVisible(true);
     } else {
-      fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
+      // code commented by Puru
+     // fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
+     navigation.navigate(STACKS.MAIN_STACK, {
+      screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+      params: {dealerCode, selectedMonth, selectedYear},
+    });
     }
 
     // if (previousDealerCode && previousDealerCode !== dealerCode) {

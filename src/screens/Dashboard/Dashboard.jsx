@@ -8,7 +8,6 @@ import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
 import DeviceInfo from 'react-native-device-info';
 import {
-  db,
   createTable,
   insertRecord,
   fetchRecords,
@@ -61,30 +60,29 @@ const Dashboard = ({navigation}) => {
       return () => backHandler.remove();
     }, []),
   );
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforServiceAttribute',
-      );
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforServiceAttribute',
+  //     );
 
-      if (response.data && response.data.Data) {
-        response.data.Data.forEach(async item => {
-          await insertRecord(
-            item.DefId,
-            item.MainParameter,
-            item.SubParameters,
-            item.Checkpoints,
-            item.MaxMarks,
-            '',
-          );
-        });
-        
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      showAlert('Error', 'Failed to fetch data from server.');
-    }
-  };
+  //     if (response.data && response.data.Data) {
+  //       response.data.Data.forEach(async item => {
+  //         await insertRecord(
+  //           item.DefId,
+  //           item.MainParameter,
+  //           item.SubParameters,
+  //           item.Checkpoints,
+  //           item.MaxMarks,
+  //           '',
+  //         );
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //     showAlert('Error', 'Failed to fetch data from server.');
+  //   }
+  // };
 
   useEffect(() => {
     createTable();
@@ -107,7 +105,6 @@ const Dashboard = ({navigation}) => {
           setIsSnackbarVisible(true);
           setWasOffline(false);
         }
-        checkServiceAttributeStatus();
       }
     });
 
@@ -116,20 +113,6 @@ const Dashboard = ({navigation}) => {
     };
   }, []);
 
-  const checkServiceAttributeStatus = async () => {
-
-    let serviceAttributesRecords = await fetchRecords();
-    console.log("serviceAttributesRecords >>>>>",serviceAttributesRecords)
-    
-    if(serviceAttributesRecords == 0){
-
-      fetchData();
-    }
-    else{
-      console.log("No Need to fetch the data")
-    }
-
-  }
 
   const handleCardPress = type => {
     console.log('card pressed');
@@ -143,7 +126,7 @@ const Dashboard = ({navigation}) => {
       <Topbar
         showBack={false}
         showtitle={true}
-        showLogout = {true}
+        showLogout={true}
         title={'Dashboard'}
         navState={navigation}
       />

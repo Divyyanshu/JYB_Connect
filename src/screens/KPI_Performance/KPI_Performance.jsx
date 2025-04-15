@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  Platform,
 } from 'react-native';
 import {styles} from './style';
 import KPI_Action_Pop_up from '../../components/KPI_Action_Pop_up/KPI_Action_Pop_up';
@@ -14,6 +15,7 @@ import {
   updateKPIPerformanceData,
 } from '../../database/db';
 import Topbar from '../../components/CommonComponents/TopBar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
@@ -36,22 +38,39 @@ const KPIPerformance = ({navigation}) => {
       try {
         setLoading(true);
         const localData = await fetch_KPI_Performance_Data();
-        console.log('local data >>>>>', localData);
         setData(localData || []);
-        console.log('data from local data >>>.', localData);
+        await storeServiceVisitMTDPlan(localData);
       } catch (error) {
         console.error('Error fetching KPI data:', error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
     const unsubscribe = navigation.addListener('focus', fetchData);
     return unsubscribe;
   }, [navigation, refresh]);
 
+  const storeServiceVisitMTDPlan = async kpiData => {
+    try {
+      const serviceVisitItem = kpiData.find(
+        item => item.parameter === 'Service Visit',
+      );
+      if (serviceVisitItem && serviceVisitItem.month_plan) {
+        const mtdPlan = (
+          (parseFloat(serviceVisitItem.month_plan) / totalDaysInMonth) *
+          currentDay
+        ).toFixed(2);
+        await AsyncStorage.setItem('MTD_SERVICE_VISIT', mtd_actual);
+        console.log(' MTD Plan stored in AsyncStorage:', mtd_actual);
+      }
+    } catch (error) {
+      console.error('Error storing MTD Plan:', error);
+    }
+  };
+
   const handleActionPlanModel = (item, index) => {
-    console.log('item log >>> ', item);
     if (item.month_plan == '') {
       Alert.alert(
         `Month plan is pending for ${item.parameter}.`,
@@ -84,13 +103,13 @@ const KPIPerformance = ({navigation}) => {
         dataForm.image_path,
       );
       setRefresh(!refresh);
-      onClose();
     } catch (error) {
       console.error('Error updating data:', error);
     } finally {
       onClose();
     }
   };
+
   const renderItem = ({item, index}) => {
     const mtdPlan = (
       (parseFloat(item.month_plan) / totalDaysInMonth) *
@@ -123,7 +142,9 @@ const KPIPerformance = ({navigation}) => {
           <View style={styles.row}>
             <View style={styles.cell}>
               <Text style={styles.header}>MTD Plan</Text>
-              <Text style={styles.text}>{mtdPlan}</Text>
+              <Text style={styles.text}>
+                {item.mtd_plan == ' ' ? '' : parseFloat(item.mtd_plan)}
+              </Text>
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>MTD Actual</Text>
@@ -144,6 +165,7 @@ const KPIPerformance = ({navigation}) => {
       </TouchableOpacity>
     );
   };
+
   return (
     <View style={styles.container}>
       <Topbar

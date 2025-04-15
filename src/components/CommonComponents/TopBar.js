@@ -30,6 +30,13 @@ const Topbar = props => {
       {text: 'Yes', onPress: () => clearUserData()},
     ]);
   }
+  function Minutes_of_meeting_popUp() {
+    console.log('MOM MODEL Open');
+    Alert.alert('Mom model?', '', [
+      {text: 'No', style: 'cancel'},
+      {text: 'Yes', onPress: () => clearUserData()},
+    ]);
+  }
   async function clearUserData() {
     dropAllTables();
     try {
@@ -123,7 +130,7 @@ const Topbar = props => {
             numberOfLines={1}
             style={{
               color: '#fff',
-              fontSize: 22,
+              fontSize: 18,
               fontFamily: 'Helvetica',
               width: '95%',
               textAlign: 'center',
@@ -150,6 +157,29 @@ const Topbar = props => {
             }}>
             <Image
               source={require('../../assets/icons/logout.png')}
+              style={{margin: 10, width: 34, height: 34}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>,
+      )}
+      {renderIf(
+        props.showAdd == true,
+        <View
+          style={{
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            bottom: 0,
+            height: 44,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              Minutes_of_meeting_popUp();
+            }}>
+            <Image
+              source={require('../../assets/icons/add.png')}
               style={{margin: 10, width: 34, height: 34}}
               resizeMode="contain"
             />
