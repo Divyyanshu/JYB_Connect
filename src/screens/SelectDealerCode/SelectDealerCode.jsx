@@ -21,7 +21,9 @@ import {STACKS} from '../../utils/stacks';
 import axios from 'axios';
 import {
   clearAllTables,
+  clearCustomerComplaintAnalysisTableData,
   clearKPIPerformanceData,
+  clearRepeatCardTable,
   clearTableManPowerAvailability,
   fetchDataManPowerAvailability,
   insert_KPI_Performance_Record,
@@ -175,51 +177,6 @@ const SelectDealerCode = () => {
       setLoading(false);
     }
   };
-
-  // const fetchManPowerData = async (
-  //   plan,
-  //   month,
-  //   year,
-  //   dealerCode,
-  //   dealerName,
-  // ) => {
-  //   try {
-  //     clearTableManPowerAvailability();
-  //     const response = await axios.post(
-  //       'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
-  //       {ServiceVisit: plan},
-  //       {headers: {'Content-Type': 'application/json'}},
-  //     );
-
-  //     if (response.data?.Data?.length > 0) {
-  //       console.log('rs >>>..', response);
-  //       response.data.Data.forEach(item =>
-  //     let statusManpower = await insertDataManPowerAvailability(
-  //           item.Type,
-  //           item.Values,
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //           '',
-  //         ),
-  //       );
-  //       saveDealerCode(dealerCode);
-  //       saveDealerName(dealerName);
-  //       navigation.navigate(STACKS.MAIN_STACK, {
-  //         screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
-  //         params: {dealerCode, month, year},
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('ManPower API Error:', error);
-  //     setLoading(false);
-  //   }
-  // };
   const fetchManPowerData = async (
     plan,
     month,
@@ -228,8 +185,9 @@ const SelectDealerCode = () => {
     dealerName,
   ) => {
     try {
-      // Clear previous local data
       await clearTableManPowerAvailability();
+      await clearCustomerComplaintAnalysisTableData();
+      await clearRepeatCardTable();
 
       const response = await axios.post(
         'http://198.38.81.7/jawadvrapi/api/Dealer/MainPowerAvailability',
@@ -241,8 +199,6 @@ const SelectDealerCode = () => {
 
       if (manpowerData?.length > 0) {
         console.log('API Response:', response);
-
-        // Use for...of for sequential async operations
         for (const item of manpowerData) {
           await insertDataManPowerAvailability(
             item.Type,
@@ -258,8 +214,6 @@ const SelectDealerCode = () => {
             '',
           );
         }
-
-        // Save state and navigate
         saveDealerCode(dealerCode);
         saveDealerName(dealerName);
         navigation.navigate(STACKS.MAIN_STACK, {

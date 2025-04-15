@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {styles} from './style';
 import {COLORS} from '../../utils/colors';
-
-const db = SQLite.openDatabase({name: 'repeatCard.db'});
+import {db} from '../../database/db';
 
 const RepeatJobCardScreen = ({navigation}) => {
   const [repeatCard, setRepeatCard] = useState('');

@@ -20,7 +20,7 @@ import {SCREENS} from '../../../utils/screens';
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('123@');
+  const [password, setPassword] = useState('');
   const [secureText, setSecureText] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -103,7 +103,6 @@ const LoginPage = ({navigation}) => {
         <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
         <View
           style={{
-            // marginTop: 40,
             gap: 5,
             alignItems: 'center',
             justifyContent: 'center',

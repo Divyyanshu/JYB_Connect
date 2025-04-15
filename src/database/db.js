@@ -663,15 +663,6 @@ const dropAllTables = async () => {
 const clearAllTables = async () => {
   db.transaction(tx => {
     tx.executeSql(
-      'DELETE FROM ServiceAttributes',
-      [],
-      (_, results) => {},
-      error => {
-        console.error('Failed to clear ServiceAttributes', error);
-      },
-    );
-
-    tx.executeSql(
       'DELETE FROM KPI_PERFORMANCE',
       [],
       (_, results) => {},
@@ -679,7 +670,6 @@ const clearAllTables = async () => {
         console.error('Failed to clear KPI_PERFORMANCE', error);
       },
     );
-
     tx.executeSql(
       'DELETE FROM ManPowerAvailability',
       [],
@@ -688,7 +678,6 @@ const clearAllTables = async () => {
         console.error('Failed to clear ManPowerAvailability', error);
       },
     );
-
     tx.executeSql(
       'DELETE FROM AccompaniedByCompany',
       [],
@@ -697,7 +686,6 @@ const clearAllTables = async () => {
         console.error('Failed to clear AccompaniedByCompany', error);
       },
     );
-
     tx.executeSql(
       'DELETE FROM AccompaniedByDealer',
       [],
@@ -708,32 +696,29 @@ const clearAllTables = async () => {
     );
   });
 };
-
 //complaint analyis
-
-const createTableComplaintAnalysis = async () => {
-  const db = await SQLite.openDatabase({
-    name: 'ComplaintAnalysisDB',
-    location: 'default',
-  });
-
+const createTableComplaintAnalysis = () => {
   db.transaction(tx => {
     tx.executeSql(
-      `CREATE TABLE IF NOT EXISTS ComplaintAnalysis (
+      `CREATE TABLE IF NOT EXISTS CustomerComplaintAnalysis (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        received INTEGER,
-        closed INTEGER,
-        within72 INTEGER,
-        occurrence REAL,
+        received TEXT,
+        closed TEXT,
+        within72 TEXT,
+        occurrence TEXT,
         gapArea TEXT,
         counterMeasure TEXT,
         responsibility TEXT,
         planClosureDate TEXT
       )`,
+      [],
+      () => {},
+      error => console.log('Create Table Error:', error),
     );
   });
 };
-const insertComplaintAnalysis = async () => {
+
+const insertComplaintAnalysis = formData => {
   const {
     received,
     closed,
@@ -745,14 +730,10 @@ const insertComplaintAnalysis = async () => {
     planClosureDate,
   } = formData;
 
-  const db = await SQLite.openDatabase({
-    name: 'ComplaintAnalysisDB',
-    location: 'default',
-  });
-
   db.transaction(tx => {
     tx.executeSql(
-      'INSERT INTO ComplaintAnalysis (received, closed, within72, occurrence, gapArea, counterMeasure, responsibility, planClosureDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      `INSERT INTO CustomerComplaintAnalysis (received, closed, within72, occurrence, gapArea, counterMeasure, responsibility, planClosureDate)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         received,
         closed,
@@ -763,79 +744,71 @@ const insertComplaintAnalysis = async () => {
         responsibility,
         planClosureDate,
       ],
-      (tx, results) => {
-        console.log('Data inserted successfully', results);
+      () => {
+        console.log('Data inserted successfully');
       },
       error => {
-        console.log('Error inserting data', error);
+        console.log('Insert Error:', error);
       },
     );
   });
 };
-const fetchDataComplaintAnalysis = async () => {
-  const db = await SQLite.openDatabase({
-    name: 'ComplaintAnalysisDB',
-    location: 'default',
-  });
 
+const fetchDataComplaintAnalysis = (setFormData, setIsSubmitted) => {
   db.transaction(tx => {
     tx.executeSql(
-      'SELECT * FROM ComplaintAnalysis ORDER BY id DESC LIMIT 1', // Fetch the latest entry
+      `SELECT * FROM CustomerComplaintAnalysis ORDER BY id DESC LIMIT 1`,
       [],
       (tx, results) => {
         if (results.rows.length > 0) {
           const data = results.rows.item(0);
-          setFormData({
-            ...formData,
-            received: data.received.toString(),
-            closed: data.closed.toString(),
-            within72: data.within72.toString(),
-            occurrence: data.occurrence.toString(),
-            gapArea: data.gapArea,
-            counterMeasure: data.counterMeasure,
-            responsibility: data.responsibility,
-            planClosureDate: data.planClosureDate,
-          });
+          setFormData(data);
+          setIsSubmitted(true);
         }
       },
-      error => {
-        console.log('Error fetching data', error);
-      },
+      error => console.log('Fetch Data Error:', error),
     );
   });
 };
-
+const clearCustomerComplaintAnalysisTableData = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM CustomerComplaintAnalysis`,
+      [],
+      () => {
+        console.log('All data cleared from the table.');
+      },
+      error => console.log('Clear Table Data Error:', error),
+    );
+  });
+};
 const getMOMFromServiceAttributes = () => {
-  console.log('Fetching details for >>>>:');
+  console.log('Fetching MOM from ServiceAttributes');
 
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql(
-        `SELECT * FROM ServiceAttributes WHERE GapArea IS NOT NULL AND GapArea != ' ';`,
+        `SELECT * FROM ServiceAttributes WHERE TRIM(GapArea) != '';`,
         [],
         (_, results) => {
-          if (results.rows.length > 0) {
-            let detailsList = [];
-            console.log('Raw SQL Results:', results);
-            for (let i = 0; i < results.rows.length; i++) {
-              detailsList.push(results.rows.item(i));
-            }
-            console.log('Formatted Data:', detailsList);
-            resolve(detailsList);
-          } else {
-            reject(new Error('No data found for the given DefId'));
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
           }
+          console.log('ServiceAttributes Data:', detailsList);
+          resolve(detailsList);
         },
         (_, error) => {
-          console.error('Error fetching details by main parameter', error);
+          console.error('Error fetching ServiceAttributes:', error);
           reject(error);
         },
       );
     });
   });
 };
+
 const getMOMFromKPI_Performance = () => {
-  console.log('Fetching details for >>>>:');
+  console.log('Fetching MOM from KPI_PERFORMANCE');
 
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -843,28 +816,24 @@ const getMOMFromKPI_Performance = () => {
         `SELECT * FROM KPI_PERFORMANCE WHERE TRIM(gap_area) != '';`,
         [],
         (_, results) => {
-          if (results.rows.length > 0) {
-            let detailsList = [];
-            console.log('Raw SQL Results:', results);
-            for (let i = 0; i < results.rows.length; i++) {
-              detailsList.push(results.rows.item(i));
-            }
-            console.log('Formatted Data:', detailsList);
-            resolve(detailsList);
-          } else {
-            reject(new Error('No data found for the given gap_area'));
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
           }
+          console.log('KPI_PERFORMANCE Data:', detailsList);
+          resolve(detailsList);
         },
         (_, error) => {
-          console.error('Error fetching details by main parameter', error);
+          console.error('Error fetching KPI_PERFORMANCE:', error);
           reject(error);
         },
       );
     });
   });
 };
+
 const getMOMFromManPowerAvailability = () => {
-  console.log('Fetching details for >>>>:');
+  console.log('Fetching MOM from ManPowerAvailability');
 
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -872,25 +841,99 @@ const getMOMFromManPowerAvailability = () => {
         `SELECT * FROM ManPowerAvailability WHERE TRIM(gap_area) != '';`,
         [],
         (_, results) => {
-          if (results.rows.length > 0) {
-            let detailsList = [];
-            console.log('Raw SQL Results:', results);
-            for (let i = 0; i < results.rows.length; i++) {
-              detailsList.push(results.rows.item(i));
-            }
-            console.log('Formatted Data:', detailsList);
-            resolve(detailsList);
-          } else {
-            reject(new Error('No data found for the given gap_area'));
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
           }
+          console.log('ManPowerAvailability Data:', detailsList);
+          resolve(detailsList);
         },
         (_, error) => {
-          console.error('Error fetching details by main parameter', error);
+          console.error('Error fetching ManPowerAvailability:', error);
           reject(error);
         },
       );
     });
   });
+};
+const getMOMFromComplaintAnalysis = () => {
+  console.log('Fetching MOM from ComplaintAnalysis');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ComplaintAnalysis WHERE gapArea IS NOT NULL AND TRIM(gapArea) != '';`,
+        [],
+        (_, results) => {
+          const rows = results.rows;
+          const detailsList = [];
+
+          for (let i = 0; i < rows.length; i++) {
+            const item = rows.item(i);
+            detailsList.push(item);
+          }
+
+          console.log('ComplaintAnalysis Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching ComplaintAnalysis:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const clearRepeatCardTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM RepeatCard`,
+      [],
+      () => {
+        console.log('All data from RepeatCard table deleted successfully.');
+      },
+      error => console.log('Clear RepeatCard Table Error:', error),
+    );
+  });
+};
+export const createMOMTable = async () => {
+  const db = await getDBConnection();
+  await db.executeSql(
+    `CREATE TABLE IF NOT EXISTS MOMEntries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      parameters TEXT,
+      clPlRemarks TEXT,
+      countermeasurePlan TEXT,
+      targetDate TEXT,
+      responsibility TEXT
+    );`,
+  );
+};
+export const insertMOMEntry = async entry => {
+  const db = await getDBConnection();
+  await db.executeSql(
+    `INSERT INTO MOMEntries (parameters, clPlRemarks, countermeasurePlan, targetDate, responsibility)
+     VALUES (?, ?, ?, ?, ?)`,
+    [
+      entry.parameters,
+      entry.clPlRemarks,
+      entry.countermeasurePlan,
+      entry.targetDate,
+      entry.responsibility,
+    ],
+  );
+};
+
+export const getMOMEntries = async () => {
+  const db = await getDBConnection();
+  const results = await db.executeSql(`SELECT * FROM MOMEntries`);
+  const rows = results[0].rows;
+  const entries = [];
+  for (let i = 0; i < rows.length; i++) {
+    entries.push(rows.item(i));
+  }
+  return entries;
 };
 
 export {
@@ -924,4 +967,7 @@ export {
   getMOMFromServiceAttributes,
   getMOMFromKPI_Performance,
   getMOMFromManPowerAvailability,
+  getMOMFromComplaintAnalysis,
+  clearRepeatCardTable,
+  clearCustomerComplaintAnalysisTableData,
 };

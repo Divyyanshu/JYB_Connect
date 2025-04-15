@@ -45,8 +45,6 @@ const Topbar = props => {
         text1: 'Logout Successful',
         text2: 'You have been logged out successfully!',
       });
-
-      // Slight delay for better UX before navigating
       setTimeout(() => {
         props.navState.reset({
           index: 0,

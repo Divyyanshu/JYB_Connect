@@ -142,7 +142,9 @@ const KPIPerformance = ({navigation}) => {
           <View style={styles.row}>
             <View style={styles.cell}>
               <Text style={styles.header}>MTD Plan</Text>
-              <Text style={styles.text}>{mtdPlan}</Text>
+              <Text style={styles.text}>
+                {item.mtd_plan == ' ' ? '' : parseFloat(item.mtd_plan)}
+              </Text>
             </View>
             <View style={styles.cell}>
               <Text style={styles.header}>MTD Actual</Text>

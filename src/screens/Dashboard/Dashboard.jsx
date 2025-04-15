@@ -8,7 +8,6 @@ import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
 import DeviceInfo from 'react-native-device-info';
 import {
-  db,
   createTable,
   insertRecord,
   fetchRecords,
@@ -78,7 +77,6 @@ const Dashboard = ({navigation}) => {
             '',
           );
         });
-        
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -117,19 +115,15 @@ const Dashboard = ({navigation}) => {
   }, []);
 
   const checkServiceAttributeStatus = async () => {
-
     let serviceAttributesRecords = await fetchRecords();
-    console.log("serviceAttributesRecords >>>>>",serviceAttributesRecords)
-    
-    if(serviceAttributesRecords == 0){
+    console.log('serviceAttributesRecords >>>>>', serviceAttributesRecords);
 
+    if (serviceAttributesRecords == 0) {
       fetchData();
+    } else {
+      console.log('No Need to fetch the data');
     }
-    else{
-      console.log("No Need to fetch the data")
-    }
-
-  }
+  };
 
   const handleCardPress = type => {
     console.log('card pressed');
@@ -143,7 +137,7 @@ const Dashboard = ({navigation}) => {
       <Topbar
         showBack={false}
         showtitle={true}
-        showLogout = {true}
+        showLogout={true}
         title={'Dashboard'}
         navState={navigation}
       />

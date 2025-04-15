@@ -103,21 +103,21 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Available</Text>
-            <Text style={styles.text}>{item.available || 'NA'}</Text>
+            <Text style={styles.text}>{item.available || ''}</Text>
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.header}>Trained</Text>
-            <Text style={styles.text}>{item.trained || 'NA'}</Text>
+            <Text style={styles.text}>{item.trained || ''}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Available %</Text>
-            <Text style={styles.text}>{item.available_percentage || 'NA'}</Text>
+            <Text style={styles.text}>{item.available_percentage || ''}</Text>
           </View>
           <View style={styles.cell}>
             <Text style={styles.header}>Trained %</Text>
-            <Text style={styles.text}>{item.trained_percentage || 'NA'}</Text>
+            <Text style={styles.text}>{item.trained_percentage || ''}</Text>
           </View>
         </View>
       </View>
