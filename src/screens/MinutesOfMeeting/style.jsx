@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.WHITE,
-    paddingVertical: 6,
+//    paddingVertical: 6,
   },
   tableContainer: {
     marginHorizontal: 40,

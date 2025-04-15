@@ -309,6 +309,13 @@ export const MainNavigator = ({navigation}) => {
               };
             },
           }}>
+
+<Stack.Screen
+            name={SCREENS.MAIN_STACK.LOGIN}
+            component={LoginPage}
+            options={{headerShown: false}}
+          />
+
           <Stack.Screen
             name={SCREENS.MAIN_STACK.DASHBOARD}
             component={Dashboard}
@@ -530,11 +537,7 @@ export const MainNavigator = ({navigation}) => {
               ),
             })}
           />
-          <Stack.Screen
-            name={SCREENS.MAIN_STACK.LOGIN}
-            component={LoginPage}
-            options={{headerShown: false}}
-          />
+  
         </Stack.Navigator>
       );
     }

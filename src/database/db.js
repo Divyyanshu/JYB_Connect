@@ -574,7 +574,7 @@ const dropAllTables = async () => {
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS Company',
+      'DROP TABLE IF EXISTS AccompaniedByCompany',
       [],
       (_, results) => {},
       error => {
@@ -582,7 +582,7 @@ const dropAllTables = async () => {
       },
     );
     tx.executeSql(
-      'DROP TABLE IF EXISTS Dealer',
+      'DROP TABLE IF EXISTS AccompaniedBy',
       [],
       (_, results) => {},
       error => {
@@ -621,7 +621,7 @@ const clearAllTables = async () => {
     );
 
     tx.executeSql(
-      'DELETE FROM Company',
+      'DELETE FROM AccompaniedByCompany',
       [],
       (_, results) => {},
       error => {
@@ -630,7 +630,7 @@ const clearAllTables = async () => {
     );
 
     tx.executeSql(
-      'DELETE FROM Dealer',
+      'DELETE FROM AccompaniedBy',
       [],
       (_, results) => {},
       error => {

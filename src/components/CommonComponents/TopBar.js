@@ -19,6 +19,8 @@ import DeviceInfo from 'react-native-device-info';
 import {COLORS} from '../../utils/colors';
 import {dropAllTables} from '../../database/db';
 import {removeToken} from '../../utils/shared';
+import { STACKS } from '../../utils/stacks';
+import { SCREENS } from '../../utils/screens';
 
 const Topbar = props => {
   function LogoutButtonClicked() {
@@ -33,11 +35,11 @@ const Topbar = props => {
     try {
       await removeToken();
 
-      Toast.show({
-        type: 'success',
-        text1: 'Logout Successful',
-        text2: 'You have been logged out successfully!',
-      });
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Logout Successful',
+      //   text2: 'You have been logged out successfully!',
+      // });
 
       // Slight delay for better UX before navigating
       setTimeout(() => {

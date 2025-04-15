@@ -4,12 +4,17 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '15.4'
 install! 'cocoapods', :deterministic_uuids => false
 
+
 target 'JawaAudit' do
   config = use_native_modules!
 
   use_react_native!(
     :path => '../node_modules/react-native'
   )
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  
 
   post_install do |installer|
     react_native_post_install(installer)
