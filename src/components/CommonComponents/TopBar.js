@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
   Text,
@@ -7,20 +6,16 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  SafeAreaView,
-  Linking,
   Alert,
 } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
 import renderIf from '../../utils/renderIf';
-const deviceWidth = Dimensions.get('window').width;
-import {semiBold, deleteNotificationApi, baseURL} from '../../Constant';
 import DeviceInfo from 'react-native-device-info';
 import {COLORS} from '../../utils/colors';
 import {dropAllTables} from '../../database/db';
 import {removeToken} from '../../utils/shared';
-import { STACKS } from '../../utils/stacks';
-import { SCREENS } from '../../utils/screens';
+import {STACKS} from '../../utils/stacks';
+import {SCREENS} from '../../utils/screens';
+const deviceWidth = Dimensions.get('window').width;
 
 const Topbar = props => {
   function LogoutButtonClicked() {
@@ -32,23 +27,16 @@ const Topbar = props => {
   }
   function Minutes_of_meeting_popUp() {
     console.log('MOM MODEL Open');
-    Alert.alert('Mom model?', '', [
+    Alert.alert('Can you fill Minutes of Meeting Data Manually?', '', [
       {text: 'No', style: 'cancel'},
-      {text: 'Yes', onPress: () => clearUserData()},
+      {text: 'Yes', onPress: () => props.setModalVisible(true)},
     ]);
   }
+
   async function clearUserData() {
     dropAllTables();
     try {
       await removeToken();
-
-      // Toast.show({
-      //   type: 'success',
-      //   text1: 'Logout Successful',
-      //   text2: 'You have been logged out successfully!',
-      // });
-
-      // Slight delay for better UX before navigating
       setTimeout(() => {
         props.navState.reset({
           index: 0,
@@ -199,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   topBarTextStyle: {
-    fontSize: 28,
+    fontSize: 30,
     color: '#272727',
     width: deviceWidth - 126,
     textAlign: 'center',

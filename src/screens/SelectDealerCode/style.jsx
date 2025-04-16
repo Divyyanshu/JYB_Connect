@@ -6,8 +6,6 @@ const {width} = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
- //   paddingVertical: 5,
     backgroundColor: '#fff',
   },
   label: {
@@ -54,13 +52,9 @@ export const styles = StyleSheet.create({
     marginVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderWidth: 0.1,
+    borderWidth: 0.2,
+    borderColor: COLORS.DISABLE,
     marginHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
-    // shadowColor: '#000',
-    // shadowOffset: {width: -1, height: 2},
-    // shadowOpacity: 0.08,
-    // shadowRadius: 6,
-    // elevation: 6,
   },
   title: {
     fontSize: 16,

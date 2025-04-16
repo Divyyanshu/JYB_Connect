@@ -99,14 +99,16 @@ const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
       [key]: value,
     }));
   };
-
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
-      setForm({...form, plan_closure_date: selectedDate.toDateString()});
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      setForm(prev => ({
+        ...prev,
+        plan_closure_date: formattedDate,
+      }));
     }
   };
-
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
@@ -235,18 +237,27 @@ const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
                     style={styles.nativeInput}
                     placeholder="Enter Responsibility"
                   />
-
-                  <View style={styles.button}>
-                    <CustomButton
-                      onPress={() => setShowDatePicker(true)}
-                      title={form.plan_closure_date || 'Pick Closure Date'}
-                      color={
-                        form.plan_closure_date
-                          ? COLORS.SUCCESS_GREEN
-                          : COLORS.PRIMARY
-                      }
-                    />
-                  </View>
+                  <Text style={styles.label}>Plan Closure Date</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(true)}
+                    activeOpacity={0.7}
+                    style={[
+                      styles.nativeInput,
+                      {
+                        justifyContent: 'center',
+                        backgroundColor: '#fff',
+                        borderColor: form.plan_closure_date
+                          ? COLORS.DANGER
+                          : '#ccc',
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color: form.plan_closure_date ? COLORS.DANGER : '#888',
+                      }}>
+                      {form.plan_closure_date || 'Pick Closure Date'}
+                    </Text>
+                  </TouchableOpacity>
 
                   <View style={styles.button}>
                     <CustomButton

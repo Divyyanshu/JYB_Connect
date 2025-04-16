@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList} from 'react-native';
 import {TextInput, Button, Text} from 'react-native-paper';
-import SQLite from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {styles} from './style';
@@ -16,16 +15,6 @@ const RepeatJobCardScreen = ({navigation}) => {
   const [showTable, setShowTable] = useState(false);
 
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql(
-        `CREATE TABLE IF NOT EXISTS RepeatCard (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          card_no INTEGER,
-          card_percent TEXT
-        );`,
-      );
-    });
-
     getMTDFromAsyncStorage();
     fetchData();
   }, []);

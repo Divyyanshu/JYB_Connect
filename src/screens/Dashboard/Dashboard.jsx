@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {View, Dimensions, StatusBar, BackHandler, Alert} from 'react-native';
-import axios from 'axios';
 import NetInfo from '@react-native-community/netinfo';
 import {Snackbar} from 'react-native-paper';
 import {styles} from './style';
@@ -9,12 +8,13 @@ import CustomModal from '../../components/DashboardModel/dashboardModel';
 import DeviceInfo from 'react-native-device-info';
 import {
   createTable,
-  insertRecord,
-  fetchRecords,
   create_KPI_Performance_Table,
   createManPowerAvailability,
   createCompanyTable,
   createDealerTable,
+  createRepeatCardTable,
+  createTableComplaintAnalysis,
+  createTableMomManuallyTable,
 } from '../../database/db';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 import {useFocusEffect} from '@react-navigation/native';
@@ -60,30 +60,6 @@ const Dashboard = ({navigation}) => {
       return () => backHandler.remove();
     }, []),
   );
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforServiceAttribute',
-  //     );
-
-  //     if (response.data && response.data.Data) {
-  //       response.data.Data.forEach(async item => {
-  //         await insertRecord(
-  //           item.DefId,
-  //           item.MainParameter,
-  //           item.SubParameters,
-  //           item.Checkpoints,
-  //           item.MaxMarks,
-  //           '',
-  //         );
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //     showAlert('Error', 'Failed to fetch data from server.');
-  //   }
-  // };
-
   useEffect(() => {
     createTable();
     console.log('createTable');
@@ -95,6 +71,12 @@ const Dashboard = ({navigation}) => {
     console.log('createCompanyTable');
     createDealerTable();
     console.log('createDealerTable');
+    createRepeatCardTable();
+    console.log('createRepeatCardTable');
+    createTableComplaintAnalysis();
+    console.log('createTableComplaintAnalysis');
+    createTableMomManuallyTable();
+    console.log('createTableMomManuallyTable');
 
     const unsubscribe = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
@@ -113,7 +95,6 @@ const Dashboard = ({navigation}) => {
     };
   }, []);
 
-
   const handleCardPress = type => {
     console.log('card pressed');
     setModalType(type);
@@ -130,15 +111,6 @@ const Dashboard = ({navigation}) => {
         title={'Dashboard'}
         navState={navigation}
       />
-
-      {/* <CustomCard
-        centerName="Sales"
-        imageSource={require('../../assets/icons/sales.png')}
-        onPress={() =>
-          showAlert('Coming Soon 🚀', 'Sales feature is under development.')
-        }
-      /> */}
-
       <View
         style={{
           backgroundColor: '#fff',
@@ -166,8 +138,6 @@ const Dashboard = ({navigation}) => {
           modalType={modalType}
         />
       </View>
-
-      {/* Snackbar on reconnect */}
       <Snackbar
         visible={isSnackbarVisible}
         onDismiss={() => setIsSnackbarVisible(false)}

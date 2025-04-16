@@ -10,13 +10,16 @@ import Orientation from 'react-native-orientation-locker';
 import {styles} from './style';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {
+  fetchDataMomManuallyTable,
   getMOMFromComplaintAnalysis,
   getMOMFromKPI_Performance,
   getMOMFromManPowerAvailability,
   getMOMFromServiceAttributes,
 } from '../../database/db';
+import CustomFormModal from '../../components/Mom_Popup/Mom_Popup';
 
 const MinutesOfMeeting = ({navigation}) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [dataMom, setDataMom] = useState([]);
 
   useEffect(() => {
@@ -86,6 +89,19 @@ const MinutesOfMeeting = ({navigation}) => {
           responsibility: item.responsibility,
         });
       });
+      const getManuallyMomData = await fetchDataMomManuallyTable();
+      console.log('getManuallyMomData:', getManuallyMomData);
+      getManuallyMomData.forEach(item => {
+        tempData.push({
+          id: SerialNumber++,
+          parameters: item.parameter,
+          clPlRemarks: item.remarks,
+          countermeasurePlan: item.counterMeasure,
+          targetDate: item.targetDate,
+          responsibility: item.responsibility,
+        });
+      });
+
       setDataMom(tempData);
       console.log('Final Merged Data:', tempData);
     } catch (error) {
@@ -102,7 +118,6 @@ const MinutesOfMeeting = ({navigation}) => {
       <Text style={styles.cell}>{item.responsibility}</Text>
     </View>
   );
-
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style={styles.container}>
@@ -113,6 +128,7 @@ const MinutesOfMeeting = ({navigation}) => {
           showAdd={true}
           title={'Minutes of Meeting'}
           navState={navigation}
+          setModalVisible={setModalVisible}
         />
         <View style={styles.tableContainer}>
           <View style={styles.headerRow}>
@@ -133,6 +149,10 @@ const MinutesOfMeeting = ({navigation}) => {
           </View>
         </View>
       </View>
+      <CustomFormModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </KeyboardAvoidingView>
   );
 };

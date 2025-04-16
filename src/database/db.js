@@ -679,6 +679,14 @@ const clearAllTables = async () => {
       },
     );
     tx.executeSql(
+      'DELETE FROM MomManualTable',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear AccompaniedByCompany', error);
+      },
+    );
+    tx.executeSql(
       'DELETE FROM AccompaniedByCompany',
       [],
       (_, results) => {},
@@ -884,7 +892,24 @@ const getMOMFromComplaintAnalysis = () => {
     });
   });
 };
-
+const createRepeatCardTable = () => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `CREATE TABLE IF NOT EXISTS RepeatCard (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        card_no INTEGER,
+        card_percent TEXT
+      );`,
+      [],
+      () => {
+        console.log('RepeatCard table created successfully');
+      },
+      error => {
+        console.log('Error creating RepeatCard table: ', error);
+      },
+    );
+  });
+};
 const clearRepeatCardTable = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -904,7 +929,9 @@ const clearServiceAttributeTable = () => {
       `DELETE FROM ServiceAttributes`,
       [],
       () => {
-        console.log('All data from ServiceAttributes table deleted successfully.');
+        console.log(
+          'All data from ServiceAttributes table deleted successfully.',
+        );
       },
       error => console.log('Clear ServiceAttributes Table Error:', error),
     );
@@ -950,6 +977,82 @@ export const getMOMEntries = async () => {
   return entries;
 };
 
+// Mom manually table
+const createTableMomManuallyTable = () => {
+  db.executeSql(
+    `
+    CREATE TABLE IF NOT EXISTS MomManualTable (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      parameter TEXT,
+      remarks TEXT,
+      counterMeasure TEXT,
+      targetDate TEXT,
+      responsibility TEXT
+    )
+  `,
+    [],
+    result => {
+      console.log('Table created or already exists');
+    },
+    error => {
+      console.error('Error creating table:', error);
+    },
+  );
+};
+
+const insertDataMomManuallyTable = formData => {
+  const query = `
+    INSERT INTO MomManualTable (parameter, remarks, counterMeasure, targetDate, responsibility)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  const values = [
+    formData.parameter,
+    formData.remarks,
+    formData.counterMeasure,
+    formData.targetDate,
+    formData.responsibility,
+  ];
+
+  return new Promise((resolve, reject) => {
+    db.executeSql(
+      query,
+      values,
+      () => {
+        console.log('Data inserted successfully!');
+        resolve();
+      },
+      error => {
+        console.error('Error inserting data:', error);
+        reject(error);
+      },
+    );
+  });
+};
+const fetchDataMomManuallyTable = () => {
+  console.log('Fetching MomManualTable');
+
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * from MomManualTable`,
+        [],
+        (_, results) => {
+          let detailsList = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            detailsList.push(results.rows.item(i));
+          }
+          console.log('MomSuccess Data:', detailsList);
+          resolve(detailsList);
+        },
+        (_, error) => {
+          console.error('Error fetching MomData:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
 export {
   db,
   createTable,
@@ -984,5 +1087,9 @@ export {
   getMOMFromComplaintAnalysis,
   clearRepeatCardTable,
   clearCustomerComplaintAnalysisTableData,
-  clearServiceAttributeTable
+  clearServiceAttributeTable,
+  createRepeatCardTable,
+  insertDataMomManuallyTable,
+  fetchDataMomManuallyTable,
+  createTableMomManuallyTable,
 };
