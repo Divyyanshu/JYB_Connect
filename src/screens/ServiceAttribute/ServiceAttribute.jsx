@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {styles} from './style';
 import {
-  getDetailsByMainParameter,
   getDetailsByMaxObtain,
   getGroupedMainParameters,
 } from '../../database/db';
@@ -25,7 +24,6 @@ const ServiceAttributes = () => {
 
   useEffect(() => {
     const unsubscribe2 = navigation.addListener('focus', () => {
-      console.log('focus revived');
       const fetchData = async () => {
         try {
           const response = await getGroupedMainParameters();

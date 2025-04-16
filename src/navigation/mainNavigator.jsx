@@ -309,8 +309,7 @@ export const MainNavigator = ({navigation}) => {
               };
             },
           }}>
-
-<Stack.Screen
+          <Stack.Screen
             name={SCREENS.MAIN_STACK.LOGIN}
             component={LoginPage}
             options={{headerShown: false}}
@@ -537,7 +536,6 @@ export const MainNavigator = ({navigation}) => {
               ),
             })}
           />
-  
         </Stack.Navigator>
       );
     }

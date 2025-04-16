@@ -21,8 +21,6 @@ const CustomFormModal = ({visible, onClose}) => {
     targetDate: '',
     responsibility: '',
   });
-  const [fetchedData, setFetchedData] = useState([]);
-
   const handleChange = (name, value) => {
     setFormData(prev => ({
       ...prev,
@@ -48,86 +46,83 @@ const CustomFormModal = ({visible, onClose}) => {
       supportedOrientations={['landscape']}>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.title}>Enter MOM Data</Text>
+          <Text style={styles.title}>Minutes of Meeting</Text>
           <ScrollView>
-            <Text style={styles.label}>Parameter</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.parameter}
-              onChangeText={text => handleChange('parameter', text)}
-              placeholder="Enter Parameter"
-            />
-            <Text style={styles.label}>CL-PL Remarks</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.remarks}
-              onChangeText={text => handleChange('remarks', text)}
-              placeholder="Enter Remarks"
-            />
-            <Text style={styles.label}>Counter Measure Plan</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.counterMeasure}
-              onChangeText={text => handleChange('counterMeasure', text)}
-              placeholder="Enter Counter Measure"
-            />
-            <Text style={styles.label}>Target Date</Text>
-            <TouchableOpacity
-              onPress={() => setShowDatePicker(true)}
-              style={[styles.input, {justifyContent: 'center'}]}>
-              <Text style={{color: formData.targetDate ? '#000' : '#999'}}>
-                {formData.targetDate ? formData.targetDate : 'Select a date'}
-              </Text>
-            </TouchableOpacity>
-
-            {showDatePicker && (
-              <DateTimePicker
-                value={
-                  formData.targetDate
-                    ? new Date(formData.targetDate)
-                    : new Date()
-                }
-                mode="date"
-                display="default"
-                minimumDate={new Date()}
-                onChange={(event, selectedDate) => {
-                  setShowDatePicker(false);
-                  if (selectedDate) {
-                    const formattedDate = selectedDate
-                      .toISOString()
-                      .split('T')[0];
-                    handleChange('targetDate', formattedDate);
-                  }
-                }}
+            <View
+              style={{
+                backgroundColor: '#fff',
+                padding: 20,
+                borderBottomRightRadius: 18,
+                borderBottomLeftRadius: 18,
+              }}>
+              <Text style={styles.label}>Parameter</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.parameter}
+                onChangeText={text => handleChange('parameter', text)}
+                placeholder="Enter Parameter"
               />
-            )}
-            <Text style={styles.label}>Responsibility</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.responsibility}
-              onChangeText={text => handleChange('responsibility', text)}
-              placeholder="Enter Responsibility"
-            />
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Submit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
+              <Text style={styles.label}>CL-PL Remarks</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.remarks}
+                onChangeText={text => handleChange('remarks', text)}
+                placeholder="Enter Remarks"
+              />
+              <Text style={styles.label}>Counter Measure Plan</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.counterMeasure}
+                onChangeText={text => handleChange('counterMeasure', text)}
+                placeholder="Enter Counter Measure"
+              />
+              <Text style={styles.label}>Target Date</Text>
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                style={[styles.input, {justifyContent: 'center'}]}>
+                <Text style={{color: formData.targetDate ? '#000' : '#999'}}>
+                  {formData.targetDate ? formData.targetDate : 'Select a date'}
+                </Text>
+              </TouchableOpacity>
 
-            {/* Display Fetched Data */}
-            <View>
-              {fetchedData.map((item, index) => (
-                <View key={index} style={styles.dataItem}>
-                  <Text>{item.parameter}</Text>
-                  <Text>{item.remarks}</Text>
-                  <Text>{item.counterMeasure}</Text>
-                  <Text>{item.targetDate}</Text>
-                  <Text>{item.responsibility}</Text>
-                </View>
-              ))}
+              {showDatePicker && (
+                <DateTimePicker
+                  value={
+                    formData.targetDate
+                      ? new Date(formData.targetDate)
+                      : new Date()
+                  }
+                  mode="date"
+                  display="default"
+                  minimumDate={new Date()}
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) {
+                      const formattedDate = selectedDate
+                        .toISOString()
+                        .split('T')[0];
+                      handleChange('targetDate', formattedDate);
+                    }
+                  }}
+                />
+              )}
+              <Text style={styles.label}>Responsibility</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.responsibility}
+                onChangeText={text => handleChange('responsibility', text)}
+                placeholder="Enter Responsibility"
+              />
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <TouchableOpacity
+                  style={styles.submitButton}
+                  onPress={handleSubmit}>
+                  <Text style={styles.buttonSubmitText}>Submit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+                  <Text style={styles.buttonCloseText}>Close</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </View>

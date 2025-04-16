@@ -12,7 +12,7 @@ import renderIf from '../../utils/renderIf';
 import DeviceInfo from 'react-native-device-info';
 import {COLORS} from '../../utils/colors';
 import {dropAllTables} from '../../database/db';
-import {removeToken} from '../../utils/shared';
+import {clearAllAsyncStorage, removeToken} from '../../utils/shared';
 import {STACKS} from '../../utils/stacks';
 import {SCREENS} from '../../utils/screens';
 const deviceWidth = Dimensions.get('window').width;
@@ -37,6 +37,7 @@ const Topbar = props => {
     dropAllTables();
     try {
       await removeToken();
+      await clearAllAsyncStorage();
       setTimeout(() => {
         props.navState.reset({
           index: 0,

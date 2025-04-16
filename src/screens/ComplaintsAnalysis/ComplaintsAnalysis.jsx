@@ -97,7 +97,6 @@ const CustomerComplaintAnalysis = ({navigation}) => {
 
   const handleSubmit = () => {
     insertComplaintAnalysis(formData);
-    Alert.alert('Success', 'Data submitted and saved');
     setIsSubmitted(true);
   };
 
@@ -236,9 +235,11 @@ const CustomerComplaintAnalysis = ({navigation}) => {
                     )}
                   </>
                 )}
-              <View style={styles.ButtonContainer}>
-                <CustomButton title={'Submit'} onPress={handleSubmit} />
-              </View>
+              {formData.occurrence && (
+                <View style={styles.ButtonContainer}>
+                  <CustomButton title={'Submit'} onPress={handleSubmit} />
+                </View>
+              )}
             </>
           ) : (
             <View>

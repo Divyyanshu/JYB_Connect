@@ -1053,6 +1053,30 @@ const fetchDataMomManuallyTable = () => {
   });
 };
 
+// Tick status showing :- queries
+const isAllMaxObtFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ServiceAttributes WHERE MaxObt IS NULL OR MaxObt = '';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            // Kuch values empty/null hain
+            resolve(false);
+          } else {
+            resolve(true); // Sab filled hain
+          }
+        },
+        (_, error) => {
+          console.error('Error in isAllMaxObtFilled:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
 export {
   db,
   createTable,
@@ -1092,4 +1116,5 @@ export {
   insertDataMomManuallyTable,
   fetchDataMomManuallyTable,
   createTableMomManuallyTable,
+  isAllMaxObtFilled,
 };

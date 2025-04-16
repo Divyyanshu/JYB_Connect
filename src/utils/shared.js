@@ -73,8 +73,6 @@ export const getEmail = async () => {
   }
 };
 
-
-
 export const saveDealerName = async dealerName => {
   try {
     await AsyncStorage.setItem('dealerName', dealerName);
@@ -92,5 +90,15 @@ export const getDealerName = async () => {
   } catch (error) {
     console.error('Error retrieving dealerName:', error);
     return null;
+  }
+};
+//for all async data >>>> token  , dealer code / mtd actual <<<<<<<
+
+export const clearAllAsyncStorage = async () => {
+  try {
+    await AsyncStorage.clear();
+    console.log('All AsyncStorage data cleared successfully');
+  } catch (error) {
+    console.error('Error clearing AsyncStorage:', error);
   }
 };

@@ -13,7 +13,6 @@ import {
 } from 'react-native-paper';
 import {styles} from './style';
 import {COLORS} from '../../utils/colors';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {db} from '../../database/db';
 import Topbar from '../../components/CommonComponents/TopBar';
 
@@ -136,7 +135,7 @@ const AccompaniedByDealer = ({navigation}) => {
                     <View style={styles.cardHeader}>
                       <Text style={styles.cardHeaderText}>Post</Text>
                       <Text style={styles.cardHeaderText}>Name</Text>
-                      <Text style={styles.cardHeaderText}>Mobile</Text>
+                      <Text style={styles.cardHeaderText}>Mobile No.</Text>
                     </View>
                     <View style={styles.row}>
                       <Text style={styles.cellText}>{item.post}</Text>

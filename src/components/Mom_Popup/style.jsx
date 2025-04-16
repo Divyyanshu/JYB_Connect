@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {COLORS} from '../../utils/colors';
 
 export const styles = StyleSheet.create({
   modalContainer: {
@@ -8,17 +9,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.PRIMARY,
     width: '90%',
     height: '90%',
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: 18,
     justifyContent: 'flex-start',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    padding: 10,
+    color: 'white',
+    textAlign: 'center',
   },
   label: {
     fontSize: 16,
@@ -36,21 +38,29 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   submitButton: {
-    backgroundColor: '#007AFF',
-    padding: 12,
+    backgroundColor: COLORS.PRIMARY,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
     marginTop: 30,
-    borderRadius: 8,
+    borderRadius: 18,
     alignItems: 'center',
   },
   closeButton: {
-    backgroundColor: 'gray',
-    padding: 12,
+    backgroundColor: COLORS.WHITE,
+    borderWidth: 0.8,
+    borderColor: COLORS.PRIMARY,
+    paddingHorizontal: 40,
+    paddingVertical: 8,
     marginTop: 15,
-    borderRadius: 8,
+    borderRadius: 14,
     alignItems: 'center',
   },
-  buttonText: {
-    color: '#fff',
+  buttonSubmitText: {
+    color: COLORS.WHITE,
+    fontWeight: '600',
+  },
+  buttonCloseText: {
+    color: COLORS.PRIMARY,
     fontWeight: '600',
   },
 });

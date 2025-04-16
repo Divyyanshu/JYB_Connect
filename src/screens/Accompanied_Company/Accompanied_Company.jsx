@@ -138,7 +138,7 @@ const AccompaniedByCompany = ({navigation}) => {
                     <View style={styles.cardHeader}>
                       <Text style={styles.cardHeaderText}>Post</Text>
                       <Text style={styles.cardHeaderText}>Name</Text>
-                      <Text style={styles.cardHeaderText}>Mobile</Text>
+                      <Text style={styles.cardHeaderText}>Mobile No.</Text>
                     </View>
                     <View style={styles.row}>
                       <Text style={styles.cellText}>{item.post}</Text>

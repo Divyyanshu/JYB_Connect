@@ -85,6 +85,14 @@ const KeyActivities = () => {
     setAlertVisible(true);
   };
 
+  const check_If_All_Filled = async item => {
+    let itemRowData = await getDetailsByMaxObtain(item);
+    if (itemRowData.length > 0) {
+      return false;
+    }
+    return true;
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />

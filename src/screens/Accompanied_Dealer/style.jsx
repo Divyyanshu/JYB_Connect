@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
   containerTable: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 5,
   },
   headerRow: {
     flexDirection: 'row',
@@ -40,7 +39,6 @@ export const styles = StyleSheet.create({
     shadowColor: 'transparent',
     shadowOpacity: 0,
     marginVertical: 6,
-    marginHorizontal: 15,
     borderWidth: 0.5,
     borderColor: '#e0e0e0',
   },
@@ -73,8 +71,8 @@ export const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
     position: 'absolute',
-    right: 20,
-    bottom: 30,
+    right: 30,
+    bottom: 50,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
