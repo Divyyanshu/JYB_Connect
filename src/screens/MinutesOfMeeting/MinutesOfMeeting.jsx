@@ -62,7 +62,7 @@ const MinutesOfMeeting = ({navigation}) => {
       });
 
       const MOMFromManPowerAvailability =
-      await getMOMFromManPowerAvailability();
+        await getMOMFromManPowerAvailability();
       console.log('ManPowerAvailability:', MOMFromManPowerAvailability);
       MOMFromManPowerAvailability.forEach(item => {
         tempData.push({
@@ -74,21 +74,24 @@ const MinutesOfMeeting = ({navigation}) => {
           responsibility: item.responsibility,
         });
       });
-
-      // Code added by Puru
-     // for complaintAnalysis
-
-     const MomForComplaintAnalysis = await getMOMFromComplaintAnalysis()
-
-     console.log('MomForComplaintAnalysis:', MomForComplaintAnalysis);
-
+      const MomForComplaintAnalysis = await getMOMFromComplaintAnalysis();
+      console.log('MomForComplaintAnalysis:', MomForComplaintAnalysis);
+      MomForComplaintAnalysis.forEach(item => {
+        tempData.push({
+          id: SerialNumber++,
+          parameters: `Complaints - ${item.received}`,
+          clPlRemarks: item.gapArea,
+          countermeasurePlan: item.counterMeasure,
+          targetDate: item.planClosureDate,
+          responsibility: item.responsibility,
+        });
+      });
       setDataMom(tempData);
       console.log('Final Merged Data:', tempData);
     } catch (error) {
       console.log('Error while fetching MOM data:', error);
     }
   };
-
   const renderItem = ({item}) => (
     <View style={styles.row}>
       <Text style={styles.cell}>{item.id}</Text>
