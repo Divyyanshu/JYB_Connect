@@ -8,7 +8,6 @@ const db = SQLite.openDatabase(
   () => console.log('Database opened successfully!'),
   error => console.log('Database open error:', error),
 );
-
 const createTable = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -1054,6 +1053,7 @@ const fetchDataMomManuallyTable = () => {
 };
 
 // Tick status showing :- queries
+// 1. service attribute
 const isAllMaxObtFilled = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
@@ -1062,14 +1062,250 @@ const isAllMaxObtFilled = () => {
         [],
         (_, results) => {
           if (results.rows.length > 0) {
-            // Kuch values empty/null hain
             resolve(false);
           } else {
-            resolve(true); // Sab filled hain
+            resolve(true);
           }
         },
         (_, error) => {
           console.error('Error in isAllMaxObtFilled:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const isAllMTDActualFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM KPI_PERFORMANCE WHERE TRIM(mtd_actual) IS NULL OR TRIM(mtd_actual) = '';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        },
+        (_, error) => {
+          console.error('Error in isAllMTDActualFilled:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const isAllAvailableFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ManPowerAvailability WHERE TRIM(available) IS NULL OR TRIM(available) = '';`,
+        [],
+        (_, results) => {
+          if (results.rows.length > 0) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        },
+        (_, error) => {
+          console.error('Error in isAllAvailableFilled:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const isAllComplaintsReceivedFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Step 1: Check if table has any rows
+      tx.executeSql(
+        `SELECT COUNT(*) as total FROM CustomerComplaintAnalysis`,
+        [],
+        (_, countResult) => {
+          const totalRows = countResult.rows.item(0).total;
+          if (totalRows === 0) {
+            resolve(false);
+          } else {
+            tx.executeSql(
+              `SELECT * FROM CustomerComplaintAnalysis WHERE TRIM(received) IS NULL OR TRIM(received) = '';`,
+              [],
+              (_, results) => {
+                if (results.rows.length > 0) {
+                  resolve(false);
+                } else {
+                  resolve(true);
+                }
+              },
+              (_, error) => {
+                console.error('Error in inner received check:', error);
+                reject(error);
+              },
+            );
+          }
+        },
+        (_, error) => {
+          console.error('Error counting rows:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const isAllRepeatCardNoFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT COUNT(*) as total FROM RepeatCard`,
+        [],
+        (_, countResult) => {
+          const totalRows = countResult.rows.item(0).total;
+
+          if (totalRows === 0) {
+            resolve(false);
+          } else {
+            tx.executeSql(
+              `SELECT * FROM RepeatCard WHERE TRIM(card_no) IS NULL OR TRIM(card_no) = '';`,
+              [],
+              (_, results) => {
+                if (results.rows.length > 0) {
+                  resolve(false);
+                } else {
+                  resolve(true);
+                }
+              },
+              (_, error) => {
+                console.error('Error checking card_no field:', error);
+                reject(error);
+              },
+            );
+          }
+        },
+        (_, error) => {
+          console.error('Error checking total rows in RepeatCard:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const isAllMomParametersFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT COUNT(*) as total FROM MomManualTable`,
+        [],
+        (_, countResult) => {
+          const totalRows = countResult.rows.item(0).total;
+
+          if (totalRows === 0) {
+            resolve(false);
+          } else {
+            tx.executeSql(
+              `SELECT * FROM MomManualTable WHERE TRIM(parameter) IS NULL OR TRIM(parameter) = '';`,
+              [],
+              (_, results) => {
+                if (results.rows.length > 0) {
+                  resolve(false);
+                } else {
+                  resolve(true);
+                }
+              },
+              (_, error) => {
+                console.error('Error checking parameter field:', error);
+                reject(error);
+              },
+            );
+          }
+        },
+        (_, error) => {
+          console.error('Error checking MomManualTable rows:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const isAllDealerNamesFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Step 1: Check if table has any data
+      tx.executeSql(
+        `SELECT COUNT(*) as total FROM AccompaniedByDealer`,
+        [],
+        (_, countResult) => {
+          const totalRows = countResult.rows.item(0).total;
+
+          if (totalRows === 0) {
+            resolve(false); // Table is empty
+          } else {
+            // Step 2: Check for blank/invalid 'name'
+            tx.executeSql(
+              `SELECT * FROM AccompaniedByDealer WHERE TRIM(name) IS NULL OR TRIM(name) = '';`,
+              [],
+              (_, results) => {
+                if (results.rows.length > 0) {
+                  resolve(false); // Some names are empty
+                } else {
+                  resolve(true); // All names filled properly
+                }
+              },
+              (_, error) => {
+                console.error(
+                  'Error checking name field in AccompaniedByDealer:',
+                  error,
+                );
+                reject(error);
+              },
+            );
+          }
+        },
+        (_, error) => {
+          console.error('Error checking rows in AccompaniedByDealer:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const isAllCompanyNamesFilled = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT COUNT(*) as total FROM AccompaniedByCompany`,
+        [],
+        (_, countResult) => {
+          const totalRows = countResult.rows.item(0).total;
+
+          if (totalRows === 0) {
+            resolve(false);
+          } else {
+            tx.executeSql(
+              `SELECT * FROM AccompaniedByCompany WHERE TRIM(name) IS NULL OR TRIM(name) = '';`,
+              [],
+              (_, results) => {
+                if (results.rows.length > 0) {
+                  resolve(false);
+                } else {
+                  resolve(true);
+                }
+              },
+              (_, error) => {
+                console.error(
+                  'Error checking name field in AccompaniedByCompany:',
+                  error,
+                );
+                reject(error);
+              },
+            );
+          }
+        },
+        (_, error) => {
+          console.error('Error checking rows in AccompaniedByCompany:', error);
           reject(error);
         },
       );
@@ -1117,4 +1353,11 @@ export {
   fetchDataMomManuallyTable,
   createTableMomManuallyTable,
   isAllMaxObtFilled,
+  isAllMTDActualFilled,
+  isAllAvailableFilled,
+  isAllComplaintsReceivedFilled,
+  isAllRepeatCardNoFilled,
+  isAllMomParametersFilled,
+  isAllDealerNamesFilled,
+  isAllCompanyNamesFilled,
 };

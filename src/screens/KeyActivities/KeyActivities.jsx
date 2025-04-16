@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,16 @@ import {STACKS} from '../../utils/stacks';
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 import DeviceInfo from 'react-native-device-info';
 import Topbar from '../../components/CommonComponents/TopBar';
+import {
+  isAllAvailableFilled,
+  isAllCompanyNamesFilled,
+  isAllComplaintsReceivedFilled,
+  isAllDealerNamesFilled,
+  isAllMaxObtFilled,
+  isAllMomParametersFilled,
+  isAllMTDActualFilled,
+  isAllRepeatCardNoFilled,
+} from '../../database/db';
 
 const activities = [
   {id: '1', title: 'Service Attributes', completed: false},
@@ -53,6 +63,9 @@ const KeyActivities = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const deviceHeight = Dimensions.get('window').height;
   console.log('DeviceInfo.hasNotch()', DeviceInfo.hasNotch());
+  const [updateUI, setUpdateUI] = useState(false);
+
+  useEffect(() => {}, []);
   const toggleSelection = id => {
     setLoading(true);
 
@@ -61,15 +74,25 @@ const KeyActivities = () => {
       if (screenName) {
         navigation.navigate(STACKS.MAIN_STACK, {screen: screenName});
       }
-
-      setSelected(prev =>
-        prev.map(item =>
-          item.id === id ? {...item, completed: !item.completed} : item,
-        ),
-      );
       setLoading(false);
-    }, 1200);
+    }, 100);
   };
+
+  useEffect(() => {
+    const unsubscribe2 = navigation.addListener('focus', () => {
+      console.log('On focus >>>>');
+      isAllMaxObtFillServiceAttribute();
+      isAllMtd_actualKPI_Performance();
+      isAllMaxObtFillDVR_Score();
+      isAll_Available_ManPowerStatus();
+      isAllComplaintsAnalysis_Received();
+      isAllRepeatCardNoFilledTable();
+      isAllDealerFilled();
+      isAllCompanyFilled();
+      isAllMoM_Table();
+    });
+    return unsubscribe2;
+  }, [navigation]);
 
   const handleSubmit = () => {
     const allCompleted = selected.every(item => item.completed);
@@ -85,12 +108,77 @@ const KeyActivities = () => {
     setAlertVisible(true);
   };
 
-  const check_If_All_Filled = async item => {
-    let itemRowData = await getDetailsByMaxObtain(item);
-    if (itemRowData.length > 0) {
-      return false;
+  const isAllMaxObtFillServiceAttribute = async () => {
+    let isAllMaxObtain = await isAllMaxObtFilled();
+    if (isAllMaxObtain == true) {
+      activities[0].completed = true;
+      setUpdateUI(!updateUI);
     }
-    return true;
+    console.log('isAllMaxObtFilled', isAllMaxObtain);
+  };
+  const isAllMaxObtFillDVR_Score = async () => {
+    let isAllMaxObtain = await isAllMaxObtFilled();
+    if (isAllMaxObtain == true) {
+      activities[2].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllMaxObtFilled', isAllMaxObtain);
+  };
+  const isAllMtd_actualKPI_Performance = async () => {
+    let isAllMtd_actual = await isAllMTDActualFilled();
+    if (isAllMtd_actual == true) {
+      activities[1].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllMTDActualFilled', isAllMtd_actual);
+  };
+  const isAll_Available_ManPowerStatus = async () => {
+    let isAll_Available = await isAllAvailableFilled();
+    if (isAll_Available == true) {
+      activities[3].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllAvailableFilled', isAll_Available);
+  };
+  const isAllComplaintsAnalysis_Received = async () => {
+    let isAllComplaintsReceived = await isAllComplaintsReceivedFilled();
+    if (isAllComplaintsReceived == true) {
+      activities[4].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllComplaintsReceivedFilled', isAllComplaintsReceived);
+  };
+  const isAllRepeatCardNoFilledTable = async () => {
+    let isAllRepeatCard = await isAllRepeatCardNoFilled();
+    if (isAllRepeatCard == true) {
+      activities[5].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllRepeatCardNoFilled', isAllRepeatCard);
+  };
+  const isAllMoM_Table = async () => {
+    let isAllMom = await isAllMomParametersFilled();
+    if (isAllMom == true) {
+      activities[6].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllMomParametersFilled', isAllMom);
+  };
+  const isAllCompanyFilled = async () => {
+    let isAllCompanyFill = await isAllCompanyNamesFilled();
+    if (isAllCompanyFill == true) {
+      activities[7].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllCompanyNamesFilled', isAllCompanyFill);
+  };
+  const isAllDealerFilled = async () => {
+    let isAllDealerFill = await isAllDealerNamesFilled();
+    if (isAllDealerFill == true) {
+      activities[8].completed = true;
+      setUpdateUI(!updateUI);
+    }
+    console.log('isAllDealerNamesFilled', isAllDealerFill);
   };
 
   return (

@@ -25,7 +25,6 @@ const ServiceAttributeModel = ({
   rowIndex,
 }) => {
   if (!item) return null;
-  console.log('item string value', item);
   const [formData, setFormData] = useState({
     gapArea: item.GapArea !== null ? item.GapArea : '',
     actionPlan: item.ActionPlan !== null ? item.ActionPlan : '',
@@ -60,11 +59,9 @@ const ServiceAttributeModel = ({
 
   useEffect(() => {
     if (item.GapArea !== null && item.GapArea !== '') {
-      console.log('Gap area is present');
       setIsMaxObtGreater(true);
       setMarksObtained(item.MaxObt);
     } else {
-      console.log('Gap area is present else condition >>>>>>');
       setMarksObtained(item.MaxObt);
     }
   }, []);

@@ -40,6 +40,7 @@ const KPIPerformance = ({navigation}) => {
         const localData = await fetch_KPI_Performance_Data();
         setData(localData || []);
         await storeServiceVisitMTDPlan(localData);
+        console.log('localdata >>>>>?', localData);
       } catch (error) {
         console.error('Error fetching KPI data:', error);
       } finally {
