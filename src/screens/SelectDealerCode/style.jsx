@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: COLORS.GREY,
-    padding: 18,
+    padding: 10,
     borderRadius: 10,
     marginVertical: 8,
     flexDirection: 'row',
@@ -55,7 +55,13 @@ export const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderColor: COLORS.DISABLE,
     marginHorizontal: COMMON_STYLES.SCREEN_HORIZONTAL_SPACING,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
+
   title: {
     fontSize: 16,
     fontWeight: 'bold',

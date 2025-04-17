@@ -255,28 +255,45 @@ const ServiceAttributeModel = ({
                     }
                   />
                 </View>
-
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Plan Closure Date: </Text>
-                  <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                    <TextInput
-                      style={styles.placeholderStyle}
-                      value={formData.planClosureDate}
-                      placeholder="Plan Closure Date"
-                      placeholderTextColor={'black'}
-                      editable={false}
-                    />
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(true)}
+                    style={[styles.input, {justifyContent: 'center'}]}>
+                    <Text
+                      style={{
+                        color: formData.planClosureDate ? '#000' : '#999',
+                      }}>
+                      {formData.planClosureDate
+                        ? formData.planClosureDate
+                        : 'Select a date'}
+                    </Text>
                   </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={
+                        formData.planClosureDate
+                          ? new Date(formData.planClosureDate)
+                          : new Date()
+                      }
+                      mode="date"
+                      display="default"
+                      minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                      onChange={(event, selectedDate) => {
+                        setShowDatePicker(false);
+                        if (selectedDate) {
+                          const formattedDate = selectedDate
+                            .toISOString()
+                            .split('T')[0];
+                          setFormData(prev => ({
+                            ...prev,
+                            planClosureDate: formattedDate,
+                          }));
+                        }
+                      }}
+                    />
+                  )}
                 </View>
-                {showDatePicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                    onChange={handleDateChange}
-                    minimumDate={new Date()}
-                  />
-                )}
               </>,
             )}
             <View style={{alignItems: 'center'}}>

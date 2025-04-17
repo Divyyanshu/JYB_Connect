@@ -235,7 +235,7 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
                   />
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.label}>Plan Closure Date : </Text>
+                  <Text style={styles.label}>Plan Closure Date:</Text>
                   <TouchableOpacity
                     style={styles.input}
                     onPress={() => setShowDatePicker(true)}>
@@ -245,20 +245,25 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
                         fontSize: 14,
                       }}>
                       {formData.planClosureDate
-                        ? `${formData.planClosureDate}`
+                        ? formData.planClosureDate
                         : 'Enter Date'}
                     </Text>
+                    <View>
+                      {showDatePicker && (
+                        <DateTimePicker
+                          value={selectedDate}
+                          mode="date"
+                          display={
+                            Platform.OS === 'ios' ? 'default' : 'calendar'
+                          }
+                          onChange={handleDateChange}
+                          minimumDate={new Date()}
+                        />
+                      )}
+                    </View>
                   </TouchableOpacity>
-                  {showDatePicker && (
-                    <DateTimePicker
-                      value={selectedDate}
-                      mode="date"
-                      display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                      onChange={handleDateChange}
-                      minimumDate={new Date()}
-                    />
-                  )}
                 </View>
+
                 {formData.photo && isMTDActualFilled && !isCriteriaMeet && (
                   <Image source={{uri: formData.photo}} style={styles.image} />
                 )}

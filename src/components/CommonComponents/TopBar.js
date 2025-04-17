@@ -121,6 +121,7 @@ const Topbar = props => {
             style={{
               color: '#fff',
               fontSize: 18,
+              fontWeight: '700',
               fontFamily: 'Helvetica',
               width: '95%',
               textAlign: 'center',
@@ -129,7 +130,46 @@ const Topbar = props => {
           </Text>
         </TouchableOpacity>,
       )}
-
+      {renderIf(
+        props.showDashboardTitle == true,
+        <TouchableOpacity
+          onPress={() => {
+            props.navState.pop();
+          }}
+          style={{
+            position: 'absolute',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            alignSelf: 'center',
+            bottom: 10,
+            width: '100%',
+            paddingLeft: 10,
+          }}>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: '#fff',
+              fontSize: 18,
+              fontWeight: '700',
+              fontFamily: 'Helvetica',
+              width: '95%',
+              textAlign: 'left',
+            }}>
+            {props.title}
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: '#fff',
+              fontSize: 14,
+              fontFamily: 'Helvetica',
+              width: '100%',
+              textAlign: 'left',
+            }}>
+            {props.username}
+          </Text>
+        </TouchableOpacity>,
+      )}
       {renderIf(
         props.showLogout == true,
         <View
@@ -182,7 +222,7 @@ const Topbar = props => {
 
 const styles = StyleSheet.create({
   topBarStyle: {
-    height: DeviceInfo.hasNotch() == true ?   110 : 80,
+    height: DeviceInfo.hasNotch() == true ? 110 : 100,
     justifyContent: 'center',
     width: '100%',
     alignItems: 'center',

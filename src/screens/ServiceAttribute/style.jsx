@@ -11,11 +11,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 14,
-    borderRadius: 18,
+    borderRadius: 5,
     backgroundColor: COLORS.LIGHT_PRIMARY,
     marginHorizontal: 5,
     marginVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
+
   cardText: {
     fontSize: 14,
     textAlign: 'center',

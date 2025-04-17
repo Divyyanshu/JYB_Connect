@@ -19,6 +19,7 @@ import {
 import CustomAlert from '../../uiKit/customAlert/customAlert';
 import {useFocusEffect} from '@react-navigation/native';
 import Topbar from '../../components/CommonComponents/TopBar';
+import {getEmail} from '../../utils/shared';
 
 const {width} = Dimensions.get('window');
 
@@ -29,6 +30,7 @@ const Dashboard = ({navigation}) => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
+  const [username, setUsername] = useState(null);
   const deviceHeight = Dimensions.get('window').height;
 
   console.log('deviceHeight>>>>>>', deviceHeight);
@@ -60,6 +62,15 @@ const Dashboard = ({navigation}) => {
       return () => backHandler.remove();
     }, []),
   );
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      const email = await getEmail();
+      setUsername(email);
+    };
+
+    fetchEmail();
+  }, []);
   useEffect(() => {
     createTable();
     console.log('createTable');
@@ -106,8 +117,9 @@ const Dashboard = ({navigation}) => {
       <StatusBar barStyle="light-content" backgroundColor="#A6192E" />
       <Topbar
         showBack={false}
-        showtitle={true}
+        showDashboardTitle={true}
         showLogout={true}
+        username={username}
         title={'Dashboard'}
         navState={navigation}
       />
@@ -115,8 +127,8 @@ const Dashboard = ({navigation}) => {
         style={{
           backgroundColor: '#fff',
           alignItems: 'center',
-          height:
-            deviceHeight - (DeviceInfo.hasNotch() == true ? 110 * 2 : 80 * 2),
+          // height:
+          //   deviceHeight - (DeviceInfo.hasNotch() == true ? 110 * 2 : 80 * 2),
           justifyContent: 'center',
         }}>
         <CustomCard

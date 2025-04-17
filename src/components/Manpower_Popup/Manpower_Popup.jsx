@@ -265,6 +265,20 @@ const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
                     </Text>
                   </TouchableOpacity>
 
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={
+                        form.plan_closure_date
+                          ? new Date(form.plan_closure_date)
+                          : new Date()
+                      }
+                      mode="date"
+                      display={Platform.OS === 'ios' ? 'default' : 'calendar'}
+                      onChange={handleDateChange}
+                      minimumDate={new Date()}
+                    />
+                  )}
+
                   <View style={styles.button}>
                     <CustomButton
                       onPress={openCamera}
