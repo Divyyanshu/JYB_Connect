@@ -152,6 +152,10 @@ const MinutesOfMeeting = ({navigation}) => {
       <CustomFormModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
+        onSubmit={() => {
+          setModalVisible(false);
+          fetchMOMdata();
+        }}
       />
     </KeyboardAvoidingView>
   );

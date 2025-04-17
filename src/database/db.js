@@ -1121,7 +1121,6 @@ const isAllAvailableFilled = () => {
 const isAllComplaintsReceivedFilled = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Step 1: Check if table has any rows
       tx.executeSql(
         `SELECT COUNT(*) as total FROM CustomerComplaintAnalysis`,
         [],
@@ -1233,7 +1232,6 @@ const isAllMomParametersFilled = () => {
 const isAllDealerNamesFilled = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Step 1: Check if table has any data
       tx.executeSql(
         `SELECT COUNT(*) as total FROM AccompaniedByDealer`,
         [],
@@ -1241,17 +1239,16 @@ const isAllDealerNamesFilled = () => {
           const totalRows = countResult.rows.item(0).total;
 
           if (totalRows === 0) {
-            resolve(false); // Table is empty
+            resolve(false);
           } else {
-            // Step 2: Check for blank/invalid 'name'
             tx.executeSql(
               `SELECT * FROM AccompaniedByDealer WHERE TRIM(name) IS NULL OR TRIM(name) = '';`,
               [],
               (_, results) => {
                 if (results.rows.length > 0) {
-                  resolve(false); // Some names are empty
+                  resolve(false);
                 } else {
-                  resolve(true); // All names filled properly
+                  resolve(true);
                 }
               },
               (_, error) => {
