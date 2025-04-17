@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   Platform,
 } from 'react-native';
@@ -40,7 +39,7 @@ const KPIPerformance = ({navigation}) => {
         const localData = await fetch_KPI_Performance_Data();
         setData(localData || []);
         await storeServiceVisitMTDPlan(localData);
-        console.log('localdata >>>>>?', localData);
+        console.log('localData >>>>>?', localData);
       } catch (error) {
         console.error('Error fetching KPI data:', error);
       } finally {
@@ -64,10 +63,10 @@ const KPIPerformance = ({navigation}) => {
           currentDay
         ).toFixed(2);
         await AsyncStorage.setItem('MTD_SERVICE_VISIT', mtd_actual);
-        console.log(' MTD Plan stored in AsyncStorage:', mtd_actual);
+        console.log(' mtd_actual stored in AsyncStorage:', mtd_actual);
       }
     } catch (error) {
-      console.error('Error storing MTD Plan:', error);
+      console.error('Error storing mtd_actual:', error);
     }
   };
 
