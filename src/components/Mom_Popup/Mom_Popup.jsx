@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   View,
@@ -12,7 +12,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {insertDataMomManuallyTable} from '../../database/db';
 
-const CustomFormModal = ({visible, onClose}) => {
+const CustomFormModal = ({visible, onClose, onSubmit}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [formData, setFormData] = useState({
     parameter: '',
@@ -27,17 +27,15 @@ const CustomFormModal = ({visible, onClose}) => {
       [name]: value,
     }));
   };
-
   const handleSubmit = async () => {
     try {
       await insertDataMomManuallyTable(formData);
       console.log('formdata insert mom manually! >>>', formData);
-      onClose();
+      onSubmit();
     } catch (error) {
       Alert.alert('Error', 'Failed to insert data');
     }
   };
-
   return (
     <Modal
       visible={visible}

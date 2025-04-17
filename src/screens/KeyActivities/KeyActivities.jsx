@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {styles} from './style';
+import {ToastAndroid} from 'react-native';
 import {CustomButton} from '../../uiKit/customButton';
 import {useNavigation} from '@react-navigation/native';
 import {SCREENS} from '../../utils/screens';
@@ -54,7 +55,7 @@ const screenMapping = {
 };
 
 const KeyActivities = () => {
-  const [selected, setSelected] = useState(activities);
+  const [activitiesData, setActivitiesData] = useState(activities);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
@@ -62,15 +63,65 @@ const KeyActivities = () => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const deviceHeight = Dimensions.get('window').height;
-  console.log('DeviceInfo.hasNotch()', DeviceInfo.hasNotch());
-  const [updateUI, setUpdateUI] = useState(false);
 
-  useEffect(() => {}, []);
-  const toggleSelection = id => {
+  const markActivityCompleted = index => {
+    setActivitiesData(prev =>
+      prev.map((item, idx) =>
+        idx === index ? {...item, completed: true} : item,
+      ),
+    );
+  };
+
+  const screenChecks = [
+    async () => (await isAllMaxObtFilled()) && markActivityCompleted(0), // Service Attributes.
+    async () => (await isAllMTDActualFilled()) && markActivityCompleted(1), // KPI.
+    async () => (await isAllMaxObtFilled()) && markActivityCompleted(2), // DVR Score.
+    async () => (await isAllAvailableFilled()) && markActivityCompleted(3), // Man Power.
+    async () =>
+      (await isAllComplaintsReceivedFilled()) && markActivityCompleted(4), // Complaints.
+    async () => (await isAllRepeatCardNoFilled()) && markActivityCompleted(5), // Repeat Job.
+    async () => (await isAllMomParametersFilled()) && markActivityCompleted(6), // MOM.
+    async () => (await isAllCompanyNamesFilled()) && markActivityCompleted(7), // Company Rep.
+    async () => (await isAllDealerNamesFilled()) && markActivityCompleted(8), // Dealer Rep.
+  ];
+
+  const checkAllConditions = async () => {
+    for (let check of screenChecks) {
+      await check();
+    }
+  };
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      checkAllConditions();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  // const toggleSelection = id => {
+  //   setLoading(true);
+  //   const screenName = screenMapping[id];
+  //   setTimeout(() => {
+  //     if (screenName) {
+  //       navigation.navigate(STACKS.MAIN_STACK, {screen: screenName});
+  //     }
+  //     setLoading(false);
+  //   }, 100);
+  // };
+
+  // :- add condition in this service visit is present in kpi performance table then navigate Complaint and repeat active to fill and continue dvr
+  const toggleSelection = async id => {
     setLoading(true);
+    if ((id === '5' || id === '6') && !(await isAllMTDActualFilled())) {
+      ToastAndroid.show(
+        'Please fill Service Visit in KPI Performance before proceeding.',
+        ToastAndroid.SHORT,
+      );
+      setLoading(false);
+      return;
+    }
 
+    const screenName = screenMapping[id];
     setTimeout(() => {
-      const screenName = screenMapping[id];
       if (screenName) {
         navigation.navigate(STACKS.MAIN_STACK, {screen: screenName});
       }
@@ -78,107 +129,16 @@ const KeyActivities = () => {
     }, 100);
   };
 
-  useEffect(() => {
-    const unsubscribe2 = navigation.addListener('focus', () => {
-      console.log('On focus >>>>');
-      isAllMaxObtFillServiceAttribute();
-      isAllMtd_actualKPI_Performance();
-      isAllMaxObtFillDVR_Score();
-      isAll_Available_ManPowerStatus();
-      isAllComplaintsAnalysis_Received();
-      isAllRepeatCardNoFilledTable();
-      isAllDealerFilled();
-      isAllCompanyFilled();
-      isAllMoM_Table();
-    });
-    return unsubscribe2;
-  }, [navigation]);
-
   const handleSubmit = () => {
-    const allCompleted = selected.every(item => item.completed);
+    const allCompleted = activitiesData.every(item => item.completed);
 
-    if (allCompleted) {
-      setAlertTitle('Success');
-      setAlertMessage('All activities have been completed successfully.');
-    } else {
-      setAlertTitle('Incomplete');
-      setAlertMessage('Please complete all activities before submitting.');
-    }
-
+    setAlertTitle(allCompleted ? 'Success' : 'Incomplete');
+    setAlertMessage(
+      allCompleted
+        ? 'All activities have been completed successfully.'
+        : 'Please complete all activities before submitting.',
+    );
     setAlertVisible(true);
-  };
-
-  const isAllMaxObtFillServiceAttribute = async () => {
-    let isAllMaxObtain = await isAllMaxObtFilled();
-    if (isAllMaxObtain == true) {
-      activities[0].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllMaxObtFilled', isAllMaxObtain);
-  };
-  const isAllMaxObtFillDVR_Score = async () => {
-    let isAllMaxObtain = await isAllMaxObtFilled();
-    if (isAllMaxObtain == true) {
-      activities[2].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllMaxObtFilled', isAllMaxObtain);
-  };
-  const isAllMtd_actualKPI_Performance = async () => {
-    let isAllMtd_actual = await isAllMTDActualFilled();
-    if (isAllMtd_actual == true) {
-      activities[1].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllMTDActualFilled', isAllMtd_actual);
-  };
-  const isAll_Available_ManPowerStatus = async () => {
-    let isAll_Available = await isAllAvailableFilled();
-    if (isAll_Available == true) {
-      activities[3].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllAvailableFilled', isAll_Available);
-  };
-  const isAllComplaintsAnalysis_Received = async () => {
-    let isAllComplaintsReceived = await isAllComplaintsReceivedFilled();
-    if (isAllComplaintsReceived == true) {
-      activities[4].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllComplaintsReceivedFilled', isAllComplaintsReceived);
-  };
-  const isAllRepeatCardNoFilledTable = async () => {
-    let isAllRepeatCard = await isAllRepeatCardNoFilled();
-    if (isAllRepeatCard == true) {
-      activities[5].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllRepeatCardNoFilled', isAllRepeatCard);
-  };
-  const isAllMoM_Table = async () => {
-    let isAllMom = await isAllMomParametersFilled();
-    if (isAllMom == true) {
-      activities[6].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllMomParametersFilled', isAllMom);
-  };
-  const isAllCompanyFilled = async () => {
-    let isAllCompanyFill = await isAllCompanyNamesFilled();
-    if (isAllCompanyFill == true) {
-      activities[7].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllCompanyNamesFilled', isAllCompanyFill);
-  };
-  const isAllDealerFilled = async () => {
-    let isAllDealerFill = await isAllDealerNamesFilled();
-    if (isAllDealerFill == true) {
-      activities[8].completed = true;
-      setUpdateUI(!updateUI);
-    }
-    console.log('isAllDealerNamesFilled', isAllDealerFill);
   };
 
   return (
@@ -190,22 +150,16 @@ const KeyActivities = () => {
         title={'Key Activities'}
         navState={navigation}
       />
-      <Modal
-        visible={loading}
-        animationType={'none'}
-        transparent={true}
-        onRequestClose={() => {}}>
+      {/* Loader Modal */}
+      <Modal visible={loading} transparent animationType="none">
         <View
-          style={[
-            {
-              top: DeviceInfo.hasNotch() == true ? 110 : 80,
-              height:
-                DeviceInfo.hasNotch() == true
-                  ? deviceHeight - 110
-                  : deviceHeight - 80,
-              alignItems: 'center',
-            },
-          ]}>
+          style={{
+            top: DeviceInfo.hasNotch() ? 110 : 80,
+            height: DeviceInfo.hasNotch()
+              ? deviceHeight - 110
+              : deviceHeight - 80,
+            alignItems: 'center',
+          }}>
           <View
             style={{
               height: 80,
@@ -216,22 +170,23 @@ const KeyActivities = () => {
               position: 'absolute',
               borderWidth: 2,
               borderColor: '#D4D4D4',
-              top:
-                DeviceInfo.hasNotch() == true
-                  ? (deviceHeight - 220 - 80) / 2
-                  : (deviceHeight - 160 - 80) / 2,
+              top: DeviceInfo.hasNotch()
+                ? (deviceHeight - 220 - 80) / 2
+                : (deviceHeight - 160 - 80) / 2,
             }}>
             <Image
               source={require('../../assets/icons/loader.gif')}
-              resizeMode="contain"
               style={{height: 50, width: 50, alignSelf: 'center'}}
+              resizeMode="contain"
             />
           </View>
         </View>
       </Modal>
+
+      {/* Activities List */}
       <View style={styles.flatListContainer}>
         <FlatList
-          data={selected}
+          data={activitiesData}
           keyExtractor={item => item.id}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
@@ -260,9 +215,9 @@ const KeyActivities = () => {
               <CustomButton
                 title="SUBMIT"
                 onPress={handleSubmit}
-                disabled={!selected.every(item => item.completed)}
+                disabled={!activitiesData.every(item => item.completed)}
                 variant={
-                  selected.every(item => item.completed)
+                  activitiesData.every(item => item.completed)
                     ? 'primary'
                     : 'secondary'
                 }
