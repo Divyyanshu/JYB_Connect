@@ -27,7 +27,7 @@ const Topbar = props => {
   }
   function Minutes_of_meeting_popUp() {
     console.log('MOM MODEL Open');
-    Alert.alert('Can you fill Minutes of Meeting Data Manually?', '', [
+    Alert.alert('You want to fill Minutes of meeting manually?', '', [
       {text: 'No', style: 'cancel'},
       {text: 'Yes', onPress: () => props.setModalVisible(true)},
     ]);
@@ -67,6 +67,7 @@ const Topbar = props => {
         styles.topBarStyle,
         {
           backgroundColor: COLORS.PRIMARY,
+          height : DeviceInfo.hasNotch() == true ? props.isLandscape == true ? 70  : 110 : 80 
         },
       ]}>
       {renderIf(
@@ -181,7 +182,7 @@ const Topbar = props => {
 
 const styles = StyleSheet.create({
   topBarStyle: {
-    height: DeviceInfo.hasNotch() == true ? 110 : 80,
+    height: DeviceInfo.hasNotch() == true ?   110 : 80,
     justifyContent: 'center',
     width: '100%',
     alignItems: 'center',

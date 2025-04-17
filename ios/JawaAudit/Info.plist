@@ -32,7 +32,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Please provide location permission.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your gallery</string>
 	<key>UIAppFonts</key>

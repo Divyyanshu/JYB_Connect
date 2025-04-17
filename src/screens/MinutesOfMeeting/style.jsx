@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.WHITE,
   },
   tableContainer: {
-    marginHorizontal: 100,
+    marginHorizontal: 60,
     marginBottom: 50,
     marginTop: 20,
     backgroundColor: COLORS.WHITE,

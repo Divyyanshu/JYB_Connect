@@ -5,6 +5,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import {styles} from './style';
@@ -18,15 +19,32 @@ import {
 } from '../../database/db';
 import CustomFormModal from '../../components/Mom_Popup/Mom_Popup';
 
+import { NativeModules } from 'react-native';
+
+const { OrientationManager } = NativeModules;
+
 const MinutesOfMeeting = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [dataMom, setDataMom] = useState([]);
 
   useEffect(() => {
-    Orientation.lockToLandscape();
-    return () => {
-      Orientation.lockToPortrait();
-    };
+    if(Platform.OS == "android"){
+      Orientation.lockToLandscape();
+      return () => {
+        Orientation.lockToPortrait();
+      };
+    }
+
+  }, []);
+
+  useEffect(() => {
+    if (Platform.OS === 'ios' && OrientationManager) {
+      OrientationManager.lockToLandscape();
+  
+      return () => {
+        OrientationManager.lockToPortrait();
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -126,6 +144,7 @@ const MinutesOfMeeting = ({navigation}) => {
           showBack={true}
           showtitle={true}
           showAdd={true}
+          isLandscape={true}
           title={'Minutes of Meeting'}
           navState={navigation}
           setModalVisible={setModalVisible}
