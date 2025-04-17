@@ -97,17 +97,6 @@ const KeyActivities = () => {
     return unsubscribe;
   }, [navigation]);
 
-  // const toggleSelection = id => {
-  //   setLoading(true);
-  //   const screenName = screenMapping[id];
-  //   setTimeout(() => {
-  //     if (screenName) {
-  //       navigation.navigate(STACKS.MAIN_STACK, {screen: screenName});
-  //     }
-  //     setLoading(false);
-  //   }, 100);
-  // };
-
   // :- add condition in this service visit is present in kpi performance table then navigate Complaint and repeat active to fill and continue dvr
   const toggleSelection = async id => {
     setLoading(true);
@@ -150,7 +139,6 @@ const KeyActivities = () => {
         title={'Key Activities'}
         navState={navigation}
       />
-      {/* Loader Modal */}
       <Modal visible={loading} transparent animationType="none">
         <View
           style={{
