@@ -109,40 +109,46 @@ const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
       }));
     }
   };
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+  const openCamera = async () => {
+    if (Platform.OS == 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera',
+            buttonPositive: 'OK',
+          },
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const result = await launchCamera({
+            saveToPhotos: true,
+            mediaType: 'photo',
+          });
+
+          if (result.assets?.length > 0) {
+            const imagePath = result.assets[0].uri;
+            setFormData(prev => ({...prev, photo: imagePath}));
+          }
+        } else {
+          Alert.alert('Permission Denied', 'Camera access is required.');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    } else {
+      const result = await launchCamera({
+        saveToPhotos: true,
+        mediaType: 'photo',
+      });
+
+      if (result.assets?.length > 0) {
+        const imagePath = result.assets[0].uri;
+        setFormData(prev => ({...prev, photo: imagePath}));
+      }
     }
-    return true;
   };
-
-  const handleImagePick = async () => {
-    const hasPermission = await requestCameraPermission();
-    if (!hasPermission) {
-      Alert.alert('Permission Denied', 'Camera access is required.');
-      return;
-    }
-
-    const result = await launchCamera({
-      mediaType: 'photo',
-      quality: 0.5,
-      cameraType: 'back',
-      saveToPhotos: true,
-    });
-
-    if (result.didCancel) {
-      console.log('User cancelled camera');
-    } else if (result.errorCode) {
-      console.error('Camera Error:', result.errorMessage);
-      Alert.alert('Error', 'Camera not accessible.');
-    } else if (result.assets && result.assets.length > 0) {
-      setForm(prev => ({...prev, image_path: result.assets[0].uri}));
-    }
-  };
-
   const handleSubmitForm = () => {
     const finalData = {
       ...form,
@@ -261,7 +267,7 @@ const ManPowerModal = ({visible, onClose, item, onSubmit}) => {
 
                   <View style={styles.button}>
                     <CustomButton
-                      onPress={handleImagePick}
+                      onPress={openCamera}
                       title={form.image_path ? 'Image Selected' : 'Click Photo'}
                       color={
                         form.image_path ? COLORS.SUCCESS_GREEN : COLORS.PRIMARY

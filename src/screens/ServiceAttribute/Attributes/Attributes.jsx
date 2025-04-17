@@ -37,8 +37,6 @@ const Attributes = ({navigation}) => {
 
   const fetchDetails = () => {
     getDetailsByMainParameter(mainParam, detailsList => {
-      // console.log('Fetched Data:', detailsList);
-      // setData([...detailsList]);
       const updatedList = detailsList.map(item => ({
         ...item,
         isExpanded: false,
@@ -232,7 +230,7 @@ const Attributes = ({navigation}) => {
                           fontSize: 12,
                         },
                       ]}>
-                      {isFilled ? item.MaxObt : 'N/A'}
+                      {isFilled ? item.MaxObt : ''}
                     </Text>
                   </View>
                 </View>

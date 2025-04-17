@@ -9,14 +9,12 @@ import {
   Image,
   PermissionsAndroid,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {styles} from './style';
 import {CustomButton} from '../../uiKit/customButton';
 import {COLORS} from '../../utils/colors';
 import {launchCamera} from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {updateKPIPerformanceData} from '../../database/db';
-import renderIf from '../../utils/renderIf';
 
 const calculatePercentageAchieve = (mtd_plan, mtd_actual) => {
   if (!mtd_plan || !mtd_actual) return 0;
@@ -116,32 +114,44 @@ const KPIActionPopup = ({visible, onClose, item, onSubmit}) => {
   const handleSubmit = () => {
     handleValidate();
   };
-
   const openCamera = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Camera Permission',
-          message: 'App needs access to your camera',
-          buttonPositive: 'OK',
-        },
-      );
+    if (Platform.OS == 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs access to your camera',
+            buttonPositive: 'OK',
+          },
+        );
 
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        const result = await launchCamera({
-          saveToPhotos: true,
-          mediaType: 'photo',
-        });
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const result = await launchCamera({
+            saveToPhotos: true,
+            mediaType: 'photo',
+          });
 
-        if (result.assets?.length > 0) {
-          setFormData(prev => ({...prev, photo: result.assets[0].uri}));
+          if (result.assets?.length > 0) {
+            const imagePath = result.assets[0].uri;
+            setFormData(prev => ({...prev, photo: imagePath}));
+          }
+        } else {
+          Alert.alert('Permission Denied', 'Camera access is required.');
         }
-      } else {
-        Alert.alert('Permission Denied', 'Camera access is required.');
+      } catch (err) {
+        console.warn(err);
       }
-    } catch (err) {
-      console.warn(err);
+    } else {
+      const result = await launchCamera({
+        saveToPhotos: true,
+        mediaType: 'photo',
+      });
+
+      if (result.assets?.length > 0) {
+        const imagePath = result.assets[0].uri;
+        setFormData(prev => ({...prev, photo: imagePath}));
+      }
     }
   };
   return (

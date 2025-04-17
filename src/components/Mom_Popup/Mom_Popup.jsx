@@ -74,36 +74,42 @@ const CustomFormModal = ({visible, onClose, onSubmit}) => {
                 onChangeText={text => handleChange('counterMeasure', text)}
                 placeholder="Enter Counter Measure"
               />
-              <Text style={styles.label}>Target Date</Text>
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(true)}
-                style={[styles.input, {justifyContent: 'center'}]}>
-                <Text style={{color: formData.targetDate ? '#000' : '#999'}}>
-                  {formData.targetDate ? formData.targetDate : 'Select a date'}
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Plan Closure Date</Text>
+                <TouchableOpacity
+                  onPress={() => setShowDatePicker(true)}
+                  style={[styles.input, {justifyContent: 'center'}]}>
+                  <Text
+                    style={{color: formData.planClosureDate ? '#000' : '#999'}}>
+                    {formData.planClosureDate
+                      ? formData.planClosureDate
+                      : 'Select a date'}
+                  </Text>
+                </TouchableOpacity>
 
-              {showDatePicker && (
-                <DateTimePicker
-                  value={
-                    formData.targetDate
-                      ? new Date(formData.targetDate)
-                      : new Date()
-                  }
-                  mode="date"
-                  display="default"
-                  minimumDate={new Date()}
-                  onChange={(event, selectedDate) => {
-                    setShowDatePicker(false);
-                    if (selectedDate) {
-                      const formattedDate = selectedDate
-                        .toISOString()
-                        .split('T')[0];
-                      handleChange('targetDate', formattedDate);
+                {showDatePicker && (
+                  <DateTimePicker
+                    value={
+                      formData.planClosureDate
+                        ? new Date(formData.planClosureDate)
+                        : new Date()
                     }
-                  }}
-                />
-              )}
+                    mode="date"
+                    display="default"
+                    minimumDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                    onChange={(event, selectedDate) => {
+                      setShowDatePicker(false);
+                      if (selectedDate) {
+                        const formattedDate = selectedDate
+                          .toISOString()
+                          .split('T')[0];
+                        handleChange('planClosureDate', formattedDate); // ✅ correct key
+                      }
+                    }}
+                  />
+                )}
+              </View>
+
               <Text style={styles.label}>Responsibility</Text>
               <TextInput
                 style={styles.input}
