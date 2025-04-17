@@ -141,16 +141,17 @@ const ServiceAttributeModel = ({
     handleValidate();
   };
   const openCamera = async () => {
-    if (Platform.OS == 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs access to your camera',
-            buttonPositive: 'OK',
-          },
-        );
+
+   if(Platform.OS == "android"){
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'App needs access to your camera',
+          buttonPositive: 'OK',
+        },
+      );
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           const result = await launchCamera({
@@ -179,6 +180,23 @@ const ServiceAttributeModel = ({
         setFormData(prev => ({...prev, photo: imagePath}));
       }
     }
+
+   }
+   else{
+
+    const result = await launchCamera({
+      saveToPhotos: true,
+      mediaType: 'photo',
+    });
+
+    if (result.assets?.length > 0) {
+      const imagePath = result.assets[0].uri;
+      setFormData(prev => ({...prev, photo: imagePath}));
+    }
+
+   }
+
+
   };
   const handleDateChange = (event, selectedDate) => {
     if (selectedDate) {
