@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Alert,
+  Platform,
 } from 'react-native';
 import {launchCamera} from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -140,6 +141,8 @@ const ServiceAttributeModel = ({
     handleValidate();
   };
   const openCamera = async () => {
+
+   if(Platform.OS == "android"){
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -166,6 +169,23 @@ const ServiceAttributeModel = ({
     } catch (err) {
       console.warn(err);
     }
+
+   }
+   else{
+
+    const result = await launchCamera({
+      saveToPhotos: true,
+      mediaType: 'photo',
+    });
+
+    if (result.assets?.length > 0) {
+      const imagePath = result.assets[0].uri;
+      setFormData(prev => ({...prev, photo: imagePath}));
+    }
+
+   }
+
+
   };
   const handleDateChange = (event, selectedDate) => {
     if (selectedDate) {
