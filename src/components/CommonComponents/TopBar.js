@@ -94,8 +94,8 @@ const Topbar = props => {
             }}>
             <Image
               style={{
-                height: 30,
-                width: 30,
+                height: 36,
+                width: 36,
                 alignSelf: 'center',
               }}
               resizeMode="contain"
