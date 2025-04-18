@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   ScrollView,
   Dimensions,
-  Image,
   SafeAreaView,
   Platform,
 } from 'react-native';
@@ -25,7 +24,6 @@ import {
   clearKPIPerformanceData,
   clearRepeatCardTable,
   clearTableManPowerAvailability,
-  fetchDataManPowerAvailability,
   insert_KPI_Performance_Record,
   insertDataManPowerAvailability,
   clearServiceAttributeTable,
@@ -56,8 +54,6 @@ const SelectDealerCode = () => {
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const [selectedDealerCode, setSelectedDealerCode] = useState(null);
   const [previousDealerCode, setPreviousDealerCode] = useState('');
-
-  // added by puru
   const [previousDealerName, setPreviousDealerName] = useState('');
   const [selectedDealerName, setSelectedDealerName] = useState(null);
 
@@ -219,10 +215,6 @@ const SelectDealerCode = () => {
         saveDealerCode(dealerCode);
         saveDealerName(dealerName);
         await fetchDataServiceAttributeData(dealerCode, month, year);
-        // navigation.navigate(STACKS.MAIN_STACK, {
-        //   screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
-        //   params: {dealerCode, month, year},
-        // });
       }
     } catch (error) {
       console.error('ManPower API Error:', error);
@@ -232,7 +224,6 @@ const SelectDealerCode = () => {
 
   const fetchDataServiceAttributeData = async (dealerCode, month, year) => {
     try {
-      // code added by Puru
       clearServiceAttributeTable();
       const response = await axios.get(
         'http://198.38.81.7/jawadvrapi/api/Dealer/ApiforServiceAttribute',
@@ -304,8 +295,6 @@ const SelectDealerCode = () => {
     setLoading(true);
     try {
       clearKPIPerformanceData();
-      // clearTableManPowerAvailability();
-
       const response = await axios.post(
         `${BASE_URL}${API_ENDPOINTS.KPI_PERFORMANCE}`,
         {
@@ -340,28 +329,15 @@ const SelectDealerCode = () => {
 
       setPopupVisible(true);
     } else {
-      // code commented by Puru
-      // fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
       navigation.navigate(STACKS.MAIN_STACK, {
         screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
         params: {dealerCode, selectedMonth, selectedYear},
       });
     }
-
-    // if (previousDealerCode && previousDealerCode !== dealerCode) {
-    //   setSelectedDealerCode(dealerCode);
-    //   setPopupVisible(true);
-    // } else {
-    //   // If same dealer selected again or no previous dealer, proceed directly
-    //   setPreviousDealerCode(dealerCode);
-    //   fetchKpiData(dealerCode, selectedMonth, selectedYear);
-    // }
   };
   const handleProcess = async () => {
     setPopupVisible(false);
-    // all tables clear
     await clearAllTables();
-    // setPreviousDealerCode(selectedDealerCode); // Update new dealer as current
     await fetchKpiData(
       selectedDealerCode,
       selectedMonth,

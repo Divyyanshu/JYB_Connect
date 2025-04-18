@@ -1200,70 +1200,34 @@ const isAllMomParametersFilled = () => {
         (_, countResult) => {
           const totalRows = countResult.rows.item(0).total;
 
-          // Always resolve to true regardless of the row count
           if (totalRows === 0) {
-            resolve(true);
+            resolve(false);
           } else {
             tx.executeSql(
               `SELECT * FROM MomManualTable WHERE TRIM(parameter) IS NULL OR TRIM(parameter) = '';`,
               [],
               (_, results) => {
-                // Always resolve to true even if there are empty parameters
-                resolve(true);
+                if (results.rows.length > 0) {
+                  resolve(false);
+                } else {
+                  resolve(true);
+                }
               },
               (_, error) => {
                 console.error('Error checking parameter field:', error);
-                resolve(true); // Resolve true even on error
+                reject(error);
               },
             );
           }
         },
         (_, error) => {
           console.error('Error checking MomManualTable rows:', error);
-          resolve(true); // Resolve true even on error
+          reject(error);
         },
       );
     });
   });
 };
-
-// const isAllMomParametersFilled = () => {
-//   return new Promise((resolve, reject) => {
-//     db.transaction(tx => {
-//       tx.executeSql(
-//         `SELECT COUNT(*) as total FROM MomManualTable`,
-//         [],
-//         (_, countResult) => {
-//           const totalRows = countResult.rows.item(0).total;
-
-//           if (totalRows === 0) {
-//             resolve(false);
-//           } else {
-//             tx.executeSql(
-//               `SELECT * FROM MomManualTable WHERE TRIM(parameter) IS NULL OR TRIM(parameter) = '';`,
-//               [],
-//               (_, results) => {
-//                 if (results.rows.length > 0) {
-//                   resolve(false);
-//                 } else {
-//                   resolve(true);
-//                 }
-//               },
-//               (_, error) => {
-//                 console.error('Error checking parameter field:', error);
-//                 reject(error);
-//               },
-//             );
-//           }
-//         },
-//         (_, error) => {
-//           console.error('Error checking MomManualTable rows:', error);
-//           reject(error);
-//         },
-//       );
-//     });
-//   });
-// };
 
 const isAllDealerNamesFilled = () => {
   return new Promise((resolve, reject) => {

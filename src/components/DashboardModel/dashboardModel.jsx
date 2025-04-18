@@ -19,11 +19,6 @@ const CustomModal = ({visible, onClose, modalType}) => {
   const navigation = useNavigation();
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertData, setAlertData] = useState({title: '', message: ''});
-  const showAlert = (title, message) => {
-    setAlertData({title, message});
-    setAlertVisible(true);
-  };
-
   const go_to_selectDealerCode = () => {
     onClose();
     navigation.navigate(STACKS.MAIN_STACK, {
@@ -65,23 +60,7 @@ const CustomModal = ({visible, onClose, modalType}) => {
                     />
                     <Text style={styles.optionText}>Dealer Visit Report</Text>
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                    style={styles.optionCard}
-                    onPress={() =>
-                      showAlert(
-                        'Coming Soon 🚀',
-                        'Dealer Evaluation feature is under development.',
-                      )
-                    }>
-                    <Image
-                      source={require('../../assets/icons/service.png')}
-                      style={styles.modelImages}
-                    />
-                    <Text style={styles.optionText}>Dealer Evaluation</Text>
-                    <Text style={styles.comingSoonText}>Coming Soon</Text>
-                  </TouchableOpacity> */}
                 </View>
-                {/* Custom Alert */}
                 <CustomAlert
                   visible={alertVisible}
                   onClose={() => setAlertVisible(false)}

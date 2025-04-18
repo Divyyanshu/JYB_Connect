@@ -19,6 +19,7 @@ import CustomAlert from '../../uiKit/customAlert/customAlert';
 import {useFocusEffect} from '@react-navigation/native';
 import Topbar from '../../components/CommonComponents/TopBar';
 import {getEmail} from '../../utils/shared';
+import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 
 const {width} = Dimensions.get('window');
 
@@ -30,6 +31,8 @@ const Dashboard = ({navigation}) => {
   const [isSnackbarVisible, setIsSnackbarVisible] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
   const [username, setUsername] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const deviceHeight = Dimensions.get('window').height;
 
   console.log('deviceHeight>>>>>>', deviceHeight);
@@ -38,18 +41,23 @@ const Dashboard = ({navigation}) => {
     setAlertData({title, message});
     setAlertVisible(true);
   };
+  const showExitConfirmation = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleExitConfirm = () => {
+    BackHandler.exitApp();
+    setIsModalVisible(false);
+  };
+
+  const handleExitCancel = () => {
+    setIsModalVisible(false);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       const backAction = () => {
-        Alert.alert('Confirm!', 'Are you sure you want to exit the app?', [
-          {
-            text: 'Cancel',
-            onPress: () => null,
-            style: 'cancel',
-          },
-          {text: 'YES', onPress: () => BackHandler.exitApp()},
-        ]);
+        showExitConfirmation();
         return true;
       };
 
@@ -61,7 +69,6 @@ const Dashboard = ({navigation}) => {
       return () => backHandler.remove();
     }, []),
   );
-
   useEffect(() => {
     const fetchEmail = async () => {
       const email = await getEmail();
@@ -135,7 +142,13 @@ const Dashboard = ({navigation}) => {
           imageSource={require('../../assets/icons/service.png')}
           onPress={() => handleCardPress('service')}
         />
-
+        <ConfirmationPopup
+          visible={isModalVisible}
+          onConfirm={handleExitConfirm}
+          onCancel={handleExitCancel}
+          message="Are you sure you want to exit the app?"
+          title="Confirm!"
+        />
         <CustomAlert
           visible={alertVisible}
           onClose={() => setAlertVisible(false)}

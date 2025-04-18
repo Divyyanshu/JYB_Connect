@@ -1,22 +1,5 @@
-// import {SafeAreaView} from 'react-native';
-// import {Provider as PaperProvider} from 'react-native-paper';
-// import {Navigation} from './navigation';
-// import Toast from 'react-native-toast-message';
-
-// const App = () => {
-//   return (
-//     <PaperProvider>
-//       <SafeAreaView style={{flex: 1, justifyContent: 'center'}}>
-//         <Navigation />
-//         <Toast />
-//       </SafeAreaView>
-//     </PaperProvider>
-//   );
-// };
-
-// export default App;
 import React, {useEffect} from 'react';
-import {SafeAreaView, StatusBar,View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Navigation} from './navigation';
 import Toast from 'react-native-toast-message';
