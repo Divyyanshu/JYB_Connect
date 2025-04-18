@@ -218,7 +218,7 @@ const SelectDealerCode = () => {
         }
         saveDealerCode(dealerCode);
         saveDealerName(dealerName);
-        await fetchDataServiceAttributeData(dealerCode, month, year)
+        await fetchDataServiceAttributeData(dealerCode, month, year);
         // navigation.navigate(STACKS.MAIN_STACK, {
         //   screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
         //   params: {dealerCode, month, year},
@@ -230,7 +230,7 @@ const SelectDealerCode = () => {
     }
   };
 
-  const fetchDataServiceAttributeData = async (dealerCode,month,year) => {
+  const fetchDataServiceAttributeData = async (dealerCode, month, year) => {
     try {
       // code added by Puru
       clearServiceAttributeTable();
@@ -239,7 +239,7 @@ const SelectDealerCode = () => {
       );
 
       if (response.data && response.data.Data) {
-        console.log("Service Attribute Api response >>>>",response.data.Data)
+        console.log('Service Attribute Api response >>>>', response.data.Data);
         response.data.Data.forEach(async item => {
           await insertRecord(
             item.DefId,
@@ -341,11 +341,11 @@ const SelectDealerCode = () => {
       setPopupVisible(true);
     } else {
       // code commented by Puru
-     // fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
-     navigation.navigate(STACKS.MAIN_STACK, {
-      screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
-      params: {dealerCode, selectedMonth, selectedYear},
-    });
+      // fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
+      navigation.navigate(STACKS.MAIN_STACK, {
+        screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
+        params: {dealerCode, selectedMonth, selectedYear},
+      });
     }
 
     // if (previousDealerCode && previousDealerCode !== dealerCode) {
@@ -482,18 +482,13 @@ const SelectDealerCode = () => {
                 }}>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 14,
                     fontWeight: 'bold',
                     color: '#555',
                     padding: 20,
                   }}>
                   No Data Found
                 </Text>
-                <Image
-                  source={require('../../assets/images/no_data.png')}
-                  style={{height: 100, width: 100}}
-                  resizeMode="center"
-                />
               </View>
             )}
           />
