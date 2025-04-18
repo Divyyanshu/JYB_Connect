@@ -225,11 +225,13 @@ const CustomerComplaintAnalysis = ({navigation}) => {
                         </Text>
                       </View>
                     </TouchableWithoutFeedback>
+
                     {showPicker && (
                       <DateTimePicker
                         value={date}
                         mode="date"
                         display="default"
+                        minimumDate={new Date()}
                         onChange={onDateChange}
                       />
                     )}

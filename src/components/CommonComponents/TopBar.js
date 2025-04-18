@@ -15,22 +15,19 @@ import {dropAllTables} from '../../database/db';
 import {clearAllAsyncStorage, removeToken} from '../../utils/shared';
 import {STACKS} from '../../utils/stacks';
 import {SCREENS} from '../../utils/screens';
+import ConfirmationPopup from '../../uiKit/confirmPopup/confirmPopup';
 const deviceWidth = Dimensions.get('window').width;
 
 const Topbar = props => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   function LogoutButtonClicked() {
     console.log('Logout Button Clicked');
-    Alert.alert('Are you sure you want to logout?', '', [
-      {text: 'No', style: 'cancel'},
-      {text: 'Yes', onPress: () => clearUserData()},
-    ]);
+    setShowLogoutConfirm(true);
   }
+
   function Minutes_of_meeting_popUp() {
-    console.log('MOM MODEL Open');
-    Alert.alert('You want to fill Minutes of meeting manually?', '', [
-      {text: 'No', style: 'cancel'},
-      {text: 'Yes', onPress: () => props.setModalVisible(true)},
-    ]);
+    props.setModalVisible(true);
   }
 
   async function clearUserData() {
@@ -67,7 +64,12 @@ const Topbar = props => {
         styles.topBarStyle,
         {
           backgroundColor: COLORS.PRIMARY,
-          height : DeviceInfo.hasNotch() == true ? props.isLandscape == true ? 70  : 110 : 80 
+          height:
+            DeviceInfo.hasNotch() == true
+              ? props.isLandscape == true
+                ? 70
+                : 110
+              : 80,
         },
       ]}>
       {renderIf(
@@ -191,6 +193,15 @@ const Topbar = props => {
               resizeMode="contain"
             />
           </TouchableOpacity>
+          <ConfirmationPopup
+            visible={showLogoutConfirm}
+            onConfirm={() => {
+              setShowLogoutConfirm(false);
+              clearUserData();
+            }}
+            onCancel={() => setShowLogoutConfirm(false)}
+            message="Are you sure you want to logout?"
+          />
         </View>,
       )}
       {renderIf(

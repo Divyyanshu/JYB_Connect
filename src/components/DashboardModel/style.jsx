@@ -51,10 +51,12 @@ export const styles = StyleSheet.create({
     marginVertical: 20,
     position: 'relative',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 10,
   },
+
   optionText: {
     color: COLORS.PRIMARY,
     fontSize: 20,

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   ScrollView,
   StatusBar,
@@ -11,9 +10,8 @@ import {
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import {TextInput as PaperInput} from 'react-native-paper';
-import {getEmail, saveEmail, saveToken} from '../../../utils/shared';
+import {saveEmail, saveToken} from '../../../utils/shared';
 import {COLORS} from '../../../utils/colors';
-import {STACKS} from '../../../utils/stacks';
 import {styles} from './style';
 import {CustomButton} from '../../../uiKit/customButton';
 import {SCREENS} from '../../../utils/screens';
@@ -79,8 +77,6 @@ const LoginPage = ({navigation}) => {
   };
 
   const validateForm = () => {
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!email.trim()) {
       alert('Please enter Email address.');
       return false;
@@ -89,12 +85,6 @@ const LoginPage = ({navigation}) => {
       alert('Please enter Password.');
       return false;
     }
-
-    // if (!emailRegex.test(email)) {
-    //   alert('Please enter a valid email address.');
-    //   return false;
-    // }
-
     return true;
   };
   return (

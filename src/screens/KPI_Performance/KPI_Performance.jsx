@@ -15,6 +15,7 @@ import {
 } from '../../database/db';
 import Topbar from '../../components/CommonComponents/TopBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {COLORS} from '../../utils/colors';
 
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
@@ -57,13 +58,16 @@ const KPIPerformance = ({navigation}) => {
       const serviceVisitItem = kpiData.find(
         item => item.parameter === 'Service Visit',
       );
-      if (serviceVisitItem && serviceVisitItem.month_plan) {
-        const mtdPlan = (
-          (parseFloat(serviceVisitItem.month_plan) / totalDaysInMonth) *
-          currentDay
-        ).toFixed(2);
-        await AsyncStorage.setItem('MTD_SERVICE_VISIT', mtd_actual);
-        console.log(' mtd_actual stored in AsyncStorage:', mtd_actual);
+
+      if (serviceVisitItem && serviceVisitItem.mtd_actual) {
+        await AsyncStorage.setItem(
+          'MTD_SERVICE_VISIT',
+          serviceVisitItem.mtd_actual.toString(),
+        );
+        console.log(
+          'mtd_actual stored in AsyncStorage:',
+          serviceVisitItem.mtd_actual,
+        );
       }
     } catch (error) {
       console.error('Error storing mtd_actual:', error);
@@ -117,22 +121,41 @@ const KPIPerformance = ({navigation}) => {
     ).toFixed(2);
     const updatedItem = {...item, mtd_plan: mtdPlan};
 
+    const isSelectedRow = selectedRowIndex === index;
+    const isDataFilled = parseFloat(item.mtd_actual) > 0;
+
     return (
       <TouchableOpacity
         onPress={() => handleActionPlanModel(updatedItem, index)}>
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            isSelectedRow && {backgroundColor: COLORS.SELECTED_COLOR},
+          ]}>
           <View style={styles.row}>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>Parameters</Text>
               <Text style={styles.text}>{item.parameter}</Text>
             </View>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>Month Plan</Text>
               <Text style={styles.text}>
                 {item.month_plan == '' ? '' : parseFloat(item.month_plan)}
               </Text>
             </View>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>% Criteria</Text>
               <Text style={styles.text}>
                 {parseFloat(item.percentage_criteria)}
@@ -140,19 +163,29 @@ const KPIPerformance = ({navigation}) => {
             </View>
           </View>
           <View style={styles.row}>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>MTD Plan</Text>
-              <Text style={styles.text}>
-                {item.mtd_plan == ' ' ? '' : parseFloat(item.mtd_plan)}
-              </Text>
+              <Text style={styles.text}>{mtdPlan}</Text>
             </View>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>MTD Actual</Text>
               <Text style={styles.text}>
                 {item.mtd_actual == ' ' ? '' : parseFloat(item.mtd_actual)}
               </Text>
             </View>
-            <View style={styles.cell}>
+            <View
+              style={[
+                styles.cell,
+                isDataFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
               <Text style={styles.header}>% Achieve</Text>
               <Text style={styles.text}>
                 {item.percentage_achieve == ' '

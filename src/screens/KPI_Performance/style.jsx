@@ -7,22 +7,23 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   card: {
-    padding: 2,
     marginVertical: 10,
-    marginHorizontal: 10,
-    borderRadius: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.SELECTED_COLOR2,
+    padding: 2,
     backgroundColor: COLORS.GREY,
-    borderWidth: 0.5,
     borderColor: COLORS.DISABLE,
   },
   row: {
     flexDirection: 'row',
+    borderRadius: 8,
   },
   cell: {
     width: '33.5%',
     alignItems: 'center',
-    marginBottom: 10,
     borderRightWidth: 1,
+    paddingBottom: 5,
     borderColor: '#fff',
   },
   editCell: {
@@ -33,9 +34,11 @@ export const styles = StyleSheet.create({
   header: {
     backgroundColor: COLORS.LIGHT_PRIMARY,
     width: '100%',
-    padding: 5,
+    padding: 8,
     textAlign: 'center',
     color: COLORS.PRIMARY,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
   },
   text: {
     width: '100%',

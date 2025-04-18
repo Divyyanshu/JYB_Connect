@@ -5,7 +5,6 @@ import {Snackbar} from 'react-native-paper';
 import {styles} from './style';
 import CustomCard from '../../uiKit/customCard';
 import CustomModal from '../../components/DashboardModel/dashboardModel';
-import DeviceInfo from 'react-native-device-info';
 import {
   createTable,
   create_KPI_Performance_Table,

@@ -15,6 +15,7 @@ import {
 } from '../../database/db';
 import ManPowerModal from '../../components/Manpower_Popup/Manpower_Popup';
 import Topbar from '../../components/CommonComponents/TopBar';
+import {COLORS} from '../../utils/colors';
 
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate();
 
@@ -89,40 +90,78 @@ const ManpowerAvailabilityScreen = ({navigation}) => {
     }
   };
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => handleActionPlanModel(item)}>
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Roles</Text>
-            <Text style={styles.text}>{item.type}</Text>
+  const renderItem = ({item}) => {
+    const isSelected = selectedItem && selectedItem.type === item.type;
+    const isAllFilled =
+      item.available &&
+      item.trained &&
+      item.available_percentage &&
+      item.trained_percentage;
+
+    return (
+      <TouchableOpacity onPress={() => handleActionPlanModel(item)}>
+        <View
+          style={[
+            styles.card,
+            isSelected && {backgroundColor: COLORS.SELECTED_COLOR},
+          ]}>
+          <View style={styles.row}>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Roles</Text>
+              <Text style={styles.text}>{item.type}</Text>
+            </View>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Min. Required</Text>
+              <Text style={styles.text}>{item.value}</Text>
+            </View>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Available</Text>
+              <Text style={styles.text}>{item.available || ''}</Text>
+            </View>
           </View>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Min. Required</Text>
-            <Text style={styles.text}>{item.value}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Available</Text>
-            <Text style={styles.text}>{item.available || ''}</Text>
+
+          <View style={styles.row}>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Trained</Text>
+              <Text style={styles.text}>{item.trained || ''}</Text>
+            </View>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Available %</Text>
+              <Text style={styles.text}>{item.available_percentage || ''}</Text>
+            </View>
+            <View
+              style={[
+                styles.cell,
+                isAllFilled && {backgroundColor: COLORS.SELECTED_COLOR},
+              ]}>
+              <Text style={styles.header}>Trained %</Text>
+              <Text style={styles.text}>{item.trained_percentage || ''}</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.row}>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Trained</Text>
-            <Text style={styles.text}>{item.trained || ''}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Available %</Text>
-            <Text style={styles.text}>{item.available_percentage || ''}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text style={styles.header}>Trained %</Text>
-            <Text style={styles.text}>{item.trained_percentage || ''}</Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>

@@ -1309,6 +1309,22 @@ const isAllCompanyNamesFilled = () => {
     });
   });
 };
+const isServiceVisitFilledInKPI_Performance = async () => {
+  try {
+    const db = await getDBConnection();
+    const results = await db.executeSql(
+      `SELECT mtd_actual FROM KPI_PERFORMANCE WHERE parameter = 'Service Visit' LIMIT 1`,
+    );
+    if (results[0].rows.length > 0) {
+      const value = results[0].rows.item(0).mtd_actual;
+      return value !== null && value !== '' && value !== '0';
+    }
+    return false;
+  } catch (error) {
+    console.log('Error checking Service Visit:', error);
+    return false;
+  }
+};
 
 export {
   db,
@@ -1357,4 +1373,5 @@ export {
   isAllMomParametersFilled,
   isAllDealerNamesFilled,
   isAllCompanyNamesFilled,
+  isServiceVisitFilledInKPI_Performance,
 };
