@@ -77,7 +77,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       ],
       (_, result) => {
         console.log('Record inserted successfully!', result);
-        fetchRecords();
       },
       (_, error) => {
         console.error('SQL Insert Error:', error);
@@ -93,9 +92,12 @@ const fetchRecords = () => {
         `SELECT * FROM ServiceAttributes;`,
         [],
         (_, results) => {
-          const records = results.rows.raw();
-          console.log('Fetched Records:', records.length);
-          resolve(records.length);
+          let data = [];
+          for (let i = 0; i < results.rows.length; i++) {
+            data.push(results.rows.item(i));
+          }
+          console.log('Distinct data service attribute:', data);
+          resolve(data);
         },
         error => {
           console.error('Error fetching records', error);
@@ -599,6 +601,239 @@ const updateManPowerAvailabilityData = ({
   });
 };
 
+const fetch_ManPower = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM ManPowerAvailability`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in ManPowerAvailability table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM ManPowerAvailability',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error('SQL Fetch ManPowerAvailability Error:', error);
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const fetch_ComplaintAnalysis = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM CustomerComplaintAnalysis`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in CustomerComplaintAnalysis table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM CustomerComplaintAnalysis',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error(
+                'SQL Fetch CustomerComplaintAnalysis Error:',
+                error,
+              );
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const fetch_MOM = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM MomManualTable`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in MomManualTable table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM MomManualTable',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error('SQL Fetch MomManualTable Error:', error);
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+const fetch_RepeatJc = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM RepeatCard`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in RepeatCard table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM RepeatCard',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error('SQL Fetch RepeatCard Error:', error);
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const fetch_Company = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM AccompaniedByCompany`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in AccompaniedByCompany table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM AccompaniedByCompany',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error('SQL Fetch AccompaniedByCompany Error:', error);
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
+
+const fetch_Dealer = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `SELECT * FROM AccompaniedByDealer`,
+        [],
+        (_, countResult) => {
+          const totalRecords = countResult.rows.item(0).count;
+          if (totalRecords === 0) {
+            console.warn('No data found in AccompaniedByDealer table!');
+            resolve([]);
+            return;
+          }
+
+          tx.executeSql(
+            'SELECT * FROM AccompaniedByDealer',
+            [],
+            (_, res) => {
+              const fetchedData = [];
+              for (let i = 0; i < res.rows.length; i++) {
+                fetchedData.push(res.rows.item(i));
+              }
+              resolve(fetchedData);
+            },
+            (_, error) => {
+              console.error('SQL Fetch AccompaniedByDealer Error:', error);
+              reject(error);
+            },
+          );
+        },
+        (_, error) => {
+          console.error('Error counting records:', error);
+          reject(error);
+        },
+      );
+    });
+  });
+};
 const createCompanyTable = () => {
   db.transaction(tx => {
     tx.executeSql(
@@ -695,6 +930,32 @@ const clearAllTables = async () => {
     );
     tx.executeSql(
       'DELETE FROM AccompaniedByDealer',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear AccompaniedByDealer', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM CustomerComplaintAnalysis',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear AccompaniedByDealer', error);
+      },
+    );
+
+    tx.executeSql(
+      'DELETE FROM ServiceAttributes',
+      [],
+      (_, results) => {},
+      error => {
+        console.error('Failed to clear AccompaniedByDealer', error);
+      },
+    );
+    tx.executeSql(
+      'DELETE FROM RepeatCard',
       [],
       (_, results) => {},
       error => {
@@ -1374,4 +1635,10 @@ export {
   isAllDealerNamesFilled,
   isAllCompanyNamesFilled,
   isServiceVisitFilledInKPI_Performance,
+  fetch_ManPower,
+  fetch_ComplaintAnalysis,
+  fetch_MOM,
+  fetch_RepeatJc,
+  fetch_Dealer,
+  fetch_Company,
 };

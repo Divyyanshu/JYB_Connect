@@ -209,7 +209,7 @@ const KPIPerformance = ({navigation}) => {
       />
       {loading ? (
         <View style={styles.loaderContainer}>
-          <Text style={styles.loadingText}>Data Loading...</Text>
+          <Text style={styles.loadingText}></Text>
         </View>
       ) : (
         <View style={{flex: 1, paddingHorizontal: 16}}>

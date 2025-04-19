@@ -102,3 +102,29 @@ export const clearAllAsyncStorage = async () => {
     console.error('Error clearing AsyncStorage:', error);
   }
 };
+
+export const saveDealerData = async dealerData => {
+  try {
+    await AsyncStorage.setItem('dealerData', JSON.stringify(dealerData));
+    console.log('dealerCode Saved Successfully');
+  } catch (error) {
+    console.error('Error saving dealerCode:', error);
+  }
+};
+
+export const fetchDealerData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('dealerData');
+    if (jsonValue != null) {
+      const parsedData = JSON.parse(jsonValue);
+      console.log('Fetched dictionary:', parsedData);
+      return parsedData;
+    } else {
+      console.log('No data found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching dictionary:', error);
+    return null;
+  }
+};

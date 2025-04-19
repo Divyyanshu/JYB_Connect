@@ -3734,3 +3734,175 @@ const KPIPerformance = ({navigation}) => {
 
 export default KPIPerformance;
 
+public void imageUrl(){
+        showloadingDialog();
+        serviceActionLists.clear();
+        serviceActionLists = dbHandler.getServiceDataWhereImageNotEmpty();
+        if(serviceActionLists.size() > 0){
+            for (int i=0; i<serviceActionLists.size(); i++){
+                serviceSaveImage(serviceActionLists.get(i).getImagePath(), serviceActionLists.get(i).getDefId(),serviceActionLists.size(),i);
+            }
+        }
+        else {
+            kpiActionLists.clear();
+            kpiActionLists = dbHandler.getKpiDataWhereImageNotEmpty();
+            if(kpiActionLists.size() > 0){
+                for (int i=0; i<kpiActionLists.size(); i++){
+                    kpiSaveImage(kpiActionLists.get(i).getImagePath(), kpiActionLists.get(i).getParameter(),kpiActionLists.size(),i);
+                }
+            }
+            else {
+                manActionLists.clear();
+                manActionLists = dbHandler.getManPowerDataWhereImageNotEmpty();
+                if(manActionLists.size() > 0){
+                    for (int i=0; i<manActionLists.size(); i++){
+                        manSaveImage(manActionLists.get(i).getImagePath(), manActionLists.get(i).getRole(),manActionLists.size(),i);
+                    }
+                }
+                else {
+                    insertDvr();
+                }
+            }
+        }
+    }
+
+    public void serviceSaveImage(String path, String id, int listSize, int index){
+        index+=1;
+        File file = new File(path);
+
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part image= MultipartBody.Part.createFormData("Image", file.getName(),imageBody);
+
+        ApiInterFace apiInterFace = ApiClientMain.getClient().create(ApiInterFace.class);
+        Call<SaveImageModel> call = apiInterFace.saveimage(image);
+        int finalIndex = index;
+        call.enqueue(new Callback<SaveImageModel>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(Call<SaveImageModel> call, Response<SaveImageModel> response) {
+                Log.e("servicecall",""+call.request());
+                if(response.code() == 200){
+                    if(response.body() != null){
+                        dbHandler.updateServiceImage(id,response.body().getData());
+                        Log.e("serviceequal",""+listSize+"--"+ finalIndex);
+                        if(listSize == finalIndex){
+                            kpiActionLists.clear();
+                            kpiActionLists = dbHandler.getKpiDataWhereImageNotEmpty();
+                            if(kpiActionLists.size() > 0){
+                                for (int i=0; i<kpiActionLists.size(); i++){
+                                    kpiSaveImage(kpiActionLists.get(i).getImagePath(), kpiActionLists.get(i).getParameter(),kpiActionLists.size(),i);
+                                }
+                            }
+                            else {
+                                manActionLists.clear();
+                                manActionLists = dbHandler.getManPowerDataWhereImageNotEmpty();
+                                if(manActionLists.size() > 0){
+                                    for (int i=0; i<manActionLists.size(); i++){
+                                        manSaveImage(manActionLists.get(i).getImagePath(), manActionLists.get(i).getRole(),manActionLists.size(),i);
+                                    }
+                                }
+                                else {
+                                    insertDvr();
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    shippingDialog.dismiss();
+                    Toast.makeText(KeyActivitiesPage.this, "Error occurred ("+response.code()+") please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SaveImageModel> call, Throwable t) {
+                shippingDialog.dismiss();
+                Toast.makeText(KeyActivitiesPage.this, "Network error, please check your internet connection and try again", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void kpiSaveImage(String path, String id, int listSize, int index){
+        index+=1;
+        File file = new File(path);
+
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part image= MultipartBody.Part.createFormData("Image", file.getName(),imageBody);
+
+        ApiInterFace apiInterFace = ApiClientMain.getClient().create(ApiInterFace.class);
+        Call<SaveImageModel> call = apiInterFace.saveimage(image);
+        int finalIndex = index;
+        call.enqueue(new Callback<SaveImageModel>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(Call<SaveImageModel> call, Response<SaveImageModel> response) {
+                Log.e("kpicall",""+call.request());
+                if(response.code() == 200){
+                    if(response.body() != null){
+                        dbHandler.updateKpiImage(id,response.body().getData());
+                        Log.e("kpiequal",""+listSize+"--"+ finalIndex);
+                        if(listSize == finalIndex){
+                            manActionLists.clear();
+                            manActionLists = dbHandler.getManPowerDataWhereImageNotEmpty();
+                            if(manActionLists.size() > 0){
+                                for (int i=0; i<manActionLists.size(); i++){
+                                    manSaveImage(manActionLists.get(i).getImagePath(), manActionLists.get(i).getRole(),manActionLists.size(),i);
+                                }
+                            }
+                            else {
+                                insertDvr();
+                            }
+                        }
+                    }
+                }
+                else {
+                    shippingDialog.dismiss();
+                    Toast.makeText(KeyActivitiesPage.this, "Error occurred ("+response.code()+") please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SaveImageModel> call, Throwable t) {
+                shippingDialog.dismiss();
+                Toast.makeText(KeyActivitiesPage.this, "Network error, please check your internet connection and try again", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void manSaveImage(String path, String id, int listSize, int index){
+        index+=1;
+        File file = new File(path);
+
+        RequestBody imageBody = RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        MultipartBody.Part image= MultipartBody.Part.createFormData("Image", file.getName(),imageBody);
+
+        ApiInterFace apiInterFace = ApiClientMain.getClient().create(ApiInterFace.class);
+        Call<SaveImageModel> call = apiInterFace.saveimage(image);
+        int finalIndex = index;
+        call.enqueue(new Callback<SaveImageModel>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(Call<SaveImageModel> call, Response<SaveImageModel> response) {
+                Log.e("mancall",""+call.request());
+                if(response.code() == 200){
+                    if(response.body() != null){
+                        dbHandler.updateManImage(id,response.body().getData());
+                        Log.e("manequal",""+listSize+"--"+ finalIndex);
+                        if(listSize == finalIndex){
+                            insertDvr();
+                        }
+                    }
+                }
+                else {
+                    shippingDialog.dismiss();
+                    Toast.makeText(KeyActivitiesPage.this, "Error occurred ("+response.code()+") please try later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SaveImageModel> call, Throwable t) {
+                shippingDialog.dismiss();
+                Toast.makeText(KeyActivitiesPage.this, "Network error, please check your internet connection and try again", Toast.LENGTH_LONG).show();
+            }
+        });
+    }

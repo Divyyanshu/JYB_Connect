@@ -37,6 +37,7 @@ import {
   getDealerName,
   getEmail,
   saveDealerCode,
+  saveDealerData,
   saveDealerName,
 } from '../../utils/shared';
 import Topbar from '../../components/CommonComponents/TopBar';
@@ -56,6 +57,8 @@ const SelectDealerCode = () => {
   const [previousDealerCode, setPreviousDealerCode] = useState('');
   const [previousDealerName, setPreviousDealerName] = useState('');
   const [selectedDealerName, setSelectedDealerName] = useState(null);
+
+  const [selectedDealerData, setSelectedDealerData] = useState(null);
 
   const [userEmail, setUserEmail] = useState(null);
 
@@ -126,7 +129,6 @@ const SelectDealerCode = () => {
   useEffect(() => {
     const unsubscribe2 = navigation.addListener('focus', () => {
       console.log('focus revived');
-
       setDelarCodeStatus();
     });
     return unsubscribe2;
@@ -214,6 +216,16 @@ const SelectDealerCode = () => {
         }
         saveDealerCode(dealerCode);
         saveDealerName(dealerName);
+        let dict = {};
+        dict['TravelPlanID'] = selectedDealerData.Id;
+        dict['Region'] = selectedDealerData.Region;
+        dict['AreaCode'] = selectedDealerData.Area;
+        dict['AreaIncharge'] = selectedDealerData.Ao;
+        dict['DealerCode'] = selectedDealerData.DealerCode;
+        dict['Month'] = month;
+        dict['Year'] = year;
+        saveDealerData(dict);
+
         await fetchDataServiceAttributeData(dealerCode, month, year);
       }
     } catch (error) {
@@ -319,8 +331,9 @@ const SelectDealerCode = () => {
     }
   };
 
-  const handleDealerSelect = (dealerCode, dealerName) => {
+  const handleDealerSelect = (dealerCode, dealerName, item) => {
     console.log('previousDealerCode >>>>>', previousDealerCode);
+    setSelectedDealerData(item);
     if (previousDealerCode == '') {
       fetchKpiData(dealerCode, selectedMonth, selectedYear, dealerName);
     } else if (previousDealerCode !== dealerCode) {
@@ -329,6 +342,18 @@ const SelectDealerCode = () => {
 
       setPopupVisible(true);
     } else {
+      console.log('Dealer Data >>>>>', item);
+      let dict = {};
+      dict['TravelPlanID'] = item.Id;
+      dict['Region'] = item.Region;
+      dict['AreaCode'] = item.Area;
+      dict['AreaIncharge'] = item.Ao;
+      dict['DealerCode'] = item.DealerCode;
+      dict['Month'] = selectedMonth;
+      dict['Year'] = selectedYear;
+      console.log('dict before saving >>>>', dict);
+
+      saveDealerData(dict);
       navigation.navigate(STACKS.MAIN_STACK, {
         screen: SCREENS.MAIN_STACK.KEY_ACTIVITIES,
         params: {dealerCode, selectedMonth, selectedYear},
@@ -370,7 +395,7 @@ const SelectDealerCode = () => {
           paddingBottom: 20,
         }}>
         <Text style={styles.label}>Select Month:</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {MONTHS.map((month, index) => (
             <TouchableOpacity
               key={index}
@@ -388,6 +413,39 @@ const SelectDealerCode = () => {
               </Text>
             </TouchableOpacity>
           ))}
+        </ScrollView> */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {MONTHS.map((month, index) => {
+            const isCurrentYear =
+              YEARS[selectedYearIndex] === new Date().getFullYear();
+            const isFutureMonth =
+              isCurrentYear && index > new Date().getMonth();
+
+            return (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.segmentButton,
+                  selectedMonthIndex === index && styles.activeSegment,
+                  isFutureMonth && {backgroundColor: '#e0e0e0'}, // Grayed out
+                ]}
+                onPress={() => {
+                  if (!isFutureMonth) {
+                    handleMonthChange(month);
+                  }
+                }}
+                disabled={isFutureMonth}>
+                <Text
+                  style={[
+                    styles.segmentText,
+                    selectedMonthIndex === index && styles.activeText,
+                    isFutureMonth && {color: '#9e9e9e'}, // Gray text
+                  ]}>
+                  {month.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
 
         <Text style={[styles.label, {marginTop: 10}]}>Select Year:</Text>
@@ -430,7 +488,7 @@ const SelectDealerCode = () => {
               <TouchableOpacity
                 style={styles.card}
                 onPress={() =>
-                  handleDealerSelect(item.DealerCode, item.DealerName)
+                  handleDealerSelect(item.DealerCode, item.DealerName, item)
                 }>
                 <View>
                   <Text style={styles.title}>{item.DealerName}</Text>
